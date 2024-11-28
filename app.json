@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "mobile",
-    "slug": "mobile",
+    "slug": "hospital-lht",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,8 +11,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "scheme": "hospital-lht",
+    "platforms": ["ios", "android"],
     "ios": {
       "supportsTablet": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fda05fa9-f4b7-4a48-aa81-94a26b980aaf"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,6 +29,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+
+    "owner": "lehaitho2002"
   }
 }
