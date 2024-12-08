@@ -37,6 +37,7 @@ import CreateQuestion from "../screens/community/CreateQuestion";
 import SpecialtyFilterListScreen from "../screens/SpecialtyFilterListScreen";
 import SpecialtyDetailOfHospital from "../screens/SpecialtyDetailOfHospital";
 import MedicalHistoryScreen from "../screens/MedicalHistoryScreen";
+import ChatScreen from "../screens/chat/ChatScreen";
 const CustomerNavigator = () => {
   const navigation = useNavigation();
 
@@ -365,6 +366,7 @@ const CustomerNavigator = () => {
         component={ConfirmChangeAppointmentDetailScreen}
       />
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>
   );
 };

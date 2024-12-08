@@ -25,7 +25,9 @@ import { getToken } from "./firebase/firebaseConfig";
 import { logout } from "./redux/authSlice";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
+import { io } from "socket.io-client";
 
+const Base_URL = process.env.EXPO_PUBLIC_API_URL;
 const UserInfoFetcher = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -35,6 +37,21 @@ const UserInfoFetcher = () => {
       if (token) {
         const response = await axiosConfig.get("/auth/user-info");
         console.log("user vừa vào app", response.data.user.role.name);
+
+        // Gửi token khi connect server
+        const socket = io(Base_URL, {
+          auth: {
+            token,
+          },
+        });
+
+        socket.on("connect", () => {
+          console.log("Connected to server");
+        });
+
+        socket.on("disconnect", () => {
+          console.log("Disconnected from server");
+        });
         dispatch(setUserInfo(response?.data?.user));
       } else {
         console.log("token không tồn tại");

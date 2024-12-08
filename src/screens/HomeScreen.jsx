@@ -494,6 +494,7 @@ const HomeScreen = () => {
               gap: 5,
               flex: 1,
               alignItems: "center",
+              onPress: () => navigation.navigate("Chat"),
             }}
           >
             <Image
@@ -507,7 +508,7 @@ const HomeScreen = () => {
                 textAlign: "center",
               }}
             >
-              Kết quả khám
+              Hỏi riêng bác sĩ
             </Text>
           </TouchableOpacity>
         </View>
@@ -573,7 +574,8 @@ const HomeScreen = () => {
         >
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cơ sở y tế</Text>
 
-          <TouchableOpacity onPress={() => navigation.navigate("HospitalList")}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate("HospitalList")}> */}
+          <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
             <Text
               style={{
                 color: "#0165FC",
