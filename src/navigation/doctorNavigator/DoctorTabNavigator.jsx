@@ -15,7 +15,11 @@ const DoctorTabNavigator = () => {
         component={DoctorHomeScreen}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="DoctorSchedule" component={DoctorScheduleScreen} />
+      <Tab.Screen
+        name="DoctorSchedule"
+        component={DoctorScheduleScreen}
+        options={{ headerShown: false }}
+      />
       <Tab.Screen name="DetailScheduleDate" component={DetailScheduleDate} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
       <Tab.Screen name="TimeOffList" component={TimeOffListScreen} />

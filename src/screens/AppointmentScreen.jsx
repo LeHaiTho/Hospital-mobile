@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, FlatList } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import AppointmentCard from "../components/AppointmentCard";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { Dimensions } from "react-native";
@@ -14,27 +21,42 @@ const Upcoming = ({ appointments, getAppointments, refreshing }) => {
     return <AppointmentCard appointment={item} />;
   };
   return (
-    <FlatList
-      onRefresh={getAppointments}
-      refreshing={refreshing}
-      data={upcomingAppointments}
-      renderItem={renderAppointment}
-      keyExtractor={(item) => item.id}
-      contentContainerStyle={{
-        padding: 16,
-        gap: 16,
-        backgroundColor: "#fff",
-      }}
-      ListEmptyComponent={
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      {upcomingAppointments.length > 0 ? (
+        <FlatList
+          onRefresh={getAppointments}
+          refreshing={refreshing}
+          data={upcomingAppointments}
+          renderItem={renderAppointment}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{
+            padding: 16,
+            gap: 16,
+            backgroundColor: "#fff",
+          }}
+          ListEmptyComponent={
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ textAlign: "center", color: "#797979" }}>
+                Không có lịch hẹn nào
+              </Text>
+            </View>
+          }
+        />
+      ) : (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Text style={{ textAlign: "center", color: "#797979" }}>
-            Không có lịch hẹn nào
-          </Text>
+          <ActivityIndicator size="large" color="#0165FF" />
+          <Text>Đang tải dữ liệu...</Text>
         </View>
-      }
-    />
+      )}
+    </View>
   );
 };
 const Completed = ({ appointments, getAppointments, refreshing }) => {
@@ -56,15 +78,15 @@ const Completed = ({ appointments, getAppointments, refreshing }) => {
         gap: 16,
         backgroundColor: "#fff",
       }}
-      // ListEmptyComponent={
-      //   <View
-      //     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-      //   >
-      //     <Text style={{ textAlign: "center", color: "#797979" }}>
-      //       Không có lịch hẹn nào
-      //     </Text>
-      //   </View>
-      // }
+      ListEmptyComponent={
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text style={{ textAlign: "center", color: "#797979" }}>
+            Không có lịch hẹn nào
+          </Text>
+        </View>
+      }
     />
   );
 };
@@ -140,11 +162,44 @@ const AppointmentScreen = () => {
   const [index, setIndex] = useState(0);
   const [appointments, setAppointments] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [routes] = useState([
-    { key: "upcoming", title: "Sắp tới" },
-    { key: "completed", title: "Hoàn thành" },
-    { key: "cancelled", title: "Đã hủy" },
-  ]);
+  // const [routes] = useState([
+  //   { key: "upcoming", title: "Sắp tới" },
+  //   { key: "completed", title: "Hoàn thành" },
+  //   { key: "cancelled", title: "Đã hủy" },
+  // ]);
+
+  const routes = [
+    {
+      title: "Sắp tới",
+      component: (
+        <Upcoming
+          appointments={appointments}
+          getAppointments={getAppointments}
+          refreshing={refreshing}
+        />
+      ),
+    },
+    {
+      title: "Hoàn thành",
+      component: (
+        <Completed
+          appointments={appointments}
+          getAppointments={getAppointments}
+          refreshing={refreshing}
+        />
+      ),
+    },
+    {
+      title: "Đã hủy",
+      component: (
+        <Cancelled
+          appointments={appointments}
+          getAppointments={getAppointments}
+          refreshing={refreshing}
+        />
+      ),
+    },
+  ];
   const navigation = useNavigation();
   const getAppointments = async () => {
     try {
@@ -162,40 +217,82 @@ const AppointmentScreen = () => {
   }, [navigation]);
 
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={({ route }) =>
-        renderScene({
-          route,
-          appointments,
-          getAppointments,
-          refreshing,
-        })
-      }
-      onIndexChange={setIndex}
-      initialLayout={{ width: Dimensions.get("window").width }}
-      renderTabBar={(props) => (
-        <TabBar
-          {...props}
-          indicatorStyle={{ backgroundColor: "#0165FF" }}
-          labelStyle={{
-            color: "#000",
-            textTransform: "none",
-            textAlign: "center",
-          }}
-          style={{ backgroundColor: "#fff" }}
-          tabStyle={{
-            paddingVertical: 0,
-            paddingHorizontal: 0,
-          }}
-          renderLabel={({ route, focused }) => (
-            <Text style={{ color: focused ? "#0165FF" : "#000" }}>
+    // <TabView
+    //   navigationState={{ index, routes }}
+    //   renderScene={({ route }) =>
+    //     renderScene({
+    //       route,
+    //       appointments,
+    //       getAppointments,
+    //       refreshing,
+    //     })
+    //   }
+    //   onIndexChange={setIndex}
+    //   initialLayout={{ width: Dimensions.get("window").width }}
+    //   renderTabBar={(props) => (
+    //     <TabBar
+    //       {...props}
+    //       indicatorStyle={{ backgroundColor: "#0165FF" }}
+    //       labelStyle={{
+    //         color: "#000",
+    //         textTransform: "none",
+    //         textAlign: "center",
+    //       }}
+    //       style={{ backgroundColor: "#fff" }}
+    //       tabStyle={{
+    //         paddingVertical: 0,
+    //         paddingHorizontal: 0,
+    //       }}
+    //       renderLabel={({ route, focused }) => (
+    //         <Text style={{ color: focused ? "#0165FF" : "#000" }}>
+    //           {route.title}
+    //         </Text>
+    //       )}
+    //     />
+    //   )}
+    // />
+
+    <View style={{ flex: 1 }}>
+      <View
+        style={{
+          flexDirection: "row",
+
+          backgroundColor: "#fff",
+
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingTop: 10,
+          paddingHorizontal: 16,
+
+          borderBottomWidth: 0.6,
+          borderBottomColor: "#D9D9D9",
+        }}
+      >
+        {routes.map((route, i) => (
+          <TouchableOpacity
+            key={i}
+            style={{
+              borderBottomWidth: 2,
+              borderColor: index === i ? "#0165FF" : "transparent",
+              paddingHorizontal: 20,
+              paddingBottom: 7,
+            }}
+            onPress={() => setIndex(i)}
+          >
+            <Text
+              style={{
+                fontWeight: index === i ? "700" : "400",
+                color: "#000",
+                fontSize: 16,
+              }}
+            >
               {route.title}
             </Text>
-          )}
-        />
-      )}
-    />
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={{ flex: 1 }}>{routes[index].component}</View>
+    </View>
   );
 };
 

@@ -1,18 +1,24 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
 import axiosConfig from "../apis/axiosConfig";
+import { initializeSocket, socket } from "../utils/socket";
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
     token: null, // Đảm bảo token là null ban đầu
   },
+
   reducers: {
     login: (state, action) => {
       state.user = action.payload.user;
       // Lưu token như một chuỗi (nếu chưa phải)
       state.token = action.payload.token; // Đảm bảo action.payload.token là chuỗi
       AsyncStorage.setItem("token", action.payload.token); // Lưu vào localStorage
+      if (action.payload.token) {
+        initializeSocket(action.payload.token);
+      }
     },
     setUserInfo: (state, action) => {
       state.user = action.payload;
@@ -22,6 +28,10 @@ const authSlice = createSlice({
       state.token = null; // Xóa token khi logout
       AsyncStorage.removeItem("token"); // Xóa token trong localStorage
       AsyncStorage.removeItem("expoPushToken");
+      if (socket) {
+        socket.disconnect();
+        console.log("disconnect socket");
+      }
     },
   },
 });

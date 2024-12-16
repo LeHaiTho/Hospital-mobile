@@ -1,30 +1,30 @@
+import {
+  EvilIcons,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import * as Location from "expo-location";
 import React, {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
-  useEffect,
 } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Search from "../components/Search";
-import { ScrollView, View, Text, TextInput } from "react-native";
-import StartRating from "../components/StartRating";
-import HospitalCard from "../components/HospitalCard";
-import axios from "axios";
-import axiosConfig from "../apis/axiosConfig";
-import { TouchableOpacity } from "react-native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import * as Location from "expo-location";
-import { EvilIcons } from "@expo/vector-icons";
-import BottomSheet, {
-  BottomSheetView,
-  BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
+import {
+  FlatList,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
-import { FlatList } from "react-native";
+import axiosConfig from "../apis/axiosConfig";
+import HospitalCard from "../components/HospitalCard";
 const HERE_API_KEY = "te9pF-AZqdY4Dez0jND9_-Eh_Xpe7DWthoixEhgtmeE";
 const HospitalList = () => {
   const navigation = useNavigation();
@@ -35,23 +35,30 @@ const HospitalList = () => {
   const [address, setAddress] = useState(null);
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // get
   const getHospitalsList = async () => {
     try {
+      setIsLoading(true);
       const res = await axiosConfig.get("/hospitals/get-list");
       setHospitals(res.data.hospitals);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   // get provinces
   const getProvinces = async () => {
     try {
+      setIsLoading(true);
       const res = await axios.get("https://esgoo.net/api-tinhthanh/1/0.htm");
       setProvinces(res.data.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -62,12 +69,15 @@ const HospitalList = () => {
   const handleSearch = async (text) => {
     setSearch(text);
     try {
+      setIsLoading(true);
       const res = await axiosConfig.get("/hospitals/filter", {
         params: { name: text, province: selectedProvince },
       });
       setHospitals(res.data.hospital);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   const handleProvincePress = async (province) => {
@@ -131,6 +141,7 @@ const HospitalList = () => {
   // hàm reverse gecoding để lấy địa chỉ từ tọa độ
   const fetchAddressFromCoordinates = async (latitude, longitude) => {
     try {
+      setIsLoading(true);
       const res = await fetch(
         `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${latitude},${longitude}&lang=vi-VN&apiKey=${HERE_API_KEY}`
       );
@@ -138,6 +149,8 @@ const HospitalList = () => {
       setAddress(data?.items[0]?.address?.label);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   // const handleRatingChange = (rating) => {
@@ -195,6 +208,7 @@ const HospitalList = () => {
             <Text style={{ color: "#fff" }}>Lọc</Text>
           </TouchableOpacity>
         </View>
+
         <TouchableOpacity
           onPress={requestLocationPermission}
           style={{
@@ -224,7 +238,9 @@ const HospitalList = () => {
           </View>
         </TouchableOpacity>
 
-        {hospitals.length > 0 ? (
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#0165FF" />
+        ) : hospitals.length > 0 ? (
           <FlatList
             contentContainerStyle={{
               gap: 15,

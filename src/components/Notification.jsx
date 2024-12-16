@@ -66,7 +66,7 @@ const Notification = ({ notification, onMarkAsRead }) => {
             {notification?.title}
           </Text>
         </View>
-        <Text numberOfLines={3} style={{ color: "#ABABAB" }}>
+        <Text numberOfLines={3} style={{ color: "#797979" }}>
           {notification?.body}
         </Text>
       </View>

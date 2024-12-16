@@ -35,8 +35,8 @@ const renderItem = ({ item }) => {
                 item.status === "pending"
                   ? "#E5F2FF"
                   : item.status === "approved"
-                  ? "#EAF7EF"
-                  : "#FFF4E6",
+                    ? "#EAF7EF"
+                    : "#FFF4E6",
             }}
           >
             <Text
@@ -47,15 +47,15 @@ const renderItem = ({ item }) => {
                   item.status === "pending"
                     ? "#0165FF"
                     : item.status === "approved"
-                    ? "#27AE60"
-                    : "#EB5757",
+                      ? "#27AE60"
+                      : "#EB5757",
               }}
             >
               {item.status === "pending"
                 ? "Chờ duyệt"
                 : item.status === "approved"
-                ? "Đã duyệt"
-                : "Đã từ chối"}
+                  ? "Đã duyệt"
+                  : "Đã từ chối"}
             </Text>
           </View>
           <Text
@@ -96,23 +96,23 @@ const TimeOffListScreen = () => {
       const realData = response.data.doctorUnavailableTime;
 
       // Tạo dữ liệu giả
-      const fakeData = Array.from({ length: 10 }, (_, i) => ({
-        id: 100 + i,
-        doctor_id: 48,
-        hospital_id: 15,
-        title: `Lịch nghỉ giả ${i + 1}`,
-        unavailable_start_date: "2024-11-11T08:00:00.000Z",
-        unavailable_end_date: "2024-11-11T16:00:00.000Z",
-        reason: `Lý do nghỉ giả ${i + 1}`,
-        is_active: null,
-        status:
-          i % 3 === 0 ? "approved" : i % 3 === 1 ? "pending" : "cancelled",
-        createdAt: "2024-11-08T07:42:02.171Z",
-        updatedAt: "2024-11-08T07:42:02.171Z",
-      }));
+      // const fakeData = Array.from({ length: 10 }, (_, i) => ({
+      //   id: 100 + i,
+      //   doctor_id: 48,
+      //   hospital_id: 15,
+      //   title: `Lịch nghỉ giả ${i + 1}`,
+      //   unavailable_start_date: "2024-11-11T08:00:00.000Z",
+      //   unavailable_end_date: "2024-11-11T16:00:00.000Z",
+      //   reason: `Lý do nghỉ giả ${i + 1}`,
+      //   is_active: null,
+      //   status:
+      //     i % 3 === 0 ? "approved" : i % 3 === 1 ? "pending" : "cancelled",
+      //   createdAt: "2024-11-08T07:42:02.171Z",
+      //   updatedAt: "2024-11-08T07:42:02.171Z",
+      // }));
 
       // Kết hợp dữ liệu thật và dữ liệu giả
-      setDoctorUnavailableTimeList([...realData, ...fakeData]);
+      setDoctorUnavailableTimeList([...realData]);
     } catch (error) {
       console.log(error);
     }

@@ -11,6 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [["@react-native-google-signin/google-signin"]],
     "scheme": "hospital-lht",
     "platforms": ["ios", "android"],
     "ios": {
@@ -18,19 +19,35 @@
     },
     "extra": {
       "eas": {
-        "projectId": "fda05fa9-f4b7-4a48-aa81-94a26b980aaf"
+        "projectId": "e226b582-77fe-4a7f-a2ae-859bc2698304"
       }
+      // "suppressReactWarnings": "true",
+      // "suppressReactNativeWarnings": "true",
+      // "suppressReactNativeConsole": "true"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.lehaitho2002.hospitallht"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-
+    "build": {
+      "development": {
+        "developmentClient": true,
+        "distribution": "internal"
+        // "env": {
+        //   "SUPPRESS_REACT_WARNINGS": "true",
+        //   "suppressReactWarnings": "true",
+        //   "suppressReactNativeWarnings": "true",
+        //   "suppressReactNativeConsole": "true"
+        // }
+      }
+    },
     "owner": "lehaitho2002"
   }
 }

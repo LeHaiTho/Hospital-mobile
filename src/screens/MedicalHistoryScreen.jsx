@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -19,15 +20,19 @@ const MedicalHistoryScreen = () => {
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [appointmentCompleted, setAppointmentCompleted] = useState(null);
   const { user } = useSelector((state) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
 
   // lấy thông tin user và tất cả thành viên trong gia đình
   const getAllProfileOfUser = async () => {
     try {
+      setIsLoading(true);
       const res = await axiosConfig.get("users/get-profile");
       setAllProfilesOfUser(res?.data);
       setSelectedProfile(res?.data?.profile);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -35,14 +40,18 @@ const MedicalHistoryScreen = () => {
 
   const getAppointmentCompletedById = async () => {
     try {
+      setIsLoading(true);
       // kiểm tra có phải chính chủ
 
       const res = await axiosConfig.get(
         `/appointments/get-appointment-completed-by-id/${selectedProfile?.id}`
       );
+
       setAppointmentCompleted(res?.data?.appointment);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   console.log(appointmentCompleted);
@@ -58,16 +67,16 @@ const MedicalHistoryScreen = () => {
     }
   }, [navigation]);
   console.log(allProfilesOfUser);
-
+  console.log(selectedProfile);
   const navigation = useNavigation();
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1 }}>
       <View style={{ backgroundColor: "#fff" }}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
-            gap: 20,
+            gap: 10,
             padding: 20,
           }}
         >
@@ -113,6 +122,7 @@ const MedicalHistoryScreen = () => {
             <TouchableOpacity
               onPress={() => {
                 setSelectedProfile(allProfilesOfUser?.profile);
+                setAppointmentCompleted(null);
               }}
               style={{
                 borderWidth: 3,
@@ -188,24 +198,24 @@ const MedicalHistoryScreen = () => {
                   {member?.relationship === "father"
                     ? "Ba"
                     : member?.relationship === "mother"
-                    ? "Mẹ"
-                    : member?.relationship === "brother"
-                    ? "Anh trai"
-                    : member?.relationship === "sister"
-                    ? "Chị gái"
-                    : member?.relationship === "husband"
-                    ? "Chồng"
-                    : member?.relationship === "wife"
-                    ? "Vợ"
-                    : member?.relationship === "child"
-                    ? "Con"
-                    : member?.relationship === "grandparent"
-                    ? "Ông bà"
-                    : member?.relationship === "grandchild"
-                    ? "Cháu"
-                    : member?.relationship === "other"
-                    ? "Khác"
-                    : ""}
+                      ? "Mẹ"
+                      : member?.relationship === "brother"
+                        ? "Anh trai"
+                        : member?.relationship === "sister"
+                          ? "Chị gái"
+                          : member?.relationship === "husband"
+                            ? "Chồng"
+                            : member?.relationship === "wife"
+                              ? "Vợ"
+                              : member?.relationship === "child"
+                                ? "Con"
+                                : member?.relationship === "grandparent"
+                                  ? "Ông bà"
+                                  : member?.relationship === "grandchild"
+                                    ? "Cháu"
+                                    : member?.relationship === "other"
+                                      ? "Khác"
+                                      : ""}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -307,98 +317,132 @@ const MedicalHistoryScreen = () => {
           </View>
         </View>
         {/*  scroll tháng */}
-        <FlatList
-          data={appointmentCompleted}
-          contentContainerStyle={{
-            gap: 15,
-            marginTop: 10,
-            padding: 2,
-            paddingBottom: 20,
+      </View>
+      {isLoading ? (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            flex: 1,
+            backgroundColor: "#fff",
           }}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                padding: 15,
-                backgroundColor: "#fff",
-                borderRadius: 10,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.2,
-                shadowRadius: 2,
-                elevation: 3,
-              }}
-              key={item?.id}
-            >
-              <TouchableOpacity
-                key={item?.id}
-                style={{ gap: 10, flexDirection: "row" }}
-                onPress={() => {
-                  navigation.navigate("MedicalHistoryDetail", {
-                    appointment: item,
-                    selectedProfile,
-                  });
+        >
+          <ActivityIndicator size="large" color="#0165FC" />
+          <Text>Đang tải dữ liệu...</Text>
+        </View>
+      ) : appointmentCompleted?.length === 0 ? (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            flex: 1,
+            backgroundColor: "#fff",
+          }}
+        >
+          <Text>Không tìm thấy lịch sử khám bệnh</Text>
+        </View>
+      ) : appointmentCompleted?.length > 0 ? (
+        <View style={{ backgroundColor: "#fff", flex: 1 }}>
+          <FlatList
+            data={appointmentCompleted}
+            contentContainerStyle={{
+              gap: 15,
+              marginTop: 10,
+              paddingHorizontal: 20,
+              paddingBottom: 20,
+              backgroundColor: "#fff",
+            }}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  padding: 15,
+                  backgroundColor: "#fff",
+                  borderRadius: 10,
+                  // shadowColor: "#000",
+                  // shadowOffset: { width: 0, height: 1 },
+                  // shadowOpacity: 0.2,
+                  // shadowRadius: 2,
+                  // elevation: 3,
+                  borderWidth: 1,
+                  borderColor: "#ECECEC",
                 }}
+                key={item?.id}
               >
-                <View
-                  style={{
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 36,
-                      fontWeight: "bold",
-                      color: "rgba(1, 101, 255, 0.5)",
-                    }}
-                  >
-                    {moment(item?.appointment_date).format("DD")}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: "#0165FF",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {moment(item?.appointment_date).format("MM/YYYY")}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                    justifyContent: "space-between",
-
-                    flex: 1,
+                <TouchableOpacity
+                  key={item?.id}
+                  style={{ gap: 10, flexDirection: "row" }}
+                  onPress={() => {
+                    navigation.navigate("MedicalHistoryDetail", {
+                      appointment: item,
+                      selectedProfile,
+                    });
                   }}
                 >
                   <View
                     style={{
                       flexDirection: "column",
-                      gap: 5,
-                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                      {item?.hospital?.name}
+                    <Text
+                      style={{
+                        fontSize: 36,
+                        fontWeight: "bold",
+                        color: "rgba(1, 101, 255, 0.5)",
+                      }}
+                    >
+                      {moment(item?.appointment_date).format("DD")}
                     </Text>
-                    <Text style={{ fontSize: 12 }}>
-                      Mã: {item?.appointment_code}
-                    </Text>
-                    <Text style={{ fontSize: 12 }}>
-                      {item?.specialty?.name}
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "#0165FF",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {moment(item?.appointment_date).format("MM/YYYY")}
                     </Text>
                   </View>
-                  <FontAwesome name="angle-right" size={20} color="#0165FF" />
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
-      </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 10,
+                      justifyContent: "space-between",
+
+                      flex: 1,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        gap: 5,
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                        {item?.hospital?.name}
+                      </Text>
+                      <Text style={{ fontSize: 12 }}>
+                        Mã: {item?.appointment_code}
+                      </Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {item?.specialty?.name}
+                      </Text>
+                    </View>
+                    <FontAwesome name="angle-right" size={20} color="#0165FF" />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        </View>
+      ) : (
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text>Không tìm thấy lịch sử khám bệnh</Text>
+        </View>
+      )}
     </View>
   );
 };

@@ -494,8 +494,8 @@ const HomeScreen = () => {
               gap: 5,
               flex: 1,
               alignItems: "center",
-              onPress: () => navigation.navigate("Chat"),
             }}
+            onPress={() => navigation.navigate("ListDoctorOnline")}
           >
             <Image
               source={require("../../assets/menu/hospital-book.png")}
@@ -574,8 +574,8 @@ const HomeScreen = () => {
         >
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cơ sở y tế</Text>
 
-          {/* <TouchableOpacity onPress={() => navigation.navigate("HospitalList")}> */}
-          <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
+          <TouchableOpacity onPress={() => navigation.navigate("HospitalList")}>
+            {/* <TouchableOpacity onPress={() => navigation.navigate("Chat")}> */}
             <Text
               style={{
                 color: "#0165FC",

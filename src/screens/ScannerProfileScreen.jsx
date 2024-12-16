@@ -19,6 +19,11 @@ export default function ScannerProfileScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const isPermission = permission?.granted;
 
+  // nếu chưa cấp quyền thì yêu cầu cấp quyền
+  if (!isPermission) {
+    requestPermission();
+  }
+
   const handleBarCodeScanned = async ({ data }) => {
     if (data) {
       navigation.replace("CreateProfile", {

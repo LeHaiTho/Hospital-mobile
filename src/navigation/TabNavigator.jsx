@@ -95,6 +95,17 @@ const TabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
+          headerShown: true,
+          headerTitle: "Thông báo",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
         }}
         component={NotificationScreen}
       />

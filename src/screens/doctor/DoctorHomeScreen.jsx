@@ -8,9 +8,12 @@ import {
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 import { TouchableOpacity } from "react-native";
 const DoctorHomeScreen = () => {
   const navigation = useNavigation();
+  const { user } = useSelector((state) => state.auth);
+  console.log("user", user);
   return (
     <ScrollView style={{ flex: 1, paddingHorizontal: 20 }}>
       <View
@@ -29,7 +32,7 @@ const DoctorHomeScreen = () => {
         />
         <View>
           <Text style={{ fontWeight: "500" }}>Xin chào</Text>
-          <Text style={{ fontWeight: "500" }}>Lê Hải Thọ</Text>
+          <Text style={{ fontWeight: "500" }}>{user?.fullname}</Text>
         </View>
       </View>
       <Search />
@@ -125,6 +128,7 @@ const DoctorHomeScreen = () => {
             gap: 10,
             width: "20%",
           }}
+          onPress={() => navigation.navigate("ChatList")}
         >
           <FontAwesome
             name="calendar"
@@ -137,7 +141,7 @@ const DoctorHomeScreen = () => {
             }}
           />
           <Text style={{ fontSize: 12, textAlign: "center" }}>
-            Thời gian làm việc
+            Chat với bệnh nhân
           </Text>
         </TouchableOpacity>
       </View>

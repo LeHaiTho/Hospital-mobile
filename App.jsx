@@ -1,31 +1,32 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import HomeScreen from "./screens/HomeScreen";
-import LoginScreen from "./screens/LoginScreen";
-import { createStackNavigator } from "@react-navigation/stack";
+import { Alert, StyleSheet } from "react-native";
+// import HomeScreen from "./screens/HomeScreen";
+// import LoginScreen from "./screens/LoginScreen";
+// import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { Button, PaperProvider } from "react-native-paper";
-import SignUp from "./screens/SignUp";
-import DoctorDetail from "./screens/DoctorDetail";
-import HospitalList from "./screens/HospitalList";
-import DoctorList from "./screens/DoctorList";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import StackNavigator from "./navigation/StackNavigator";
-import DoctorNavigator from "./navigation/doctorNavigator/DoctorNavigator";
-import { store } from "./redux/store";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { setUserInfo } from "./redux/authSlice";
-import { useEffect, useState, useRef } from "react";
-import axiosConfig from "./apis/axiosConfig";
+import { PaperProvider } from "react-native-paper";
+// import SignUp from "./screens/SignUp";
+// import DoctorDetail from "./screens/DoctorDetail";
+// import HospitalList from "./screens/HospitalList";
+// import DoctorList from "./screens/DoctorList";
+import StackNavigator from "./src/navigation/StackNavigator";
+// import DoctorNavigator from "./src/navigation/doctorNavigator/DoctorNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
-import { getToken } from "./firebase/firebaseConfig";
-import { logout } from "./redux/authSlice";
-import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import axiosConfig from "./src/apis/axiosConfig";
+import { setUserInfo } from "./src/redux/authSlice";
+import { store } from "./src/redux/store";
+// import { Platform } from "react-native";
+// import { getToken } from "./firebase/firebaseConfig";
+// import { logout } from ".";
+// import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
-import { io } from "socket.io-client";
+import { initializeSocket, socket } from "./src/utils/socket";
+import ToastConfig from "./src/utils/toastConfig";
+
+// test deep linking
+import * as Linking from "expo-linking";
 
 const Base_URL = process.env.EXPO_PUBLIC_API_URL;
 const UserInfoFetcher = () => {
@@ -38,24 +39,17 @@ const UserInfoFetcher = () => {
         const response = await axiosConfig.get("/auth/user-info");
         console.log("user vừa vào app", response.data.user.role.name);
 
-        // Gửi token khi connect server
-        const socket = io(Base_URL, {
-          auth: {
-            token,
-          },
-        });
-
-        socket.on("connect", () => {
-          console.log("Connected to server");
-        });
-
-        socket.on("disconnect", () => {
-          console.log("Disconnected from server");
-        });
+        // Gửi token khi connect serve
         dispatch(setUserInfo(response?.data?.user));
-      } else {
-        console.log("token không tồn tại");
+        initializeSocket(token);
       }
+
+      return () => {
+        if (socket) {
+          socket.disconnect();
+          console.log("disconnect socket");
+        }
+      };
     } catch (error) {
       console.log("error", error);
     }
@@ -104,10 +98,40 @@ const UserInfoFetcher = () => {
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, [user]);
+
   return null;
 };
 
 const App = () => {
+  // useEffect(() => {
+  //   // Hàm xử lý khi ứng dụng được mở bằng URL
+  //   const handleDeepLink = (event) => {
+  //     const url = event.url; // URL đầy đủ được mở
+  //     console.log("URL nhận được:", url);
+
+  //     // Phân tích URL để lấy thông tin
+  //     const path = url.split("://")[1]; // Lấy phần "paymentsuccess"
+  //     if (path === "paymentsuccess") {
+  //       // Alert.alert("Thông báo", "Thanh toán thành công!");
+  //       // xử lý khi thanh toán thành công
+  //       // mở màn hình home
+  //       navigation.navigate("TabNavigator");
+  //     }
+  //   };
+
+  //   // Lắng nghe sự kiện mở URL
+  //   Linking.addEventListener("url", handleDeepLink);
+
+  //   // Kiểm tra nếu ứng dụng đã được mở bằng URL
+  //   Linking.getInitialURL().then((url) => {
+  //     if (url) handleDeepLink({ url });
+  //   });
+
+  //   // Dọn dẹp listener khi component bị unmount
+  //   return () => {
+  //     Linking.removeEventListener("url", handleDeepLink);
+  //   };
+  // }, []);
   // Cấu hình hiển thị thông báo
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -123,7 +147,7 @@ const App = () => {
         <NavigationContainer>
           <UserInfoFetcher />
           <StackNavigator />
-          <Toast />
+          <Toast config={ToastConfig} />
         </NavigationContainer>
       </PaperProvider>
     </Provider>

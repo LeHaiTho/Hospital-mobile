@@ -4,7 +4,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import DoctorDetail from "../screens/DoctorDetail";
 import HospitalList from "../screens/HospitalList";
 import DoctorList from "../screens/DoctorList";
-import SignUp from "../screens/SignUp";
 import LoginScreen from "../screens/LoginScreen";
 import PatientDetailScreen from "../screens/PatientDetailScreen";
 import SuccessfullBookScreen from "../screens/SuccessfullBookScreen";
@@ -38,6 +37,11 @@ import SpecialtyFilterListScreen from "../screens/SpecialtyFilterListScreen";
 import SpecialtyDetailOfHospital from "../screens/SpecialtyDetailOfHospital";
 import MedicalHistoryScreen from "../screens/MedicalHistoryScreen";
 import ChatScreen from "../screens/chat/ChatScreen";
+import ListDoctorOnlineScreen from "../screens/chat/ListDoctorOnlineScreen";
+import PackagesScreen from "../screens/chat/PackagesScreen";
+import PaymentPackageScreen from "../screens/chat/PaymentPackageScreen";
+import ChatListScreen from "../screens/chat/ChatListScreen";
+import SignUp from "../screens/SignUp";
 const CustomerNavigator = () => {
   const navigation = useNavigation();
 
@@ -93,8 +97,37 @@ const CustomerNavigator = () => {
       <Stack.Screen
         name="MedicalHistoryDetail"
         component={MedicalHistoryDetailScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Kết quả",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
       />
-      <Stack.Screen name="MedicalHistory" component={MedicalHistoryScreen} />
+      <Stack.Screen
+        name="MedicalHistory"
+        component={MedicalHistoryScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Lịch sử khám bệnh",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
+      />
       <Stack.Screen
         name="CommunityList"
         component={CommunityListScreen}
@@ -113,12 +146,32 @@ const CustomerNavigator = () => {
           headerShadowVisible: false,
         }}
       />
-      <Stack.Screen name="WebviewPayment" component={WebviewPaymentScreen} />
+      <Stack.Screen
+        name="WebviewPayment"
+        component={WebviewPaymentScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="FilterHospitalScreen"
         component={FilterHospitalScreen}
       />
-      <Stack.Screen name="ResultDetails" component={ResultDetails} />
+      <Stack.Screen
+        name="ResultDetails"
+        component={ResultDetails}
+        options={{
+          headerShown: true,
+          headerTitle: "Kết quả chi tiết",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
+      />
       <Stack.Screen
         name="InfoPayment"
         component={InfoPaymentScreen}
@@ -356,7 +409,23 @@ const CustomerNavigator = () => {
         component={SuccessfullBookScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="ResultImage" component={ResultImageScreen} />
+      <Stack.Screen
+        name="ResultImage"
+        component={ResultImageScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Chuẩn đoán hình ảnh",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
+      />
       <Stack.Screen
         name="ChangeAppointmentDetail"
         component={ChangeAppointmentDetail}
@@ -365,8 +434,94 @@ const CustomerNavigator = () => {
         name="ConfirmChangeAppointmentDetail"
         component={ConfirmChangeAppointmentDetailScreen}
       />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ListDoctorOnline"
+        component={ListDoctorOnlineScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Hỏi riêng bác sĩ",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerRight: () => (
+            <TouchableOpacity
+              style={{ marginRight: 20 }}
+              onPress={() => navigation.navigate("ChatList")}
+            >
+              <Ionicons name="chatbubbles-outline" size={24} color="#fff" />
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="Packages"
+        component={PackagesScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PaymentPackage"
+        component={PaymentPackageScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Thanh toán",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="ChatList"
+        component={ChatListScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Tin nhắn",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };

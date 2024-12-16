@@ -24,6 +24,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
   useEffect(() => {
     getMedicalHistoryDetail();
   }, [appointment]);
+  console.log(selectedProfile);
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
@@ -42,7 +43,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
         >
           <Image
             source={{
-              uri: "https://cdn.kona-blue.com/upload/kona-blue_com/post/images/2024/09/21/476/avatar-shin-cute-4.jpg",
+              uri: "https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg",
             }}
             style={{ width: 65, height: 65, marginTop: 5 }}
           />

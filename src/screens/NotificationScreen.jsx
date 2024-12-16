@@ -42,7 +42,7 @@ const NotificationScreen = () => {
       }
     >
       <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
-        <Text style={{ fontSize: 16, color: "#ABABAB" }}>Hôm nay</Text>
+        <Text style={{ fontSize: 16, color: "#000" }}>Hôm nay</Text>
       </View>
       {notifications.map((notification) => (
         <Notification
@@ -52,7 +52,7 @@ const NotificationScreen = () => {
         />
       ))}
       <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
-        <Text style={{ fontSize: 16, color: "#ABABAB" }}>Tuần này</Text>
+        <Text style={{ fontSize: 16, color: "#000" }}>Tuần này</Text>
       </View>
       {/*  */}
     </ScrollView>

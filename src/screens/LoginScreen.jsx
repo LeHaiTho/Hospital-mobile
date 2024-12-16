@@ -1,30 +1,37 @@
-import { View, Text, ScrollView } from "react-native";
-import { TextInput, Image, Avatar, Button } from "react-native-paper";
-import { useState } from "react";
+import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import SocialMediaButton from "../components/SocialMediaButton";
-import axiosConfig from "../apis/axiosConfig";
+import { useState } from "react";
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import axiosConfig from "../apis/axiosConfig";
 import { login } from "../redux/authSlice";
-import axios from "axios";
 const LoginScreen = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [isShowPassword, setIsShowPassword] = useState(false);
   const { user } = useSelector((state) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
   const { redirectTo, doctor, selectedDate, slot, selectedHospital } =
     route.params || {};
   const handleLogin = async () => {
     try {
+      setIsLoading(true);
       const res = await axiosConfig.post("/auth/login", {
         username,
         password,
       });
 
       const { user, token } = res.data;
-
       dispatch(login({ user, token }));
 
       if (redirectTo) {
@@ -43,132 +50,212 @@ const LoginScreen = ({ route }) => {
       }
     } catch (error) {
       console.log("error", error);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
-        padding: 20,
-        flexDirection: "column",
         backgroundColor: "#fff",
       }}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* logo */}
-        <View
-          style={{
-            paddingVertical: 40,
-            alignItems: "center",
-          }}
-        >
-          <Avatar.Image
-            style={{
-              marginBottom: 25,
-            }}
-            size={100}
-            source={{
-              uri: "https://img.freepik.com/free-vector/hospital-logo-design-vector-medical-cross_53876-136743.jpg",
-            }}
-          />
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            Chào mừng bạn trở lại.
-          </Text>
-          <Text style={{ fontSize: 16, color: "gray" }}>
-            Hãy đăng nhập để tiếp tục
-          </Text>
-        </View>
-
-        {/* form */}
-        <View style={{ gap: 20, paddingVertical: 20 }}>
-          <TextInput
-            placeholder="Tên đăng nhập/Số điện thoại"
-            mode="outlined"
-            outlineColor="#D1D5DB"
-            clearTextOnFocus
-            outlineStyle={{ borderRadius: 12, borderWidth: 0.5 }}
-            placeholderTextColor="#A7ABD9"
-            activeOutlineColor="#D1D5DB"
-            left={<TextInput.Icon icon="account" color="#A7ABD9" />}
-            style={{
-              height: 50,
-            }}
-            value={username}
-            onChangeText={(text) => setUsername(text)}
-          />
-          <TextInput
-            placeholderTextColor="#A7ABD9"
-            placeholder="Mật khẩu"
-            mode="outlined"
-            textColor="black"
-            outlineColor="#D1D5DB"
-            activeOutlineColor="#D1D5DB"
-            outlineStyle={{ borderRadius: 12, borderWidth: 0.5 }}
-            left={<TextInput.Icon icon="lock" color="#A7ABD9" />}
-            secureTextEntry
-            right={<TextInput.Icon icon="eye" color="#A7ABD9" />}
-            style={{ height: 50 }}
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-          {/* login with otp */}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          backgroundColor: "#fff",
+          alignItems: "center",
+          justifyContent: "center",
+          paddingHorizontal: 20,
+          paddingTop: "50%",
+          gap: 20,
+        }}
+      >
+        <>
           <Text
             style={{
-              textAlign: "right",
+              fontSize: 20,
+              fontWeight: "bold",
+              textAlign: "center",
               color: "#0165FC",
-              fontSize: 16,
-              fontStyle: "italic",
             }}
           >
-            Đăng nhập bằng tin nhắn OTP
+            LHT MED
           </Text>
-          <Button
-            mode="contained"
-            buttonColor="#0165FC"
-            style={{
-              paddingVertical: 5,
-              borderRadius: 50,
-              height: 50,
-            }}
-            onPress={handleLogin}
-          >
-            Đăng nhập
-          </Button>
-        </View>
-
-        {/* social media login */}
-        <View
-          style={{
-            gap: 20,
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          <Text>Or login with</Text>
-          <SocialMediaButton />
-        </View>
-
-        {/* forgot password and sign up */}
-        <View style={{ justifyContent: "center", paddingVertical: 20 }}>
-          <Button textColor="#0165FC">Quên mật khẩu?</Button>
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <Text>Bạn không có tài khoản?</Text>
-            <Button
-              textColor="#0165FC"
-              onPress={() => navigation.navigate("SignUp")}
-            >
-              Đăng ký
-            </Button>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              Chào mừng bạn trở lại.
+            </Text>
+            <Text style={{ fontSize: 12, color: "gray" }}>
+              Hãy đăng nhập để tiếp tục
+            </Text>
           </View>
-        </View>
+          <View style={{ gap: 10, width: "100%" }}>
+            <View style={{ width: "100%", gap: 5 }}>
+              <Text style={{ fontWeight: "600" }}>Tên đăng nhập</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  borderWidth: 0.6,
+                  borderColor: "#808080",
+                  borderRadius: 100,
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  width: "100%",
+                }}
+              >
+                <FontAwesome6 name="user-pen" size={18} color="#808080" />
+                <TextInput
+                  placeholder="Nhập tên đăng nhập"
+                  placeholderTextColor="#808080"
+                  style={{ flex: 1 }}
+                  value={username}
+                  onChangeText={(text) => setUsername(text)}
+                />
+                {username && (
+                  <TouchableOpacity onPress={() => setUsername("")}>
+                    <Ionicons name="close-outline" size={20} color="#808080" />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          </View>
+          <View style={{ gap: 10, width: "100%" }}>
+            <View style={{ width: "100%", gap: 5 }}>
+              <Text style={{ fontWeight: "600" }}>Mật khẩu</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  borderWidth: 0.6,
+                  borderColor: "#808080",
+                  borderRadius: 100,
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  width: "100%",
+                }}
+              >
+                <FontAwesome6 name="lock" size={18} color="#808080" />
+                <TextInput
+                  placeholder="**************"
+                  placeholderTextColor="#808080"
+                  style={{ flex: 1 }}
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
+                  secureTextEntry={!isShowPassword}
+                />
+
+                <TouchableOpacity
+                  onPress={() => setIsShowPassword(!isShowPassword)}
+                  style={{ paddingRight: 10 }}
+                >
+                  <Feather
+                    name={isShowPassword ? "eye" : "eye-off"}
+                    size={20}
+                    color="#808080"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={{
+              paddingVertical: 10,
+              backgroundColor: "#0165FC",
+              borderRadius: 100,
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={handleLogin}
+          >
+            <Text style={{ color: "#fff" }}>Đăng nhập</Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              alignItems: "center",
+              width: "100%",
+              justifyContent: "center",
+              paddingHorizontal: 40,
+            }}
+          >
+            <View
+              style={{ flex: 1, height: 0.5, backgroundColor: "#808080" }}
+            />
+            <Text style={{ color: "#808080" }}>hoặc Đăng nhập với </Text>
+            <View
+              style={{ flex: 1, height: 0.5, backgroundColor: "#808080" }}
+            />
+          </View>
+          <View style={{ gap: 10, flexDirection: "row" }}>
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                borderWidth: 0.4,
+                borderColor: "#808080",
+                borderRadius: 100,
+                padding: 10,
+              }}
+            >
+              <Image
+                source={require("../../assets/ggle.png")}
+                style={{ width: 30, height: 30 }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                borderWidth: 0.4,
+                borderColor: "#808080",
+                borderRadius: 100,
+                padding: 10,
+              }}
+            >
+              <Image
+                source={require("../../assets/facebook.jpg")}
+                style={{ width: 30, height: 30 }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Text>Bạn không có tài khoản?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+              <Text style={{ color: "#0165FC" }}>Đăng ký</Text>
+            </TouchableOpacity>
+          </View>
+        </>
       </ScrollView>
+      {isLoading ? (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: 10,
+          }}
+        >
+          <ActivityIndicator size="large" color="#0165FC" />
+        </View>
+      ) : null}
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, SafeAreaView } from "react-native";
 import WebView from "react-native-webview";
 import { useNavigation } from "@react-navigation/native";
 
@@ -10,7 +10,7 @@ const WebviewPaymentScreen = ({ route }) => {
     console.log("cbi chuyen URl");
   }, [paymentUrl]);
   return (
-    <>
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <WebView
         source={{
           uri: paymentUrl,
@@ -20,7 +20,7 @@ const WebviewPaymentScreen = ({ route }) => {
           console.log("event", event.url);
         }}
       />
-    </>
+    </SafeAreaView>
   );
 };
 

@@ -68,14 +68,14 @@ export default function CustomerProfileScreen({ route }) {
     getProfiles();
   }, []);
   console.log("profiles", profiles);
-  const snapPoints = useMemo(() => ["35%"], []);
-  const handleSheetChange = useCallback((index) => {
-    if (index === -1) {
-      setIsSheetVisible(false); // Đặt trạng thái khi BottomSheet đóng
-    } else {
-      setIsSheetVisible(true); // Đặt trạng thái khi BottomSheet mở
-    }
-  }, []);
+  const snapPoints = useMemo(() => [], []);
+  // const handleSheetChange = useCallback((index) => {
+  //   if (index === -1) {
+  //     setIsSheetVisible(false); // Đặt trạng thái khi BottomSheet đóng
+  //   } else {
+  //     setIsSheetVisible(true); // Đặt trạng thái khi BottomSheet mở
+  //   }
+  // }, []);
 
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
@@ -217,8 +217,8 @@ export default function CustomerProfileScreen({ route }) {
               paddingVertical: 5,
               gap: 20,
               paddingHorizontal: 5,
-              paddingBottom: 100,
             }}
+            showsVerticalScrollIndicator={false}
           >
             {profiles?.map((profile) => (
               <Card
@@ -350,18 +350,18 @@ export default function CustomerProfileScreen({ route }) {
             ))}
           </ScrollView>
         </View>
-        {isSheetVisible && <View style={styles.overlay} />}
+        {/* {isSheetVisible && <View style={styles.overlay} />} */}
 
         <BottomSheet
           ref={sheetRef}
           snapPoints={snapPoints}
           enableDynamicSizing={true}
-          onChange={handleSheetChange}
+          // onChange={handleSheetChange}
           enablePanDownToClose={true}
           index={-1}
           backgroundStyle={{
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
             padding: 20,
           }}
         >
@@ -369,6 +369,7 @@ export default function CustomerProfileScreen({ route }) {
             style={{
               paddingHorizontal: 20,
               paddingBottom: 20,
+              backgroundColor: "#fff",
             }}
           >
             <View

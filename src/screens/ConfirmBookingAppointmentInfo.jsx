@@ -22,6 +22,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Avatar, Card, IconButton, FAB } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import ToastConfig from "../utils/toastConfig";
 import React, {
   useCallback,
   useRef,
@@ -108,6 +109,7 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
       Toast.show({
         text1: "Vui lòng điền lý do khám *",
         type: "error",
+
         text1Style: {
           fontSize: 14,
           color: "#F20000",
@@ -141,6 +143,7 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
       });
     }
   };
+
   return (
     <>
       <KeyboardAwareScrollView style={{ flex: 1 }} extraScrollHeight={1000}>

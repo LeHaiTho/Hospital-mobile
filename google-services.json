@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "909616392538",
+    "project_id": "hospital-auth-b98a6",
+    "storage_bucket": "hospital-auth-b98a6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909616392538:android:1e044382ee31908f3aeb63",
+        "android_client_info": {
+          "package_name": "com.lehaitho2002.hospitallht"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909616392538-9f0738v35crc71n8a0rmc4nu85tbslfh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lehaitho2002.hospitallht",
+            "certificate_hash": "63f495c4061a1b89cdaf1f025a50ebb1ffe94087"
+          }
+        },
+        {
+          "client_id": "909616392538-f70scsii6mr7p0pge76c70elm7on34bm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lehaitho2002.hospitallht",
+            "certificate_hash": "50dc901c20ca61a128f39271eb77263b77ae245a"
+          }
+        },
+        {
+          "client_id": "909616392538-ofbrf2mbi0cr9ops1sls8gnv9cdif35h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrJUHHMAdsupQulXlCfXHeX9AIVxNxbtg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909616392538-ofbrf2mbi0cr9ops1sls8gnv9cdif35h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
