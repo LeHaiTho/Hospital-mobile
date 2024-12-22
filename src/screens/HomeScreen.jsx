@@ -13,7 +13,6 @@ import { Avatar, Badge } from "react-native-paper";
 import Search from "../components/Search";
 import moment from "moment";
 import DoctorCard from "../components/DoctorCard";
-
 import { Dimensions } from "react-native";
 import HospitalCard from "../components/HospitalCard";
 import { useNavigation } from "@react-navigation/native";
@@ -25,6 +24,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { FlatList } from "react-native";
+import { SwiperFlatList } from "react-native-swiper-flatlist";
+import { StyleSheet, StatusBar } from "react-native";
+
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -36,7 +38,12 @@ const HomeScreen = () => {
   const [appointments, setAppointments] = useState([]);
   const [appointmentNeedChange, setAppointmentNeedChange] = useState([]);
   const dispatch = useDispatch();
-
+  console.log("user", user);
+  const banners = [
+    require("../../assets/banners/banner-1.png"),
+    require("../../assets/banners/banner-2.jpg"),
+    require("../../assets/banners/banner-3.png"),
+  ];
   // lấy những lịch hẹn cần cảnh báo dời lịch
   const getAppointmentNeedChange = async () => {
     try {
@@ -82,18 +89,18 @@ const HomeScreen = () => {
       console.log(error);
     }
   };
-  console.log(
-    "specialtiesdddddddddddddddddddddddddddddddddddddddddddddddd",
-    specialties
-  );
-  console.log(
-    "appointmentdddddddddddddddddddddddddddddddddddddddddddddddd",
-    appointments
-  );
-  console.log(
-    "doctorsdddddddddddddddddddddddddddddddddddddddddddddddddddd",
-    doctors
-  );
+  // console.log(
+  //   "specialtiesdddddddddddddddddddddddddddddddddddddddddddddddd",
+  //   specialties
+  // );
+  // console.log(
+  //   "appointmentdddddddddddddddddddddddddddddddddddddddddddddddd",
+  //   appointments
+  // );
+  // console.log(
+  //   "doctorsdddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  //   doctors
+  // );
   useEffect(() => {
     if (
       user &&
@@ -109,10 +116,61 @@ const HomeScreen = () => {
     getSpecialtiesList();
   }, []);
 
-  console.log("user", user?.role);
+  // console.log("user", user?.role);
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ gap: 10 }}
+      >
+        <View
+          style={{
+            paddingHorizontal: 16,
+            paddingTop: "10%",
+            paddingBottom: 10,
+            backgroundColor: "#0165FC",
+            borderBottomLeftRadius: 80,
+            borderBottomRightRadius: 80,
+            gap: 10,
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "#fff",
+                textTransform: "uppercase",
+              }}
+            >
+              LHT medical
+            </Text>
+            <Text style={{ fontSize: 14, color: "#fff" }}>
+              Ứng dụng đặt lịch và chăm sóc sức khỏe 24/7
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("SearchSuggestion")}
+            style={{
+              backgroundColor: "#fff",
+              padding: 10,
+              borderRadius: 10,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 10,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.2,
+              shadowRadius: 2,
+              elevation: 3,
+            }}
+          >
+            <Ionicons name="search" size={24} color="#0165FC" />
+            <Text style={{ color: "gray" }}>
+              Tìm kiếm bệnh viện, chuyên khoa, bác sĩ ...
+            </Text>
+          </TouchableOpacity>
+        </View>
         <View
           style={{
             flexDirection: "row",
@@ -121,7 +179,7 @@ const HomeScreen = () => {
             paddingHorizontal: 16,
           }}
         >
-          <View
+          {/* <View
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -136,10 +194,10 @@ const HomeScreen = () => {
               Vị trí hiện tại
             </Text>
             <Ionicons name="chevron-down" size={24} color="#000" />
-          </View>
+          </View> */}
 
           {/* notification */}
-          <TouchableOpacity style={{ position: "relative" }}>
+          {/* <TouchableOpacity style={{ position: "relative" }}>
             <Ionicons
               name="notifications"
               color="black"
@@ -163,17 +221,52 @@ const HomeScreen = () => {
                 {notification}
               </Badge>
             )}
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         {/* search */}
-        <View style={{ paddingHorizontal: 16 }}>
+        {/* <View style={{ paddingHorizontal: 16 }}>
           <Search />
-        </View>
+        </View> */}
         {/* test hỏi cộng đồng */}
         {/* <TouchableOpacity onPress={() => navigation.navigate("CommunityList")}>
           <Text>test hỏi cộng đồng</Text>
         </TouchableOpacity> */}
+        {/* swiper */}
+
+        <View>
+          <SwiperFlatList
+            autoplay
+            autoplayDelay={3}
+            autoplayLoop
+            index={2}
+            data={banners}
+            showPagination={true}
+            paginationActiveColor="#0165FC"
+            paginationDefaultColor="#D9D9D9"
+            paginationStyleItem={{
+              width: 7,
+              height: 7,
+              borderRadius: 100,
+              marginHorizontal: 5,
+            }}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  width: Dimensions.get("window").width,
+                  height: 160,
+                  paddingHorizontal: 16,
+                }}
+              >
+                <Image
+                  source={item}
+                  style={{ width: "100%", height: "100%", borderRadius: 10 }}
+                  resizeMode="cover"
+                />
+              </View>
+            )}
+          />
+        </View>
         {/* lịch hẹn cần thay đổi gấp */}
         {appointmentNeedChange?.length > 0 && (
           <View style={{ marginTop: 10, paddingHorizontal: 16 }}>
@@ -638,11 +731,13 @@ const HomeScreen = () => {
 
           <FlatList
             showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
             contentContainerStyle={{
               gap: 15,
               paddingHorizontal: 16,
               paddingVertical: 10,
             }}
+            initialNumToRender={1}
             data={doctors}
             renderItem={({ item, index }) => (
               <DoctorCard key={index} doctor={item} />
@@ -650,8 +745,9 @@ const HomeScreen = () => {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
+const { width } = Dimensions.get("window");
 
 export default HomeScreen;

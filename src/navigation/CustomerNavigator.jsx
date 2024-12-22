@@ -12,7 +12,8 @@ import AppointmentDetail from "../screens/AppointmentDetail";
 import RatingScreen from "../screens/RatingScreen";
 import SpecialtyListScreen from "../screens/SpecialtyListScreen";
 import HospitalDetailScreen from "../screens/HospitalDetailScreen";
-import FilterHospitalScreen from "../screens/FilterHospitalScreen";
+// import FilterHospitalScreen from "../screens/FilterHospitalScreen";
+import SearchSuggestionScreen from "../screens/SearchSuggestionScreen";
 import CustomerProfileScreen from "../screens/CustomerProfileScreen";
 import ConfirmInfoScreen from "../screens/ConfirmInfoScreen";
 import { TouchableOpacity, Text } from "react-native";
@@ -75,13 +76,26 @@ const CustomerNavigator = () => {
       <Stack.Screen
         name="SpecialtyFilterList"
         component={SpecialtyFilterListScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Khám dịch vụ",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
       />
       <Stack.Screen
         name="SpecialtyDetailOfHospital"
         component={SpecialtyDetailOfHospital}
         options={{
           headerShown: true,
-          headerTitle: "Cộng đồng hỏi đáp",
+          headerTitle: "Thông tin dịch vụ",
           headerTitleStyle: {
             fontSize: 17,
           },
@@ -109,6 +123,13 @@ const CustomerNavigator = () => {
           headerTintColor: "#fff",
           headerTitleAlign: "center",
           headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="SearchSuggestion"
+        component={SearchSuggestionScreen}
+        options={{
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -151,10 +172,10 @@ const CustomerNavigator = () => {
         component={WebviewPaymentScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="FilterHospitalScreen"
         component={FilterHospitalScreen}
-      />
+      /> */}
       <Stack.Screen
         name="ResultDetails"
         component={ResultDetails}
@@ -212,7 +233,7 @@ const CustomerNavigator = () => {
         }}
       />
       <Stack.Screen
-        name="CustomerProfile"
+        name="CustomerProfileBooking"
         component={CustomerProfileScreen}
         options={{
           headerShown: true,
@@ -369,7 +390,7 @@ const CustomerNavigator = () => {
         component={DoctorDetail}
         options={{
           headerShown: true,
-          headerTitle: "Cộng đồng hỏi đáp",
+          headerTitle: "Thông tin bác sĩ",
 
           headerTitleStyle: {
             fontSize: 17,
@@ -429,10 +450,36 @@ const CustomerNavigator = () => {
       <Stack.Screen
         name="ChangeAppointmentDetail"
         component={ChangeAppointmentDetail}
+        options={{
+          headerShown: true,
+          headerTitle: "Yêu cầu dời lịch",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
       />
       <Stack.Screen
         name="ConfirmChangeAppointmentDetail"
         component={ConfirmChangeAppointmentDetailScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Xác nhận thông tin",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
       />
       <Stack.Screen
         name="Login"

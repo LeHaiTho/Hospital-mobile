@@ -333,10 +333,9 @@ const ChangeAppointmentDetail = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={{ gap: 10 }}>
-          <Text style={{ fontSize: 12, textAlign: "justify" }}>
+          <Text style={{ fontSize: 12, textAlign: "center", color: "#ff2000" }}>
             * Hệ thống đề xuất các bác sĩ có kinh nghiệm chuyên khoa tương tự,
-            đáp ứng yêu cầu của bạn. Lịch hẹn khám ưu tiên ngày 11/11/2024 từ
-            10:00 đến 11:00.
+            đáp ứng yêu cầu của bạn.
           </Text>
         </View>
         <BottomSheetScrollView
@@ -350,7 +349,7 @@ const ChangeAppointmentDetail = ({ route, navigation }) => {
           }}
           showsVerticalScrollIndicator={false}
         >
-          {suggestedDoctors?.map((doctor) => (
+          {suggestedDoctors?.map((doctor, index) => (
             <View
               style={{
                 marginVertical: 10,
@@ -365,7 +364,7 @@ const ChangeAppointmentDetail = ({ route, navigation }) => {
                 elevation: 2,
               }}
             >
-              <TouchableOpacity style={{ gap: 15 }} key={doctor.id}>
+              <TouchableOpacity style={{ gap: 15 }} key={index}>
                 <View style={{ flexDirection: "row", gap: 15 }}>
                   <Image
                     source={{

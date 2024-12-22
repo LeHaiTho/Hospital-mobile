@@ -25,7 +25,7 @@ const SpecialtyDetailOfHospital = ({ route }) => {
   const getSpecialtyDetailOfHospital = async () => {
     try {
       const response = await axiosConfig.get("/specialties/detail", {
-        params: { hospitalId: hospitalId?.id, specialtyId },
+        params: { hospitalId: hospitalId?.id || hospitalId, specialtyId },
       });
       setSpecialtyDetail(response?.data?.specialty);
     } catch (error) {
@@ -40,12 +40,13 @@ const SpecialtyDetailOfHospital = ({ route }) => {
   // );
 
   console.log("hospitalId", hospitalId);
+  console.log("specialtyId", specialtyId);
 
   useEffect(() => {
-    if (hospitalId?.id && specialtyId) {
+    if (hospitalId?.id || (hospitalId && specialtyId)) {
       getSpecialtyDetailOfHospital();
     }
-  }, [hospitalId?.id, specialtyId]);
+  }, [hospitalId?.id, specialtyId, hospitalId]);
   // console.log("specialtyDetail", specialtyDetail?.image);
   const getDoctorSchedule = async () => {
     try {
@@ -54,7 +55,7 @@ const SpecialtyDetailOfHospital = ({ route }) => {
         {
           params: {
             specialtyID: specialtyId,
-            hospitalID: hospitalId?.id,
+            hospitalID: hospitalId?.id || hospitalId,
           },
         }
       );
@@ -66,10 +67,10 @@ const SpecialtyDetailOfHospital = ({ route }) => {
   };
 
   useEffect(() => {
-    if (specialtyId && hospitalId?.id) {
+    if ((specialtyId && hospitalId?.id) || hospitalId) {
       getDoctorSchedule();
     }
-  }, [specialtyId, hospitalId?.id]);
+  }, [specialtyId, hospitalId?.id, hospitalId]);
   // console.log("specialtyId", specialtyId);
 
   // console.log("doctorSchedule", doctorSchedule);
@@ -93,7 +94,7 @@ const SpecialtyDetailOfHospital = ({ route }) => {
         source={{
           uri: specialtyDetail?.image
             ? `${base_url}${specialtyDetail?.image}`
-            : `${hospitalId?.hospitalSpecialty?.[0]?.image}`,
+            : `${base_url}${hospitalId?.hospitalSpecialty?.[0]?.image}`,
         }}
         resizeMode="cover"
         style={{ width: "100%", height: 200 }}

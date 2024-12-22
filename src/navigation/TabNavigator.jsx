@@ -30,6 +30,7 @@ const TabNavigator = () => {
         component={CustomerProfileScreen}
         options={{
           tabBarLabel: "Hồ sơ",
+          unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="folder-multiple-plus"
@@ -46,9 +47,11 @@ const TabNavigator = () => {
             backgroundColor: "#0165FF",
             height: 100,
           },
+
           headerTintColor: "#fff",
           headerTitleAlign: "center",
           headerShadowVisible: false,
+
           headerRight: () => (
             <TouchableOpacity
               style={{
@@ -91,6 +94,7 @@ const TabNavigator = () => {
       <Tab.Screen
         name="Notification"
         options={{
+          unmountOnBlur: true,
           tabBarLabel: "Thông báo",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />

@@ -65,7 +65,7 @@ const BookAppointment = ({
 
   const handleBookAppointment = (slot) => {
     if (user) {
-      navigation.navigate("CustomerProfile", {
+      navigation.navigate("CustomerProfileBooking", {
         fromBooking: true,
         doctor,
         selectedDate,

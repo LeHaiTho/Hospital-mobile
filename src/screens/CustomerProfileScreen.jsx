@@ -51,7 +51,7 @@ export default function CustomerProfileScreen({ route }) {
   const sheetRef = useRef(null);
   const [checked, setChecked] = useState("1");
   const [isSheetVisible, setIsSheetVisible] = useState(false);
-  const [profiles, setProfiles] = useState([]);
+  const [allProfiles, setAllProfile] = useState([]);
   console.log("selectedHospital", selectedHospital?.specialty);
   console.log("selectedSpecialty", selectedSpecialty);
   console.log("specialtyDetail", specialtyDetail);
@@ -60,13 +60,13 @@ export default function CustomerProfileScreen({ route }) {
       try {
         const res = await axiosConfig.get(`/users/get-profile`);
         const { profile, getMembersOfUser } = res.data;
-        setProfiles([profile, ...getMembersOfUser]);
+        setAllProfile([profile, ...getMembersOfUser]);
       } catch (error) {
         console.log(error);
       }
     };
     getProfiles();
-  }, []);
+  }, [navigation]);
   console.log("profiles", profiles);
   const snapPoints = useMemo(() => [], []);
   // const handleSheetChange = useCallback((index) => {
@@ -77,6 +77,12 @@ export default function CustomerProfileScreen({ route }) {
   //   }
   // }, []);
 
+  // const handleSheetChange = useCallback((index) => {
+  //   if (index === 0) {
+  //     // Đặt trạng thái khi BottomSheet đóng
+  //     sheetRef.current?.snapToIndex(0);
+  //   }
+  // }, []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);
@@ -95,6 +101,7 @@ export default function CustomerProfileScreen({ route }) {
   //   hospital,
   //   isDoctorSpecial
   // );
+  const profiles = allProfiles?.filter((profile) => profile?.fullname !== null);
   return (
     <>
       <GestureHandlerRootView>
@@ -190,7 +197,7 @@ export default function CustomerProfileScreen({ route }) {
               alignItems: "center",
             }}
           >
-            {profiles.length > 0 && (
+            {profiles && (
               <>
                 <Text style={{ fontWeight: "500" }}>Hồ sơ đặt khám</Text>
                 <TouchableOpacity
@@ -364,6 +371,7 @@ export default function CustomerProfileScreen({ route }) {
             borderTopRightRadius: 10,
             padding: 20,
           }}
+          onClose={handleClosePress}
         >
           <BottomSheetView
             style={{

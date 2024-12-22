@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
 import axiosConfig from "../apis/axiosConfig";
 import { initializeSocket, socket } from "../utils/socket";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const authSlice = createSlice({
   name: "auth",
@@ -16,6 +17,7 @@ const authSlice = createSlice({
       // Lưu token như một chuỗi (nếu chưa phải)
       state.token = action.payload.token; // Đảm bảo action.payload.token là chuỗi
       AsyncStorage.setItem("token", action.payload.token); // Lưu vào localStorage
+
       if (action.payload.token) {
         initializeSocket(action.payload.token);
       }
@@ -28,6 +30,7 @@ const authSlice = createSlice({
       state.token = null; // Xóa token khi logout
       AsyncStorage.removeItem("token"); // Xóa token trong localStorage
       AsyncStorage.removeItem("expoPushToken");
+      GoogleSignin.signOut();
       if (socket) {
         socket.disconnect();
         console.log("disconnect socket");

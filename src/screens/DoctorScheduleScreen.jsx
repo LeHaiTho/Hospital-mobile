@@ -345,6 +345,7 @@ import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import {
   Entypo,
   FontAwesome,
+  Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import moment from "moment";
@@ -485,11 +486,21 @@ const DoctorScheduleScreen = () => {
             paddingVertical: 5,
           }}
         >
-          <Text style={{ fontSize: 20, fontWeight: "500" }}>
-            {`${moment(calendarDate).format("YYYY")} Tháng ${moment(
-              calendarDate
-            ).format("MM")}`}
-          </Text>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+
+              alignItems: "center",
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" />
+            <Text style={{ fontSize: 20, fontWeight: "500" }}>
+              {`${moment(calendarDate).format("YYYY")} Tháng ${moment(
+                calendarDate
+              ).format("MM")}`}
+            </Text>
+          </View>
           <View
             style={{
               flexDirection: "row",

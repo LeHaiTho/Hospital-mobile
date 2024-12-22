@@ -44,7 +44,7 @@ const HospitalDetailScreen = ({ route }) => {
       console.log(error);
     }
   };
-
+  console.log("ddddddddddddddddddddddddddddddd", id);
   const getHospitalDetail = async () => {
     try {
       const res = await axiosConfig.get(`/hospitals/detail/${id}`);
@@ -134,14 +134,19 @@ const HospitalDetailScreen = ({ route }) => {
         "Bệnh viện này rất tốt, bác sĩ rất tận tâm và chuyên nghiệp. Tôi rất hài lòng với dịch vụ của bệnh viện.",
     },
   ];
+  const source = { html: hospital?.description || "<p></p>" };
   const Introduction = () => (
     <View style={{ paddingHorizontal: 15, paddingVertical: 12 }}>
       <Text style={{ fontWeight: "bold", color: "#0165FF" }}>
         Giới thiệu bệnh viện
       </Text>
       <RenderHtml
-        source={{ html: hospital?.description || "" }}
+        source={source}
         contentWidth={width}
+        tagsStyles={{
+          // Áp dụng padding cho tất cả các phần tử
+          body: {},
+        }}
       />
     </View>
   );

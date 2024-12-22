@@ -1,7 +1,33 @@
 import { Entypo, EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-const PaymentPackageScreen = () => {
+import axiosConfig from "../../apis/axiosConfig";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+const PaymentPackageScreen = ({ route }) => {
+  const { packageId, price } = route.params || {};
+  const { user } = useSelector((state) => state.auth);
+  const navigation = useNavigation();
+  console.log(packageId, price);
+  console.log(user);
+  const handleSubmit = async () => {
+    try {
+      const paymentRes = await axiosConfig.post(
+        "/payments/createPackagePayment",
+        {
+          package: {
+            id: packageId,
+            price: Number(price),
+            user_id: user.id,
+          },
+        }
+      );
+      console.log("sasjdslakjlk", paymentRes.data);
+      navigation.navigate("WebviewPayment", {
+        paymentUrl: paymentRes.data.payUrl,
+      });
+    } catch (error) {}
+  };
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
@@ -25,7 +51,7 @@ const PaymentPackageScreen = () => {
                 Chat riêng với bác sĩ 24H
               </Text>
             </View>
-            <Text>100000 VNĐ</Text>
+            <Text>{`${Number(price).toLocaleString("vi-VN")} VNĐ`}</Text>
           </View>
           <TouchableOpacity
             style={{
@@ -104,7 +130,7 @@ const PaymentPackageScreen = () => {
                 }}
               >
                 <Text>Tổng tiền</Text>
-                <Text>100000 VNĐ</Text>
+                <Text>{`${Number(price).toLocaleString("vi-VN")} VNĐ`}</Text>
               </View>
               <View
                 style={{
@@ -116,7 +142,7 @@ const PaymentPackageScreen = () => {
               >
                 <Text style={{ fontWeight: "bold" }}>Tổng thanh toán</Text>
                 <Text style={{ fontWeight: "bold", color: "red" }}>
-                  100000 VNĐ
+                  {`${Number(price).toLocaleString("vi-VN")} VNĐ`}
                 </Text>
               </View>
             </View>
@@ -154,7 +180,7 @@ const PaymentPackageScreen = () => {
             width: "100%",
             alignItems: "center",
           }}
-          onPress={() => navigation.navigate("PaymentPackage")}
+          onPress={handleSubmit}
         >
           <Text
             style={{

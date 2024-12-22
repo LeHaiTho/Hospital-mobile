@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { ScrollView, View, Text, RefreshControl } from "react-native";
 import Notification from "../components/Notification";
 import axiosConfig from "../apis/axiosConfig";
-
+import { useNavigation } from "@react-navigation/native";
 const NotificationScreen = () => {
   const [notifications, setNotifications] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const navigation = useNavigation();
 
   const getNotifications = async () => {
     try {
@@ -27,7 +28,7 @@ const NotificationScreen = () => {
 
   useEffect(() => {
     getNotifications();
-  }, []);
+  }, [navigation]);
 
   return (
     <ScrollView

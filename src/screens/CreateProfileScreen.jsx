@@ -41,8 +41,19 @@ import Toast from "react-native-toast-message";
 const CreateProfileScreen = ({ route }) => {
   const navigation = useNavigation();
   const { data } = route.params || {};
-  const { doctor, selectedDate, slot, selectedHospital, selectedSpecialty } =
-    route.params || {};
+  // const { doctor, selectedDate, slot, selectedHospital, selectedSpecialty } =
+  //   route.params || {};
+  const {
+    doctor,
+    selectedDate,
+    slot,
+    selectedHospital,
+    selectedSpecialty,
+    hospital,
+    isDoctorSpecial,
+    specialtyDetail,
+    fromBooking,
+  } = route.params || {};
   const sheetRefProvince = useRef(null);
   const sheetRefDistrict = useRef(null);
   const sheetRefWard = useRef(null);
@@ -86,7 +97,7 @@ const CreateProfileScreen = ({ route }) => {
     address: "",
     relationship: "",
   });
-
+  console.log(route.params);
   const relationshipOptions = [
     { label: "Bản thân", value: "myself" },
     { label: "Bố", value: "father" },
@@ -115,13 +126,31 @@ const CreateProfileScreen = ({ route }) => {
         formData
       );
       if (res.status === 200) {
-        Toast.show({
-          text1: "Tạo hồ sơ thành công",
-          type: "success",
-        });
-        navigation.replace("CustomerProfile", {
-          fromBooking: true,
-        });
+        // navigation.replace("CustomerProfile", {
+        //   fromBooking: true,
+        // });
+        if (fromBooking) {
+          navigation.replace("CustomerProfileBooking", {
+            fromBooking: true,
+            doctor,
+            selectedDate,
+            slot,
+            selectedHospital,
+            selectedSpecialty,
+          });
+          Toast.show({
+            text1: "Tạo hồ sơ thành công",
+            type: "success",
+          });
+        } else {
+          navigation.navigate("CustomerProfile", {
+            fromBooking: false,
+          });
+          Toast.show({
+            text1: "Tạo hồ sơ thành công",
+            type: "success",
+          });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -218,9 +247,9 @@ const CreateProfileScreen = ({ route }) => {
   // }, [selectedDistrict]);
 
   // variables
-  const snapPointsProvince = useMemo(() => ["100%"]);
-  const snapPointsDistrict = useMemo(() => ["100%"]);
-  const snapPointsWard = useMemo(() => ["100%"]);
+  const snapPointsProvince = useMemo(() => []);
+  const snapPointsDistrict = useMemo(() => []);
+  const snapPointsWard = useMemo(() => []);
 
   // callbacks
   const handleSheetChange = useCallback((index) => {
@@ -310,8 +339,8 @@ const CreateProfileScreen = ({ route }) => {
                   borderColor: isQR
                     ? "#797979"
                     : formData.name
-                    ? "#0165FC"
-                    : "#E0E0E0",
+                      ? "#0165FC"
+                      : "#E0E0E0",
                   color: "#000",
                 }}
                 editable={!isQR}
@@ -386,8 +415,8 @@ const CreateProfileScreen = ({ route }) => {
                       borderColor: isQR
                         ? "#797979"
                         : formData.dateOfBirth
-                        ? "#0165FC"
-                        : "#E0E0E0",
+                          ? "#0165FC"
+                          : "#E0E0E0",
                       color: "#000",
                     }}
                     disabled={isQR}
@@ -406,9 +435,9 @@ const CreateProfileScreen = ({ route }) => {
                       {isQR
                         ? moment(formData.dateOfBirth).format("DD/MM/YYYY")
                         : date.toLocaleDateString() ===
-                          new Date().toLocaleDateString()
-                        ? "Chọn ngày sinh"
-                        : date.toLocaleDateString()}
+                            new Date().toLocaleDateString()
+                          ? "Chọn ngày sinh"
+                          : date.toLocaleDateString()}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -563,8 +592,8 @@ const CreateProfileScreen = ({ route }) => {
                   borderColor: isQR
                     ? "#797979"
                     : formData.province
-                    ? "#0165FC"
-                    : "#E0E0E0",
+                      ? "#0165FC"
+                      : "#E0E0E0",
                   color: "#000",
                   flexDirection: "row",
                   justifyContent: "space-between",
@@ -599,8 +628,8 @@ const CreateProfileScreen = ({ route }) => {
                   borderColor: isQR
                     ? "#797979"
                     : formData.district
-                    ? "#0165FC"
-                    : "#E0E0E0",
+                      ? "#0165FC"
+                      : "#E0E0E0",
                   color: "#000",
                   flexDirection: "row",
                   justifyContent: "space-between",
@@ -637,8 +666,8 @@ const CreateProfileScreen = ({ route }) => {
                   borderColor: isQR
                     ? "#797979"
                     : formData.ward
-                    ? "#0165FC"
-                    : "#E0E0E0",
+                      ? "#0165FC"
+                      : "#E0E0E0",
                   color: "#000",
                   flexDirection: "row",
                   justifyContent: "space-between",
@@ -675,8 +704,8 @@ const CreateProfileScreen = ({ route }) => {
                   borderColor: isQR
                     ? "#797979"
                     : formData.address
-                    ? "#0165FC"
-                    : "#E0E0E0",
+                      ? "#0165FC"
+                      : "#E0E0E0",
                   color: "#000",
                 }}
                 value={formData.address}

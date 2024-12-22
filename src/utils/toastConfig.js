@@ -6,7 +6,6 @@ export const ToastConfig = {
   success: ({ text1, text2 }) => (
     <View
       style={{
-        height: 60,
         width: "90%",
         backgroundColor: "#4CAF50",
         padding: 10,

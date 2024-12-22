@@ -38,15 +38,17 @@ export default function ProfileScreen() {
           <Avatar.Image
             size={100}
             source={{
-              uri: user.avatar
-                ? `${BASE_URL}${user.avatar}`
-                : "https://supercharge.info/images/avatar-placeholder.png",
+              uri: user?.avatar?.includes("https")
+                ? user?.avatar
+                : user?.avatar?.includes("/uploads/")
+                  ? `${BASE_URL}${user.avatar}`
+                  : "https://supercharge.info/images/avatar-placeholder.png",
             }}
             style={{ backgroundColor: "transparent", position: "relative" }}
           />
 
           <Title style={{ fontSize: 20, fontWeight: "bold" }}>
-            {user.fullname ?? user.username}
+            {user.fullname ?? user.username ?? user.display_name}
           </Title>
         </View>
       ) : (

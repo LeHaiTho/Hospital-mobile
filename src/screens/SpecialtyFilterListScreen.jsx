@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import axiosConfig from "../apis/axiosConfig";
 import DoctorCard from "../components/DoctorCard";
@@ -21,9 +22,10 @@ const SpecialtyFilterListScreen = ({ route }) => {
   const { specialtyId } = route.params;
   const [data, setData] = useState([]);
   const [selectedType, setSelectedType] = useState("all");
-
+  const [isLoading, setIsLoading] = useState(false);
   const getSpecialtyIdFilterList = async () => {
     try {
+      setIsLoading(true);
       const response = await axiosConfig.get(
         `/specialties/${specialtyId}/entities`,
         {
@@ -36,6 +38,8 @@ const SpecialtyFilterListScreen = ({ route }) => {
       setData(response.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -81,6 +85,7 @@ const SpecialtyFilterListScreen = ({ route }) => {
 
     return stars;
   };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <View
@@ -184,148 +189,162 @@ const SpecialtyFilterListScreen = ({ route }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <FlatList
-        contentContainerStyle={{ gap: 16, padding: 16 }}
-        showsVerticalScrollIndicator={false}
-        data={[...(data?.hospitals || []), ...(data?.doctors || [])]}
-        renderItem={({ item }) => (
-          <TouchableOpacity
+      {isLoading ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#fff",
+          }}
+        >
+          <ActivityIndicator size="large" color="#0165FF" />
+          <Text
             style={{
-              paddingHorizontal: 14,
-              paddingVertical: 14,
-              backgroundColor: "#fff",
-              borderRadius: 14,
-              // shadowColor: "#000",
-              // shadowOffset: { width: 0, height: 2 },
-              // shadowOpacity: 0.25,
-              // shadowRadius: 3.84,
-              // elevation: 3,
-              borderWidth: 1,
-              borderColor: "#E5E5E5",
-              width: "100%",
-              gap: 5,
-            }}
-            onPress={() => {
-              if (item?.user_id) {
-                navigation.navigate("DoctorDetail", {
-                  id: item?.id,
-                  specialtyId,
-                });
-              } else {
-                navigation.navigate("SpecialtyDetailOfHospital", {
-                  hospitalId: item,
-                  specialtyId: specialtyId,
-                });
-              }
+              color: "#797979",
+              fontSize: 12,
             }}
           >
-            <View
+            Đang tải dữ liệu...
+          </Text>
+        </View>
+      ) : data ? (
+        <FlatList
+          contentContainerStyle={{ gap: 16, padding: 16 }}
+          showsVerticalScrollIndicator={false}
+          data={[...(data?.hospitals || []), ...(data?.doctors || [])]}
+          renderItem={({ item }) => (
+            <TouchableOpacity
               style={{
-                justifyContent: "center",
-
-                flexDirection: "row",
-                flex: 1,
-                gap: 10,
+                paddingHorizontal: 14,
+                paddingVertical: 14,
+                backgroundColor: "#fff",
+                borderRadius: 14,
+                // shadowColor: "#000",
+                // shadowOffset: { width: 0, height: 2 },
+                // shadowOpacity: 0.25,
+                // shadowRadius: 3.84,
+                // elevation: 3,
+                borderWidth: 1,
+                borderColor: "#E5E5E5",
+                width: "100%",
+                gap: 5,
+              }}
+              onPress={() => {
+                if (item?.user_id) {
+                  navigation.navigate("DoctorDetail", {
+                    id: item?.id,
+                    specialtyId,
+                  });
+                } else {
+                  navigation.navigate("SpecialtyDetailOfHospital", {
+                    hospitalId: item,
+                    specialtyId: specialtyId,
+                  });
+                }
               }}
             >
-              <Image
-                style={{
-                  width: 100,
-                  height: 120,
-                  borderRadius: 10,
-                }}
-                source={{
-                  uri:
-                    item?.user?.avatar || item?.avatar
-                      ? `${baseUrl}${item?.user?.avatar || item?.avatar}`
-                      : "https://thumbs.dreamstime.com/b/default-placeholder-doctor-half-length-portrait-photo-avatar-gray-color-119556416.jpg",
-                }}
-                resizeMode={item?.user?.avatar ? "cover" : "contain"}
-              />
-
               <View
                 style={{
-                  flex: 1,
-                  flexDirection: "column",
+                  justifyContent: "center",
 
-                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  flex: 1,
+                  gap: 10,
                 }}
               >
-                <View style={{}}>
-                  <Text
-                    style={{
-                      fontWeight: "700",
-                      color: item?.user?.fullname ? "#000" : "#0165FF",
-                    }}
-                    numberOfLines={1}
-                  >
-                    {item?.user?.fullname || item?.hospitalSpecialty?.[0]?.name}
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                    }}
-                  >
+                <Image
+                  style={{
+                    width: 100,
+                    height: 120,
+                    borderRadius: 10,
+                  }}
+                  source={{
+                    uri:
+                      item?.user?.avatar || item?.hospitalSpecialty?.[0]?.image
+                        ? `${baseUrl}${item?.user?.avatar || item?.hospitalSpecialty?.[0]?.image}`
+                        : "https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg",
+                  }}
+                  resizeMode={item?.user?.avatar && "cover"}
+                />
+
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "column",
+
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View style={{}}>
                     <Text
                       style={{
-                        fontSize: 12,
-                        fontWeight: "400",
-                        color: item?.doctorSpecialty ? "#0165FF" : "#6B7280",
-                        backgroundColor: item?.doctorSpecialty
-                          ? "#DBEAFE"
-                          : "transparent",
-                        paddingHorizontal: item?.doctorSpecialty ? 5 : 0,
-                        paddingVertical: 2,
-                        borderRadius: 5,
-                        marginTop: item?.doctorSpecialty ? 5 : 0,
+                        fontWeight: "700",
+                        color: item?.user?.fullname ? "#000" : "#0165FF",
                       }}
                       numberOfLines={1}
                     >
-                      {item?.doctorSpecialty
-                        ?.map(
-                          (specialty) =>
-                            specialty?.hospitalSpecialty?.specialty?.name
-                        )
-                        .filter((name) => name) // Lọc ra những tên hợp lệ (không null/undefined)
-                        .join(" - ") || // Nối các tên bằng dấu gạch ngang
-                        item?.name}
+                      {item?.user?.fullname ||
+                        item?.hospitalSpecialty?.[0]?.name}
                     </Text>
-                  </View>
-                </View>
-                <View>
-                  {/* Giá khám */}
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      gap: 2,
-                      alignItems: "center",
-
-                      paddingVertical: 2,
-                      borderRadius: 5,
-                    }}
-                  >
-                    <Text style={{ color: "#1F2937", fontSize: 12 }}>
-                      Giá khám:
-                    </Text>
-                    <Text style={{ color: "#0165FC" }}>
-                      {`${Number(
-                        item?.doctorSpecialty?.[0]?.consultation_fee ||
-                          item?.hospitalSpecialty?.[0]?.consultation_fee
-                      ).toLocaleString("vi-VN")} VNĐ`}
-                    </Text>
-                  </View>
-                  {/* Đánh giá */}
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      flex: 1,
-                    }}
-                  >
                     <View
                       style={{
                         flexDirection: "row",
-                        gap: 5,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontWeight: "400",
+                          color: item?.doctorSpecialty ? "#0165FF" : "#6B7280",
+                          backgroundColor: item?.doctorSpecialty
+                            ? "#DBEAFE"
+                            : "transparent",
+                          paddingHorizontal: item?.doctorSpecialty ? 5 : 0,
+                          paddingVertical: 2,
+                          borderRadius: 5,
+                          marginTop: item?.doctorSpecialty ? 5 : 0,
+                        }}
+                        numberOfLines={1}
+                      >
+                        {item?.doctorSpecialty
+                          ?.map(
+                            (specialty) =>
+                              specialty?.hospitalSpecialty?.specialty?.name
+                          )
+                          .filter((name) => name) // Lọc ra những tên hợp lệ (không null/undefined)
+                          .join(" - ") || // Nối các tên bằng dấu gạch ngang
+                          item?.name}
+                      </Text>
+                    </View>
+                  </View>
+                  <View>
+                    {/* Giá khám */}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        gap: 2,
                         alignItems: "center",
+
+                        paddingVertical: 2,
+                        borderRadius: 5,
+                      }}
+                    >
+                      <Text style={{ color: "#1F2937", fontSize: 12 }}>
+                        Giá khám:
+                      </Text>
+                      <Text style={{ color: "#0165FC" }}>
+                        {`${Number(
+                          item?.doctorSpecialty?.[0]?.consultation_fee ||
+                            item?.hospitalSpecialty?.[0]?.consultation_fee
+                        ).toLocaleString("vi-VN")} VNĐ`}
+                      </Text>
+                    </View>
+                    {/* Đánh giá */}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        flex: 1,
                       }}
                     >
                       <View
@@ -335,27 +354,34 @@ const SpecialtyFilterListScreen = ({ route }) => {
                           alignItems: "center",
                         }}
                       >
-                        {(item?.averageRating &&
-                          item?.averageRating > 0 &&
-                          renderStars(item?.averageRating)) ||
-                          renderStars(5)}
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            gap: 5,
+                            alignItems: "center",
+                          }}
+                        >
+                          {(item?.averageRating &&
+                            item?.averageRating > 0 &&
+                            renderStars(item?.averageRating)) ||
+                            renderStars(5)}
+                        </View>
+                        <Text style={{ fontSize: 12, color: "#000" }}>
+                          {item?.averageRating && item?.averageRating > 0
+                            ? item?.averageRating
+                            : ""}
+                        </Text>
                       </View>
-                      <Text style={{ fontSize: 12, color: "#000" }}>
-                        {item?.averageRating && item?.averageRating > 0
-                          ? item?.averageRating
+                      <Text style={{ fontSize: 12, color: "#6B7280" }}>
+                        {item?.totalComments && item?.totalComments > 0
+                          ? `${item?.totalComments} Phản hồi`
                           : ""}
                       </Text>
                     </View>
-                    <Text style={{ fontSize: 12, color: "#6B7280" }}>
-                      {item?.totalComments && item?.totalComments > 0
-                        ? `${item?.totalComments} Phản hồi`
-                        : ""}
-                    </Text>
                   </View>
                 </View>
               </View>
-            </View>
-            {/* <TouchableOpacity
+              {/* <TouchableOpacity
               style={{
                 marginTop: 10,
                 borderRadius: 8,
@@ -373,9 +399,21 @@ const SpecialtyFilterListScreen = ({ route }) => {
                 Đặt lịch khám
               </Text>
             </TouchableOpacity> */}
-          </TouchableOpacity>
-        )}
-      />
+            </TouchableOpacity>
+          )}
+        />
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#fff",
+          }}
+        >
+          <Text style={{ textAlign: "center" }}>Không có dữ liệu phù hợp</Text>
+        </View>
+      )}
     </View>
   );
 };

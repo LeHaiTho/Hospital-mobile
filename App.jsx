@@ -26,7 +26,7 @@ import { initializeSocket, socket } from "./src/utils/socket";
 import ToastConfig from "./src/utils/toastConfig";
 
 // test deep linking
-import * as Linking from "expo-linking";
+// import * as Linking from "expo-linking";
 
 const Base_URL = process.env.EXPO_PUBLIC_API_URL;
 const UserInfoFetcher = () => {

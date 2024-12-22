@@ -12,7 +12,8 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { Dimensions } from "react-native";
 import axiosConfig from "../apis/axiosConfig";
 import { useNavigation } from "@react-navigation/native";
-const Upcoming = ({ appointments, getAppointments, refreshing }) => {
+
+const Upcoming = ({ appointments, getAppointments, refreshing, isLoading }) => {
   const upcomingAppointments = appointments?.filter(
     (appointment) =>
       appointment.status === "pending" || appointment.status === "confirmed"
@@ -22,38 +23,46 @@ const Upcoming = ({ appointments, getAppointments, refreshing }) => {
   };
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      {upcomingAppointments.length > 0 ? (
-        <FlatList
-          onRefresh={getAppointments}
-          refreshing={refreshing}
-          data={upcomingAppointments}
-          renderItem={renderAppointment}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{
-            padding: 16,
-            gap: 16,
-            backgroundColor: "#fff",
-          }}
-          ListEmptyComponent={
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ textAlign: "center", color: "#797979" }}>
-                Không có lịch hẹn nào
-              </Text>
-            </View>
-          }
-        />
-      ) : (
+      {isLoading ? (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <ActivityIndicator size="large" color="#0165FF" />
           <Text>Đang tải dữ liệu...</Text>
+        </View>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "#fff",
+          }}
+        >
+          <FlatList
+            onRefresh={getAppointments}
+            refreshing={refreshing}
+            data={upcomingAppointments}
+            renderItem={renderAppointment}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{
+              padding: 16,
+              gap: 16,
+              backgroundColor: "#fff",
+            }}
+            initialNumToRender={3}
+            ListEmptyComponent={
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ textAlign: "center", color: "#797979" }}>
+                  Không có lịch hẹn nào
+                </Text>
+              </View>
+            }
+          />
         </View>
       )}
     </View>
@@ -67,27 +76,34 @@ const Completed = ({ appointments, getAppointments, refreshing }) => {
     return <AppointmentCard appointment={item} />;
   };
   return (
-    <FlatList
-      data={completedAppointments}
-      onRefresh={getAppointments}
-      refreshing={refreshing}
-      renderItem={renderAppointment}
-      keyExtractor={(item) => item.id}
-      contentContainerStyle={{
-        padding: 16,
-        gap: 16,
+    <View
+      style={{
+        flex: 1,
         backgroundColor: "#fff",
       }}
-      ListEmptyComponent={
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Text style={{ textAlign: "center", color: "#797979" }}>
-            Không có lịch hẹn nào
-          </Text>
-        </View>
-      }
-    />
+    >
+      <FlatList
+        data={completedAppointments}
+        onRefresh={getAppointments}
+        refreshing={refreshing}
+        renderItem={renderAppointment}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{
+          padding: 16,
+          gap: 16,
+          backgroundColor: "#fff",
+        }}
+        ListEmptyComponent={
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text style={{ textAlign: "center", color: "#797979" }}>
+              Không có lịch hẹn nào
+            </Text>
+          </View>
+        }
+      />
+    </View>
   );
 };
 const Cancelled = ({ appointments, getAppointments, refreshing }) => {
@@ -162,6 +178,8 @@ const AppointmentScreen = () => {
   const [index, setIndex] = useState(0);
   const [appointments, setAppointments] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   // const [routes] = useState([
   //   { key: "upcoming", title: "Sắp tới" },
   //   { key: "completed", title: "Hoàn thành" },
@@ -176,6 +194,7 @@ const AppointmentScreen = () => {
           appointments={appointments}
           getAppointments={getAppointments}
           refreshing={refreshing}
+          isLoading={isLoading}
         />
       ),
     },
@@ -203,12 +222,16 @@ const AppointmentScreen = () => {
   const navigation = useNavigation();
   const getAppointments = async () => {
     try {
+      setIsLoading(true);
       const response = await axiosConfig.get(
         `/appointments/get-appointment-by-user-id`
       );
       setAppointments(response.data.appointmentList);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshing(false);
     }
   };
 

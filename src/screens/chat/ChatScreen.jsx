@@ -7,49 +7,42 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Avatar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { socket } from "../../utils/socket";
 import { useSelector } from "react-redux";
 import axiosConfig from "../../apis/axiosConfig";
+
 import moment from "moment";
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
-const data = [
-  {
-    id: 1,
-    message: "Hello, how are you?",
-  },
-  {
-    id: 2,
-    message: "Hello, how are you?",
-  },
-];
+
 const ChatScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { doctorId, doctorName, doctorAvatar, chatRoomId } = route.params;
+  const { doctorId, doctorName, doctorAvatar, chatRoomId, info } =
+    route.params || {};
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const { user } = useSelector((state) => state.auth);
   const flatListRef = useRef(null);
 
   console.log("usertrtretete", user);
-
+  console.log(chatRoomId);
   useEffect(() => {
     if (user.role.name === "doctor" || user.role === "doctor") {
-      console.log("chatRoomId", chatRoomId);
-      console.log("chatRoomId", chatRoomId);
       const fetchMessages = async () => {
         const response = await axiosConfig.get(
-          `${baseUrl}/messages/${chatRoomId}/messages`
+          `${baseUrl}/messages/${chatRoomId.id}`
         );
         // console.log("response", response.data.messages);
         setMessages(response.data.messages);
       };
       fetchMessages();
-      socket.emit("join-room", { roomId: chatRoomId });
-      console.log("messages", messages);
+      socket.emit("join-room", { roomId: chatRoomId?.room_id });
+      console.log("đã đọc");
+      // console.log("messages", messages);
     }
     if (user.role.name === "customer" || user.role === "customer") {
       console.log("chatRoomId", user);
@@ -62,27 +55,30 @@ const ChatScreen = ({ route }) => {
           }
         );
         // console.log("response", response.data.chatRoom);
+        fetchMessages(response.data.chatRoom.id);
       };
-      const fetchMessages = async () => {
+      const fetchMessages = async (id) => {
         const response = await axiosConfig.get(
-          `${baseUrl}/messages/${`room-${user.id}-${doctorId}`}/messages`
+          // `${baseUrl}/messages/${`room-${user.id}-${doctorId}`}/messages`
+          `${baseUrl}/messages/${id}`
         );
         // console.log("response", response.data.messages);
         setMessages(response.data.messages);
+        console.log("messages", messages);
       };
       fetchChatRoom();
-      fetchMessages();
+      // fetchMessages();
       socket.emit("join-room", { roomId: `room-${user.id}-${doctorId}` });
     }
   }, []);
-
+  console.log("info", info);
   const sendMessage = () => {
     if (newMessage.trim() !== "") {
       socket.emit("send-message", {
         message: newMessage,
         roomId:
           user.role.name === "doctor" || user.role === "doctor"
-            ? chatRoomId
+            ? chatRoomId?.room_id
             : `room-${user.id}-${doctorId}`,
       });
       setNewMessage("");
@@ -98,7 +94,16 @@ const ChatScreen = ({ route }) => {
       socket.off("receive-message");
     };
   }, []);
-
+  const handleCheck = async () => {
+    try {
+      const response = await axiosConfig.post(`/subscriptions/check`);
+      if (response.data.subscription.length === 0) {
+        navigation.navigate("Packages");
+      } else {
+        return;
+      }
+    } catch (error) {}
+  };
   const shouldShowTime = (currentMessage, previousMessage) => {
     if (!previousMessage) return true; // Hiển thị thời gian cho tin nhắn đầu tiên
     const currentTime = moment(currentMessage.createdAt);
@@ -167,10 +172,19 @@ const ChatScreen = ({ route }) => {
           </TouchableOpacity>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
             <Avatar.Image
-              source={{ uri: `${baseUrl}${doctorAvatar}` }}
+              source={{
+                uri: doctorAvatar
+                  ? `${baseUrl}${doctorAvatar}`
+                  : info.gender === true
+                    ? "https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg"
+                    : "https://img.freepik.com/premium-photo/3d-rendering-cute-little-girl-wearing-yellow-dress_877354-275.jpg",
+              }}
               size={45}
             />
-            <Text style={{ color: "#fff", fontSize: 16 }}>{doctorName}</Text>
+            <Text style={{ color: "#fff", fontSize: 16 }}>
+              {doctorName ||
+                `${info?.user?.gender ? "Nam" : "Nữ"} ${info?.user?.date_of_birth ? `(${new Date().getFullYear() - info.user.date_of_birth.split("-")[0]} tuổi)` : ""}`}
+            </Text>
           </View>
         </View>
       </View>
@@ -218,6 +232,7 @@ const ChatScreen = ({ route }) => {
             paddingVertical: 7,
             flex: 1,
           }}
+          onFocus={handleCheck}
         />
         <TouchableOpacity onPress={sendMessage}>
           <Ionicons name="send" size={24} color="#0165FC" />

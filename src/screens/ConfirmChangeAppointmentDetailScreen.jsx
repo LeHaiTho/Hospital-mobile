@@ -325,7 +325,7 @@ const ConfirmChangeAppointmentDetailScreen = ({ route }) => {
                         gap: 16,
                       }}
                     >
-                      <Entypo name="wallet" size={28} color="#0165FF" />
+                      <Entypo name="wallet" size={20} color="#0165FF" />
                       <Text style={{ color: "#000", fontWeight: "bold" }}>
                         {`${
                           doctor?.doctor?.consultation_fee.split(".")[0]
@@ -333,6 +333,13 @@ const ConfirmChangeAppointmentDetailScreen = ({ route }) => {
                       </Text>
                     </View>
                   </View>
+                  <Text
+                    style={{
+                      color: "#ff2000",
+                    }}
+                  >
+                    Việc thay đổi không cần thanh toán lại!
+                  </Text>
                 </View>
               </Card.Content>
             </Card>
@@ -426,7 +433,7 @@ const ConfirmChangeAppointmentDetailScreen = ({ route }) => {
             <Text
               style={{ fontSize: 18, fontWeight: "bold", color: "#0165FC" }}
             >
-              Đánh giá thành công!
+              Dời lịch hẹn thành công!
             </Text>
             <Text
               style={{
@@ -435,8 +442,7 @@ const ConfirmChangeAppointmentDetailScreen = ({ route }) => {
                 marginBottom: 10,
               }}
             >
-              Mọi ý kiến đóng góp của bạn sẽ giúp chúng tôi cải thiện chất lượng
-              và dịch vụ!
+              Hy vọng bạn sẽ có một buổi khám tốt đẹp với bác sĩ mới!
             </Text>
             <TouchableOpacity
               style={{
