@@ -148,6 +148,7 @@ const HospitalDetailScreen = ({ route }) => {
           body: {},
         }}
       />
+      {/* <Text>{hospital?.description}</Text> */}
     </View>
   );
 

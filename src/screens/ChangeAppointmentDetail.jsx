@@ -57,6 +57,17 @@ const ChangeAppointmentDetail = ({ route, navigation }) => {
     "suggestedDoctors",
     suggestedDoctors[0]?.doctor?.doctor?.user?.avatar
   );
+  const handleCancel = async () => {
+    try {
+      const res = await axiosConfig.patch(
+        `appointments/cancel-appointment/${appointmentNeedChange.id}`
+      );
+
+      navigation.replace("TabNavigator", { screen: "TabNavigator" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // get suggested doctors
   const getSuggestedDoctors = async () => {
     try {
@@ -266,19 +277,20 @@ const ChangeAppointmentDetail = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{ padding: 10, backgroundColor: "#0165FF", borderRadius: 5 }}
           >
             <Text style={{ color: "#fff", textAlign: "center" }}>
               Đổi lại thông tin khám
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={{
               padding: 10,
               backgroundColor: "#fff",
               borderRadius: 5,
             }}
+            onPress={handleCancel}
           >
             <Text
               style={{
@@ -364,7 +376,7 @@ const ChangeAppointmentDetail = ({ route, navigation }) => {
                 elevation: 2,
               }}
             >
-              <TouchableOpacity style={{ gap: 15 }} key={index}>
+              <TouchableOpacity style={{ gap: 15 }} key={doctor.id}>
                 <View style={{ flexDirection: "row", gap: 15 }}>
                   <Image
                     source={{

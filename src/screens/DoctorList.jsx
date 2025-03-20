@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, ScrollView, TouchableOpacity } from "react-native";
+import { Image, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import { Text, Avatar, Button } from "react-native-paper";
 import { View } from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
@@ -28,16 +28,47 @@ const DoctorList = () => {
         flex: 1,
         backgroundColor: "#fff",
         paddingHorizontal: 16,
-        gap: 20,
       }}
     >
-      <View style={{ paddingHorizontal: 4 }}>
-        <Search
-          placeholder="Tìm kiếm bác sĩ"
-          onChangeText={setSearch}
-          value={search}
+      <View
+        style={{
+          alignItems: "center",
+          gap: 10,
+          flexDirection: "row",
+
+          width: "100%",
+
+          backgroundColor: "#fff",
+        }}
+      >
+        <TextInput
+          placeholder="Tìm kiếm bác sĩ tư vấn"
+          style={{
+            flex: 1,
+            padding: 9,
+            borderWidth: 1,
+            borderColor: "#0165FF",
+            borderRadius: 10,
+            paddingHorizontal: 15,
+          }}
         />
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 5,
+            backgroundColor: "#0165FF",
+            padding: 5,
+            borderRadius: 10,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+          }}
+        >
+          <Ionicons name="options-outline" size={24} color="#fff" />
+          <Text style={{ color: "#fff" }}>Lọc</Text>
+        </TouchableOpacity>
       </View>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{

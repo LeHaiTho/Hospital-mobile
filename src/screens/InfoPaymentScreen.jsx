@@ -14,6 +14,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { Avatar, Card, IconButton, FAB } from "react-native-paper";
 import React, {
@@ -109,18 +110,34 @@ const InfoPaymentScreen = ({ route }) => {
           requestBody
         );
         if (res.data.newAppointment.payment_method === "e-wallet") {
+          console.log({
+            appointment: {
+              // ...res.data.newAppointment.id,
+              // amount: Number(
+              //   selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
+              //     doctor?.consultation_fee[0]
+              // ),
+              ...res.data.newAppointment,
+              amount: Number(res.data.newAppointment.price),
+            },
+          });
+          console.log(res.data.newAppointment);
+          console.log("resbody", requestBody);
           const paymentRes = await axiosConfig.post(
             "/payments/create-payment",
             {
               appointment: {
-                ...res.data.newAppointment.id,
-                amount: Number(
-                  selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
-                    doctor?.consultation_fee[0]
-                ),
+                // id: res.data.newAppointment.id,
+                // amount: Number(
+                //   selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
+                //     doctor?.consultation_fee[0]
+                // ),
+                ...res.data.newAppointment,
+                amount: Number(res.data.newAppointment.price),
               },
             }
           );
+
           navigation.navigate("WebviewPayment", {
             paymentUrl: paymentRes.data.payUrl,
           });
@@ -523,8 +540,8 @@ const InfoPaymentScreen = ({ route }) => {
                   {paymentMethod === "cash"
                     ? "Thanh toán tại cơ sở y tế"
                     : paymentMethod === "e-wallet"
-                    ? "Thanh toán ví điện tử MOMO"
-                    : "Chọn phương thức"}
+                      ? "Thanh toán ví điện tử MOMO"
+                      : "Chọn phương thức"}
                 </Text>
               </View>
               <Entypo name="chevron-small-right" size={24} color="#000" />
@@ -684,8 +701,8 @@ const InfoPaymentScreen = ({ route }) => {
               style={{
                 backgroundColor: "#fff",
                 borderWidth: 1,
-                paddingHorizontal: 20,
-                paddingVertical: 18,
+                paddingHorizontal: 10,
+                paddingVertical: 10,
                 borderRadius: 10,
                 borderColor: "#E0E0E0",
                 color: "#000",
@@ -697,15 +714,22 @@ const InfoPaymentScreen = ({ route }) => {
                 handlePaymentMethod("cash");
               }}
             >
-              <FontAwesome5 name="hospital" size={24} color="#0165FC" />
+              <Image
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 10,
+                }}
+                source={require("../../assets/hospital (2).png")}
+              />
               <Text>Thanh toán tại cơ sở y tế</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
                 backgroundColor: "#fff",
                 borderWidth: 1,
-                paddingHorizontal: 20,
-                paddingVertical: 18,
+                paddingHorizontal: 10,
+                paddingVertical: 10,
                 borderRadius: 10,
                 borderColor: "#E0E0E0",
                 color: "#000",
@@ -717,48 +741,15 @@ const InfoPaymentScreen = ({ route }) => {
                 handlePaymentMethod("e-wallet");
               }}
             >
-              <FontAwesome5 name="credit-card" size={24} color="#0165FC" />
+              <Image
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 10,
+                }}
+                source={require("../../assets/momo.png")}
+              />
               <Text>Thanh toán ví điện tử MOMO</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#fff",
-                borderWidth: 1,
-                paddingHorizontal: 20,
-                paddingVertical: 18,
-                borderRadius: 10,
-                borderColor: "#E0E0E0",
-                color: "#000",
-                alignItems: "center",
-                flexDirection: "row",
-                gap: 10,
-              }}
-              onPress={() => {
-                handleClosePress();
-              }}
-            >
-              <FontAwesome5 name="credit-card" size={24} color="#0165FC" />
-              <Text>Thẻ ATM nội địa / Internet Banking</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#fff",
-                borderWidth: 1,
-                paddingHorizontal: 20,
-                paddingVertical: 18,
-                borderRadius: 10,
-                borderColor: "#E0E0E0",
-                color: "#000",
-                alignItems: "center",
-                flexDirection: "row",
-                gap: 10,
-              }}
-              onPress={() => {
-                handleClosePress();
-              }}
-            >
-              <FontAwesome5 name="credit-card" size={24} color="#0165FC" />
-              <Text>Thẻ ATM nội địa / Internet Banking</Text>
             </TouchableOpacity>
           </BottomSheetScrollView>
         </BottomSheet>
@@ -791,7 +782,7 @@ const InfoPaymentScreen = ({ route }) => {
             <Text
               style={{ fontSize: 18, fontWeight: "bold", color: "#0165FC" }}
             >
-              Đánh giá thành công!
+              Đặt lịch hẹn thành công!
             </Text>
             <Text
               style={{
@@ -800,8 +791,7 @@ const InfoPaymentScreen = ({ route }) => {
                 marginBottom: 10,
               }}
             >
-              Mọi ý kiến đóng góp của bạn sẽ giúp chúng tôi cải thiện chất lượng
-              và dịch vụ!
+              Chúc bạn có thời gian trải nghiệm dịch vụ vui vẻ.
             </Text>
             <TouchableOpacity
               style={{

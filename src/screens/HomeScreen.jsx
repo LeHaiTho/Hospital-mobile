@@ -40,9 +40,10 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   console.log("user", user);
   const banners = [
-    require("../../assets/banners/banner-1.png"),
-    require("../../assets/banners/banner-2.jpg"),
+    require("../../assets/banners/banner-2.png"),
     require("../../assets/banners/banner-3.png"),
+    require("../../assets/banners/banner-5.jpeg"),
+    require("../../assets/banners/banner-6.png"),
   ];
   // lấy những lịch hẹn cần cảnh báo dời lịch
   const getAppointmentNeedChange = async () => {
@@ -121,7 +122,7 @@ const HomeScreen = () => {
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ gap: 10 }}
+        contentContainerStyle={{ gap: 5 }}
       >
         <View
           style={{
@@ -591,7 +592,7 @@ const HomeScreen = () => {
             onPress={() => navigation.navigate("ListDoctorOnline")}
           >
             <Image
-              source={require("../../assets/menu/hospital-book.png")}
+              source={require("../../assets/menu/ask-doctor.png")}
               style={{ width: "80%", height: 50 }}
               resizeMode="center"
             />
@@ -606,7 +607,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
         {/* speciality */}
-        <View style={{ marginVertical: 10 }}>
+        <View style={{}}>
           <View
             style={{
               justifyContent: "space-between",
@@ -640,6 +641,8 @@ const HomeScreen = () => {
               paddingHorizontal: 16,
               paddingVertical: 10,
             }}
+            windowSize={1}
+            initialNumToRender={5}
             data={specialties}
             renderItem={({ item, index }) => (
               <Speciality
@@ -662,7 +665,7 @@ const HomeScreen = () => {
             flexDirection: "row",
             paddingHorizontal: 16,
             alignItems: "center",
-            marginVertical: 10,
+            // marginVertical: 10,
           }}
         >
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cơ sở y tế</Text>
@@ -738,6 +741,7 @@ const HomeScreen = () => {
               paddingVertical: 10,
             }}
             initialNumToRender={1}
+            windowSize={1}
             data={doctors}
             renderItem={({ item, index }) => (
               <DoctorCard key={index} doctor={item} />
@@ -745,6 +749,32 @@ const HomeScreen = () => {
           />
         </View>
       </ScrollView>
+
+      <TouchableOpacity
+        style={{
+          position: "absolute",
+          bottom: 10,
+          right: 10,
+          backgroundColor: "#0165fc",
+          padding: 5,
+          borderRadius: 100,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.2,
+          shadowRadius: 2,
+          elevation: 3,
+        }}
+        onPress={() => navigation.navigate("ChatBot")}
+      >
+        <Image
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 100,
+          }}
+          source={require("../../assets/chatbot.jpeg")}
+        />
+      </TouchableOpacity>
     </View>
   );
 };

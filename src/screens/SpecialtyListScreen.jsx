@@ -71,6 +71,8 @@ const SpecialtyListScreen = () => {
             paddingTop: 2,
             paddingHorizontal: 2,
           }}
+          initialNumToRender={2}
+          windowSize={1}
           renderItem={({ item }) => (
             <TouchableOpacity
               key={item?.id}

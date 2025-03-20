@@ -47,6 +47,7 @@ const DoctorCard = ({ doctor, hospitalId }) => {
     return stars;
   };
 
+  console.log(doctor?.averageRating);
   return (
     <TouchableOpacity
       style={{
@@ -145,14 +146,18 @@ const DoctorCard = ({ doctor, hospitalId }) => {
           >
             <View style={{ flexDirection: "row", gap: 5 }}>
               <View style={{ flexDirection: "row", gap: 5 }}>
-                {renderStars(doctor?.averageRating || 0)}
+                {renderStars(
+                  doctor?.averageRating === "0.0" ? 5.0 : doctor?.averageRating
+                )}
               </View>
               <Text style={{ fontSize: 12, color: "#000" }}>
-                {doctor?.averageRating}
+                {doctor?.averageRating === "0.0"
+                  ? "5.0"
+                  : doctor?.averageRating}
               </Text>
             </View>
             <Text style={{ fontSize: 12, color: "#6B7280" }}>
-              {doctor?.totalComments} Phản hồi
+              {doctor?.totalComments > 0 && `${doctor.totalComments} Phản hồi`}
             </Text>
           </View>
         </View>

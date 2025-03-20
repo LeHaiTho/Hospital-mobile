@@ -43,6 +43,7 @@ import PackagesScreen from "../screens/chat/PackagesScreen";
 import PaymentPackageScreen from "../screens/chat/PaymentPackageScreen";
 import ChatListScreen from "../screens/chat/ChatListScreen";
 import SignUp from "../screens/SignUp";
+import ChatBotScreen from "../screens/chat/ChatBotScreen";
 const CustomerNavigator = () => {
   const navigation = useNavigation();
 
@@ -55,7 +56,6 @@ const CustomerNavigator = () => {
           headerShown: false,
         }}
       />
-
       <Stack.Screen
         name="CreateQuestion"
         component={CreateQuestion}
@@ -254,7 +254,6 @@ const CustomerNavigator = () => {
         component={ScannerProfileScreen}
         options={{ headerShown: false, headerTitle: "Quét mã QR" }}
       />
-
       <Stack.Screen
         name="ConfirmInfo"
         component={ConfirmInfoScreen}
@@ -378,7 +377,9 @@ const CustomerNavigator = () => {
           headerRight: () => (
             <TouchableOpacity
               style={{ marginRight: 30 }}
-              onPress={() => navigation.navigate("TabNavigator")}
+              onPress={() =>
+                navigation.replace("TabNavigator", { screen: "Home" })
+              }
             >
               <Ionicons name="home-outline" size={24} color="#fff" />
             </TouchableOpacity>
@@ -405,7 +406,6 @@ const CustomerNavigator = () => {
           statusBarColor: "#0165FC",
         }}
       />
-
       <Stack.Screen
         name="HospitalList"
         component={HospitalList}
@@ -423,7 +423,32 @@ const CustomerNavigator = () => {
           headerShadowVisible: false,
         }}
       />
-      <Stack.Screen name="DoctorList" component={DoctorList} />
+      <Stack.Screen
+        name="DoctorList"
+        component={DoctorList}
+        options={{
+          headerShown: true,
+          headerTitle: "Bác sĩ tư vấn khám",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+          headerRight: () => (
+            <TouchableOpacity
+              style={{ marginRight: 30 }}
+              onPress={() => navigation.navigate("TabNavigator")}
+            >
+              <Ionicons name="home-outline" size={24} color="#fff" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
       <Stack.Screen name="PatientDetail" component={PatientDetailScreen} />
       <Stack.Screen
         name="SuccessfullBook"
@@ -550,6 +575,24 @@ const CustomerNavigator = () => {
         options={{
           headerShown: true,
           headerTitle: "Tin nhắn",
+          headerTitleStyle: {
+            fontSize: 17,
+          },
+
+          headerStyle: {
+            backgroundColor: "#0165FC",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="ChatBot"
+        component={ChatBotScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Trợ lý bác sĩ",
           headerTitleStyle: {
             fontSize: 17,
           },

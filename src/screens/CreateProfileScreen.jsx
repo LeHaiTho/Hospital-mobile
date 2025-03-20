@@ -118,7 +118,17 @@ const CreateProfileScreen = ({ route }) => {
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
-
+  console.log(
+    doctor,
+    selectedDate,
+    slot,
+    selectedHospital,
+    selectedSpecialty,
+    hospital,
+    isDoctorSpecial,
+    specialtyDetail,
+    fromBooking
+  );
   const handleSubmit = async () => {
     try {
       const res = await axiosConfig.put(
@@ -137,6 +147,15 @@ const CreateProfileScreen = ({ route }) => {
             slot,
             selectedHospital,
             selectedSpecialty,
+            // doctor,
+            // selectedDate,
+            // slot,
+            // selectedHospital,
+            // selectedSpecialty,
+            // hospital,
+            // isDoctorSpecial,
+            // specialtyDetail,
+            // fromBooking,
           });
           Toast.show({
             text1: "Tạo hồ sơ thành công",

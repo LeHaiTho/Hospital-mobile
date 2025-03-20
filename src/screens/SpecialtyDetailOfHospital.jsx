@@ -76,7 +76,7 @@ const SpecialtyDetailOfHospital = ({ route }) => {
   // console.log("doctorSchedule", doctorSchedule);
   const handleBookAppointment = (slot) => {
     if (user) {
-      navigation.navigate("CustomerProfile", {
+      navigation.navigate("CustomerProfileBooking", {
         fromBooking: true,
         doctor: slot?.doctors?.[0],
         selectedDate,

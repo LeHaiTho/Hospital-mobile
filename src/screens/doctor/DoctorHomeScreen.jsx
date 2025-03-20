@@ -16,9 +16,10 @@ const DoctorHomeScreen = () => {
   console.log("user", user);
 
   const banners = [
-    require("../../../assets/banners/banner-1.png"),
-    require("../../../assets/banners/banner-2.jpg"),
+    require("../../../assets/banners/banner-2.png"),
+    require("../../../assets/banners/banner-5.jpeg"),
     require("../../../assets/banners/banner-3.png"),
+    require("../../../assets/banners/banner-6.png"),
   ];
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -147,7 +148,7 @@ const DoctorHomeScreen = () => {
               onPress={() => navigation.navigate("ChatList")}
             >
               <Image
-                source={require("../../../assets/menu/communication.png")}
+                source={require("../../../assets/menu/ask-doctor.png")}
                 style={{ width: "80%", height: 50 }}
                 resizeMode="center"
               />
@@ -170,7 +171,7 @@ const DoctorHomeScreen = () => {
               onPress={() => navigation.navigate("CommunityList")}
             >
               <Image
-                source={require("../../../assets/menu/medical-report.png")}
+                source={require("../../../assets/menu/communication.png")}
                 style={{ width: "80%", height: 50 }}
                 resizeMode="center"
               />
@@ -193,7 +194,7 @@ const DoctorHomeScreen = () => {
               onPress={() => navigation.navigate("TimeOffList")}
             >
               <Image
-                source={require("../../../assets/menu/hospital-book.png")}
+                source={require("../../../assets/menu/time-off-list.png")}
                 style={{ width: "80%", height: 50 }}
                 resizeMode="center"
               />

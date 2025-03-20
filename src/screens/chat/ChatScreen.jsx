@@ -94,16 +94,16 @@ const ChatScreen = ({ route }) => {
       socket.off("receive-message");
     };
   }, []);
-  const handleCheck = async () => {
-    try {
-      const response = await axiosConfig.post(`/subscriptions/check`);
-      if (response.data.subscription.length === 0) {
-        navigation.navigate("Packages");
-      } else {
-        return;
-      }
-    } catch (error) {}
-  };
+  // const handleCheck = async () => {
+  //   try {
+  //     const response = await axiosConfig.post(`/subscriptions/check`);
+  //     if (response.data.subscription.length === 0) {
+  //       navigation.navigate("Packages");
+  //     } else {
+  //       return;
+  //     }
+  //   } catch (error) {}
+  // };
   const shouldShowTime = (currentMessage, previousMessage) => {
     if (!previousMessage) return true; // Hiển thị thời gian cho tin nhắn đầu tiên
     const currentTime = moment(currentMessage.createdAt);
@@ -232,7 +232,7 @@ const ChatScreen = ({ route }) => {
             paddingVertical: 7,
             flex: 1,
           }}
-          onFocus={handleCheck}
+          // onFocus={handleCheck}
         />
         <TouchableOpacity onPress={sendMessage}>
           <Ionicons name="send" size={24} color="#0165FC" />

@@ -341,7 +341,13 @@
 
 import React, { useState, useEffect } from "react";
 import { Calendar } from "react-native-big-calendar";
-import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import {
   Entypo,
   FontAwesome,
@@ -350,14 +356,17 @@ import {
 } from "@expo/vector-icons";
 import moment from "moment";
 import axiosConfig from "../apis/axiosConfig";
+import { useNavigation } from "@react-navigation/native";
 
 const DoctorScheduleScreen = () => {
+  const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [mode, setMode] = useState("week");
   const [doctorSchedule, setDoctorSchedule] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [calendarDate, setCalendarDate] = useState();
   const [isShow, setIsShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // màu bệnh viện
   const hospitalBackgroundColors = ["#0165e1", "#0FAF00", "#FFCDD2"];
@@ -366,6 +375,7 @@ const DoctorScheduleScreen = () => {
   // lấy lịch của bác sĩ
   const getDoctorSchedule = async () => {
     try {
+      setLoading(true);
       const response = await axiosConfig.get(
         "/doctor-schedules/get-all-schedule"
       );
@@ -448,6 +458,8 @@ const DoctorScheduleScreen = () => {
       setDoctorSchedule(formattedData.flat() || []);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -476,232 +488,248 @@ const DoctorScheduleScreen = () => {
   console.log(moment(calendarDate).format("YYYY-MM-DD"));
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", paddingTop: 35 }}>
-      <View style={{ flex: 1 }}>
+      {loading ? (
         <View
           style={{
-            flexDirection: "row",
+            flex: 1,
+            justifyContent: "center",
             alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 16,
-            paddingVertical: 5,
+            backgroundColor: "#fff",
           }}
         >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-
-              alignItems: "center",
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="black" />
-            <Text style={{ fontSize: 20, fontWeight: "500" }}>
-              {`${moment(calendarDate).format("YYYY")} Tháng ${moment(
-                calendarDate
-              ).format("MM")}`}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 10,
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                padding: 10,
-              }}
-              onPress={() => setVisible(!visible)}
-            >
-              <FontAwesome name="calendar" size={20} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}}>
-              <MaterialCommunityIcons
-                name="dots-vertical"
-                size={24}
-                color="black"
-              />
-            </TouchableOpacity>
-          </View>
+          <ActivityIndicator size="large" color="#0165fc" />
+          <Text>Đang tải...</Text>
         </View>
-        {/* chọn hiển thị */}
-        {visible && (
+      ) : (
+        <View style={{ flex: 1 }}>
           <View
             style={{
-              paddingBottom: 10,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingHorizontal: 16,
+              paddingVertical: 5,
             }}
           >
             <View
               style={{
+                flex: 1,
+                flexDirection: "row",
+                gap: 10,
+                alignItems: "center",
+              }}
+            >
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="arrow-back" size={24} color="black" />
+              </TouchableOpacity>
+              <Text style={{ fontSize: 20, fontWeight: "500" }}>
+                {`${moment(calendarDate).format("YYYY")} Tháng ${moment(
+                  calendarDate
+                ).format("MM")}`}
+              </Text>
+            </View>
+            <View
+              style={{
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-around",
-                paddingHorizontal: 16,
+                gap: 10,
               }}
             >
               <TouchableOpacity
                 style={{
-                  flexDirection: "column",
-                  alignItems: "center",
-                  paddingHorizontal: 10,
-                  paddingVertical: 5,
+                  padding: 10,
                 }}
-                onPress={() => {
-                  setMode("month");
-                  setVisible(false);
-                }}
+                onPress={() => setVisible(!visible)}
               >
-                <MaterialCommunityIcons
-                  name="calendar-month"
-                  size={20}
-                  color={mode === "month" ? "#0165e1" : "#000"}
-                />
-                <Text
-                  style={{
-                    fontWeight: "300",
-                    color: mode === "month" ? "#0165e1" : "#000",
-                  }}
-                >
-                  Tháng
-                </Text>
+                <FontAwesome name="calendar" size={20} color="black" />
               </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{
-                  flexDirection: "column",
-                  alignItems: "center",
-                  paddingHorizontal: 10,
-                  paddingVertical: 5,
-                }}
-                onPress={() => {
-                  setMode("week");
-                  setVisible(false);
-                }}
-              >
+              <TouchableOpacity onPress={() => {}}>
                 <MaterialCommunityIcons
-                  name="calendar-week"
-                  size={20}
-                  color={mode === "week" ? "#0165e1" : "#000"}
+                  name="dots-vertical"
+                  size={24}
+                  color="black"
                 />
-                <Text
-                  style={{
-                    fontWeight: "300",
-                    color: mode === "week" ? "#0165e1" : "#000",
-                  }}
-                >
-                  Tuần
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  flexDirection: "column",
-                  alignItems: "center",
-                  paddingHorizontal: 10,
-                  paddingVertical: 5,
-                }}
-                onPress={() => {
-                  setMode("3days");
-                  setVisible(false);
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="calendar-range"
-                  size={20}
-                  color={mode === "3days" ? "#0165e1" : "#000"}
-                />
-                <Text
-                  style={{
-                    fontWeight: "300",
-                    color: mode === "3days" ? "#0165e1" : "#000",
-                  }}
-                >
-                  3 ngày
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  flexDirection: "column",
-                  alignItems: "center",
-                  paddingHorizontal: 10,
-                  paddingVertical: 5,
-                }}
-                onPress={() => {
-                  setMode("day");
-                  setVisible(false);
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="calendar-today"
-                  size={20}
-                  color={mode === "day" ? "#0165e1" : "#000"}
-                />
-                <Text
-                  style={{
-                    fontWeight: "300",
-                    color: mode === "day" ? "#0165e1" : "#000",
-                  }}
-                >
-                  Ngày
-                </Text>
               </TouchableOpacity>
             </View>
           </View>
-        )}
+          {/* chọn hiển thị */}
+          {visible && (
+            <View
+              style={{
+                paddingBottom: 10,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                  paddingHorizontal: 16,
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                  }}
+                  onPress={() => {
+                    setMode("month");
+                    setVisible(false);
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="calendar-month"
+                    size={20}
+                    color={mode === "month" ? "#0165e1" : "#000"}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "300",
+                      color: mode === "month" ? "#0165e1" : "#000",
+                    }}
+                  >
+                    Tháng
+                  </Text>
+                </TouchableOpacity>
 
-        <Calendar
-          events={doctorSchedule}
-          height={600}
-          mode={mode}
-          eventCellTextColor="#fff"
-          locale="vi"
-          minHour={6}
-          maxHour={22}
-          onSwipeEnd={(date) => {
-            setCalendarDate(date);
-          }}
-          eventCellStyle={eventCellStyle}
-          headerContainerStyle={{
-            height:
-              mode === "day" || mode === "3days" || mode === "week" ? 60 : 30,
-          }}
-          overlapOffset={mode === "week" ? 10 : mode === "3days" ? 30 : 40}
-          showTime={false}
-          date={selectedDate}
-          onPressDateHeader={handlePressDateHeader}
-          showVerticalScrollIndicator={false}
-          // onChangeDate={(date) => {
-          //   setCalendarDate(date);
-          //   console.log(calendarDate);
-          // }}
-        />
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#4995F9",
-            padding: 10,
-            borderRadius: 10,
-            alignItems: "center",
-            justifyContent: "center",
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                  }}
+                  onPress={() => {
+                    setMode("week");
+                    setVisible(false);
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="calendar-week"
+                    size={20}
+                    color={mode === "week" ? "#0165e1" : "#000"}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "300",
+                      color: mode === "week" ? "#0165e1" : "#000",
+                    }}
+                  >
+                    Tuần
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                  }}
+                  onPress={() => {
+                    setMode("3days");
+                    setVisible(false);
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="calendar-range"
+                    size={20}
+                    color={mode === "3days" ? "#0165e1" : "#000"}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "300",
+                      color: mode === "3days" ? "#0165e1" : "#000",
+                    }}
+                  >
+                    3 ngày
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                  }}
+                  onPress={() => {
+                    setMode("day");
+                    setVisible(false);
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="calendar-today"
+                    size={20}
+                    color={mode === "day" ? "#0165e1" : "#000"}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "300",
+                      color: mode === "day" ? "#0165e1" : "#000",
+                    }}
+                  >
+                    Ngày
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
 
-            position: "absolute",
-            bottom: 10,
-            right: 20,
-            zIndex: 1000,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-          }}
-          onPress={() => {
-            setSelectedDate(new Date());
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 20, fontWeight: "400" }}>
-            {moment(new Date()).format("DD")}
-          </Text>
-        </TouchableOpacity>
-      </View>
+          <Calendar
+            events={doctorSchedule}
+            height={600}
+            mode={mode}
+            eventCellTextColor="#fff"
+            locale="vi"
+            minHour={6}
+            maxHour={22}
+            onSwipeEnd={(date) => {
+              setCalendarDate(date);
+            }}
+            eventCellStyle={eventCellStyle}
+            headerContainerStyle={{
+              height:
+                mode === "day" || mode === "3days" || mode === "week" ? 60 : 30,
+            }}
+            overlapOffset={mode === "week" ? 10 : mode === "3days" ? 30 : 40}
+            showTime={false}
+            date={selectedDate}
+            onPressDateHeader={handlePressDateHeader}
+            showVerticalScrollIndicator={false}
+            // onChangeDate={(date) => {
+            //   setCalendarDate(date);
+            //   console.log(calendarDate);
+            // }}
+          />
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#4995F9",
+              padding: 10,
+              borderRadius: 10,
+              alignItems: "center",
+              justifyContent: "center",
+
+              position: "absolute",
+              bottom: 10,
+              right: 20,
+              zIndex: 1000,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+            onPress={() => {
+              setSelectedDate(new Date());
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 20, fontWeight: "400" }}>
+              {moment(new Date()).format("DD")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

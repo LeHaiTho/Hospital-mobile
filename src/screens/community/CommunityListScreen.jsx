@@ -33,7 +33,7 @@ export default function CommunityListScreen() {
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
 
-  console.log("user", user);
+  console.log("user", user.role);
   // const [routes] = useState([
   //   { key: "all", title: "Tất cả" },
   //   { key: "mine", title: "Câu hỏi của tôi" },
@@ -42,7 +42,7 @@ export default function CommunityListScreen() {
   const [questions, setQuestions] = useState([]);
   const [myQuestions, setMyQuestions] = useState([]);
   const [answer, setAnswer] = useState("");
-
+  console.log("questions", questions?.likes?.[0]);
   const QuestionsList = ({ data, handleSnapPress, loading }) => (
     <>
       {loading ? (
@@ -297,7 +297,7 @@ export default function CommunityListScreen() {
     </View>
   );
   const sheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["100%"]);
+  const snapPoints = useMemo(() => ["100%"], []);
   const handleSnapPress = useCallback((item) => {
     setSelectedQuestion(item);
     sheetRef.current?.snapToIndex(1);
@@ -423,12 +423,15 @@ export default function CommunityListScreen() {
   useEffect(() => {
     getAllQuestions();
   }, []);
+
   useEffect(() => {
     if (user && questions.length > 0) {
+      console.log("dddddddddddddddddddddddddddddddddd", user);
       setLoading(true);
       const filterMyQuestions = questions?.filter(
         (quest) => quest?.user?.id === user?.id
       );
+      console.log("filterMyQuestions", filterMyQuestions);
       setMyQuestions(filterMyQuestions);
       setLoading(false);
     }
@@ -437,27 +440,54 @@ export default function CommunityListScreen() {
   const handleSendAnswer = async (selectedQuestion, answer) => {
     try {
       setLoading(true);
+
+      // Gửi câu trả lời mới qua API
       const response = await axiosConfig.post("/questions/answer", {
         question_id: selectedQuestion?.id,
         content: answer,
       });
+
+      const newComment = {
+        id: response.data.id, // ID của comment mới từ API
+        question_id: selectedQuestion.id,
+        content: answer,
+        createdAt: new Date().toISOString(), // Thời gian hiện tại
+        updatedAt: new Date().toISOString(),
+        user: {
+          avatar: user?.avatar, // Thêm thông tin user nếu cần
+          fullname: user?.fullname, // Lấy từ context hoặc user hiện tại
+          id: user?.id,
+          role: { name: user?.role || user?.role?.name }, // Lấy từ context hoặc user hiện tại
+          // ID của người dùng hiện tại
+        },
+        user_id: user?.id, // ID của người dùng hiện tại
+      };
+
+      // Cập nhật danh sách comments cục bộ
+      const updatedComments = [
+        ...(selectedQuestion.comments || []),
+        newComment,
+      ];
+      setSelectedQuestion((prev) => ({
+        ...prev,
+        comments: updatedComments,
+      }));
       Keyboard.dismiss();
       setAnswer("");
-      // đóng bàn phím
       await getAllQuestions();
-      const updatedQuestion = questions.find(
-        (q) => q.id === selectedQuestion?.id
-      );
-      setSelectedQuestion(updatedQuestion); // Đảm bảo cập nhật comment mới
+      // Cập nhật selectedQuestion
+
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
+
   // console.log("answer", selectedQuestion);
-  // console.log("myQuestions", myQuestions);
+  console.log("myQuestions", myQuestions);
   // console.log("questions", questions);
+  // console.log("selectedQuestion", selectedQuestion);
   return (
     <GestureHandlerRootView>
       {/* <TabView
@@ -584,21 +614,20 @@ export default function CommunityListScreen() {
           ref={sheetRef}
           onChange={handleSheetChange}
           enablePanDownToClose={true}
-          index={-1}
           contentContainerStyle={{
             gap: 20,
             paddingBottom: 50,
           }}
           showsVerticalScrollIndicator={false}
         >
-          {selectedQuestion?.comments?.map((cmt) => (
+          {selectedQuestion?.comments?.map((cmt, index) => (
             <View
               style={{
                 borderRadius: 10,
                 gap: 10,
                 backgroundColor: "#fff",
               }}
-              key={cmt?.id}
+              key={index}
             >
               <View style={{ flexDirection: "row", gap: 10 }}>
                 <Image
@@ -647,6 +676,7 @@ export default function CommunityListScreen() {
             </View>
           ))}
         </BottomSheetScrollView>
+
         {selectedQuestion?.user_id === user?.id ||
         selectedQuestion?.user?.role?.name === "doctor" ||
         user?.role?.name === "doctor" ||

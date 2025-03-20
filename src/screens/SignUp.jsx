@@ -50,9 +50,10 @@ const SignUp = () => {
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     await GoogleSignin.signOut();
     const signInResult = await GoogleSignin.signIn();
-    console.log("signInResult", signInResult.data.user);
+    // console.log("signInResult", signInResult.data.user);
     let idToken = signInResult.idToken || signInResult?.data?.idToken;
-    if (!idToken) throw new Error("No ID token found");
+    // if (!idToken) throw new Error("No ID token found");
+    if (!idToken) return null;
     await GoogleSignin.configure({});
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     // Đăng nhập với Firebase
@@ -61,9 +62,9 @@ const SignUp = () => {
     try {
       setLoading(true);
       const response = await axiosConfig.post(`/auth/google-sign-in`, {
-        ...signInResult.data.user,
+        ...signInResult?.data?.user,
       });
-      const { user, token } = response.data;
+      const { user, token } = response?.data;
       dispatch(login({ user, token }));
       navigation.replace("CustomerNavigator");
     } catch (error) {

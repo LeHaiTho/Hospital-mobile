@@ -12,7 +12,7 @@ import StackNavigator from "./src/navigation/StackNavigator";
 // import DoctorNavigator from "./src/navigation/doctorNavigator/DoctorNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import axiosConfig from "./src/apis/axiosConfig";
 import { setUserInfo } from "./src/redux/authSlice";
@@ -24,9 +24,12 @@ import { store } from "./src/redux/store";
 import Toast from "react-native-toast-message";
 import { initializeSocket, socket } from "./src/utils/socket";
 import ToastConfig from "./src/utils/toastConfig";
+import { useNavigation } from "@react-navigation/native";
+import DeepLinkHandler from "./src/components/DeepLinkHandler";
 
 // test deep linking
-// import * as Linking from "expo-linking";
+import * as Linking from "expo-linking";
+import TabNavigator from "./src/navigation/TabNavigator";
 
 const Base_URL = process.env.EXPO_PUBLIC_API_URL;
 const UserInfoFetcher = () => {
@@ -103,35 +106,6 @@ const UserInfoFetcher = () => {
 };
 
 const App = () => {
-  // useEffect(() => {
-  //   // Hàm xử lý khi ứng dụng được mở bằng URL
-  //   const handleDeepLink = (event) => {
-  //     const url = event.url; // URL đầy đủ được mở
-  //     console.log("URL nhận được:", url);
-
-  //     // Phân tích URL để lấy thông tin
-  //     const path = url.split("://")[1]; // Lấy phần "paymentsuccess"
-  //     if (path === "paymentsuccess") {
-  //       // Alert.alert("Thông báo", "Thanh toán thành công!");
-  //       // xử lý khi thanh toán thành công
-  //       // mở màn hình home
-  //       navigation.navigate("TabNavigator");
-  //     }
-  //   };
-
-  //   // Lắng nghe sự kiện mở URL
-  //   Linking.addEventListener("url", handleDeepLink);
-
-  //   // Kiểm tra nếu ứng dụng đã được mở bằng URL
-  //   Linking.getInitialURL().then((url) => {
-  //     if (url) handleDeepLink({ url });
-  //   });
-
-  //   // Dọn dẹp listener khi component bị unmount
-  //   return () => {
-  //     Linking.removeEventListener("url", handleDeepLink);
-  //   };
-  // }, []);
   // Cấu hình hiển thị thông báo
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -145,6 +119,7 @@ const App = () => {
     <Provider store={store}>
       <PaperProvider>
         <NavigationContainer>
+          <DeepLinkHandler />
           <UserInfoFetcher />
           <StackNavigator />
           <Toast config={ToastConfig} />

@@ -42,7 +42,7 @@ const LoginScreen = ({ route }) => {
           slot,
           selectedHospital,
         });
-      } else if (user?.role?.name === "doctor") {
+      } else if (user?.role?.name === "doctor" || user?.role === "doctor") {
         navigation.replace("DoctorNavigator");
       } else {
         // Nếu không có redirectTo, chuyển đến màn hình chính hoặc mặc định

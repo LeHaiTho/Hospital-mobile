@@ -72,6 +72,7 @@ const BookAppointment = ({
         slot,
         selectedHospital,
         selectedSpecialty,
+        isDoctorSpecial: true,
       });
     } else {
       navigation.navigate("Login", {

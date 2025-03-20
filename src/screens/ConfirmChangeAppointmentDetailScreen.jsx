@@ -77,7 +77,7 @@ const ConfirmChangeAppointmentDetailScreen = ({ route }) => {
   console.log("appointmentId", appointmentId);
   const handleOke = () => {
     setVisible(false);
-    navigation.navigate("AppointmentDetail", {
+    navigation.replace("AppointmentDetail", {
       appointmentId,
     });
   };

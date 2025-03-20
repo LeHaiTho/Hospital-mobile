@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "mobile",
+    "name": "LHT MED",
     "slug": "hospital-lht",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,10 +20,10 @@
     "extra": {
       "eas": {
         "projectId": "e226b582-77fe-4a7f-a2ae-859bc2698304"
-      }
-      // "suppressReactWarnings": "true",
-      // "suppressReactNativeWarnings": "true",
-      // "suppressReactNativeConsole": "true"
+      },
+      "suppressReactWarnings": "true",
+      "suppressReactNativeWarnings": "true",
+      "suppressReactNativeConsole": "true"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -39,13 +39,13 @@
     "build": {
       "development": {
         "developmentClient": true,
-        "distribution": "internal"
-        // "env": {
-        //   "SUPPRESS_REACT_WARNINGS": "true",
-        //   "suppressReactWarnings": "true",
-        //   "suppressReactNativeWarnings": "true",
-        //   "suppressReactNativeConsole": "true"
-        // }
+        "distribution": "internal",
+        "env": {
+          "SUPPRESS_REACT_WARNINGS": "true",
+          "suppressReactWarnings": "true",
+          "suppressReactNativeWarnings": "true",
+          "suppressReactNativeConsole": "true"
+        }
       }
     },
     "owner": "lehaitho2002"

@@ -8,6 +8,8 @@ import { Modal, Portal } from "react-native-paper";
 import LottieView from "lottie-react-native";
 import { useNavigation } from "@react-navigation/native";
 import axiosConfig from "../apis/axiosConfig";
+
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 const RatingScreen = ({ route }) => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
@@ -80,7 +82,7 @@ const RatingScreen = ({ route }) => {
                   borderRadius: 100, // Giữ tròn ảnh (nửa của chiều cao hoặc chiều rộng)
                 }}
                 source={{
-                  uri: "https://www.fvhospital.com/wp-content/uploads/2022/07/tien-si-bac-si-nguyen-thanh-tung.jpg",
+                  uri: `${BASE_URL}${appointment?.doctor?.avatar}`,
                 }}
               />
             </View>

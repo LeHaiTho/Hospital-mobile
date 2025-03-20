@@ -52,9 +52,10 @@ export default function CustomerProfileScreen({ route }) {
   const [checked, setChecked] = useState("1");
   const [isSheetVisible, setIsSheetVisible] = useState(false);
   const [allProfiles, setAllProfile] = useState([]);
-  console.log("selectedHospital", selectedHospital?.specialty);
-  console.log("selectedSpecialty", selectedSpecialty);
-  console.log("specialtyDetail", specialtyDetail);
+  // console.log("selectedHospital", selectedHospital?.specialty);
+  // console.log("selectedSpecialty", selectedSpecialty);
+  // console.log("specialtyDetail", specialtyDetail);
+  console.log(isDoctorSpecial);
   useEffect(() => {
     const getProfiles = async () => {
       try {
