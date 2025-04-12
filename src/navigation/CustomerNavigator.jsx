@@ -270,11 +270,11 @@ const CustomerNavigator = () => {
           headerTintColor: "#fff",
           headerTitleAlign: "center",
           headerShadowVisible: false,
-          headerRight: () => (
-            <TouchableOpacity style={{ marginRight: 20 }}>
-              <FontAwesome name="trash-o" size={24} color="#fff" />
-            </TouchableOpacity>
-          ),
+          // headerRight: () => (
+          //   <TouchableOpacity style={{ marginRight: 20 }}>
+          //     <FontAwesome name="trash-o" size={24} color="#fff" />
+          //   </TouchableOpacity>
+          // ),
         }}
       />
       <Stack.Screen
