@@ -54,7 +54,10 @@ export default function CustomerProfileScreen({ route }) {
   const [allProfiles, setAllProfile] = useState([]);
   // console.log("selectedHospital", selectedHospital?.specialty);
   // console.log("selectedSpecialty", selectedSpecialty);
-  // console.log("specialtyDetail", specialtyDetail);
+  console.log("specialtyDetail", specialtyDetail);
+  console.log("slot", slot);
+  console.log("profiles", profiles);
+  console.log("allProfiles", allProfiles);
   console.log(isDoctorSpecial);
   useEffect(() => {
     const getProfiles = async () => {
@@ -102,7 +105,10 @@ export default function CustomerProfileScreen({ route }) {
   //   hospital,
   //   isDoctorSpecial
   // );
-  const profiles = allProfiles?.filter((profile) => profile?.fullname !== null);
+  // Lọc profiles chỉ hiển thị những profile có đầy đủ thông tin cần thiết
+  const profiles = allProfiles?.filter(
+    (profile) => profile?.fullname && profile?.date_of_birth && profile?.phone
+  );
   return (
     <>
       <GestureHandlerRootView>
@@ -228,134 +234,142 @@ export default function CustomerProfileScreen({ route }) {
             }}
             showsVerticalScrollIndicator={false}
           >
-            {profiles?.map((profile) => (
-              <Card
-                key={profile.id}
-                style={{
-                  borderRadius: 10,
-                  backgroundColor: "#fff",
-                }}
-                onPress={() =>
-                  navigation.navigate("ConfirmInfo", {
-                    profile,
-                    doctor,
-                    selectedDate,
-                    slot,
-                    selectedHospital,
-                    selectedSpecialty,
-                    isDoctorSpecial,
-                    specialtyDetail,
-                  })
-                }
-              >
-                <Card.Content>
-                  <View style={{ gap: 10 }}>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
+            {profiles?.length > 0 ? (
+              profiles.map((profile) => (
+                <Card
+                  key={profile.id}
+                  style={{
+                    borderRadius: 10,
+                    backgroundColor: "#fff",
+                  }}
+                  onPress={() =>
+                    navigation.navigate("ConfirmInfo", {
+                      profile,
+                      doctor,
+                      selectedDate,
+                      slot,
+                      selectedHospital,
+                      selectedSpecialty,
+                      isDoctorSpecial,
+                      specialtyDetail,
+                    })
+                  }
+                >
+                  <Card.Content>
+                    <View style={{ gap: 10 }}>
                       <View
                         style={{
                           flexDirection: "row",
-                          alignItems: "center",
-                          gap: 16,
+                          justifyContent: "space-between",
                         }}
                       >
-                        <FontAwesome5
-                          name="user-alt"
-                          size={20}
-                          color="#0165FF"
-                        />
-                        <Text
+                        <View
                           style={{
-                            fontWeight: "500",
-                            color: "#0165FF",
-                            textTransform: "uppercase",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 16,
                           }}
                         >
-                          {profile.fullname}
-                        </Text>
+                          <FontAwesome5
+                            name="user-alt"
+                            size={20}
+                            color="#0165FF"
+                          />
+                          <Text
+                            style={{
+                              fontWeight: "500",
+                              color: "#0165FF",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {profile.fullname}
+                          </Text>
+                        </View>
+                        <Entypo
+                          name="dots-three-vertical"
+                          size={20}
+                          color="#0165FF"
+                          onPress={() => console.log("profile", profile.id)}
+                        />
                       </View>
-                      <Entypo
-                        name="dots-three-vertical"
-                        size={20}
-                        color="#0165FF"
-                        onPress={() => console.log("profile", profile.id)}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
                       <View
                         style={{
                           flexDirection: "row",
-                          alignItems: "center",
-                          gap: 16,
+                          justifyContent: "space-between",
                         }}
                       >
-                        <FontAwesome5
-                          name="phone-alt"
-                          size={20}
-                          color="#0165FF"
-                        />
-                        <Text style={{ color: "#000" }}>{profile.phone}</Text>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 16,
+                          }}
+                        >
+                          <FontAwesome5
+                            name="phone-alt"
+                            size={20}
+                            color="#0165FF"
+                          />
+                          <Text style={{ color: "#000" }}>{profile.phone}</Text>
+                        </View>
                       </View>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
                       <View
                         style={{
                           flexDirection: "row",
-                          alignItems: "center",
-                          gap: 16,
+                          justifyContent: "space-between",
                         }}
                       >
-                        <FontAwesome5
-                          name="birthday-cake"
-                          size={20}
-                          color="#0165FF"
-                        />
-                        <Text style={{ color: "#000" }}>
-                          {moment(profile?.date_of_birth).format("DD/MM/YYYY")}
-                        </Text>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 16,
+                          }}
+                        >
+                          <FontAwesome5
+                            name="birthday-cake"
+                            size={20}
+                            color="#0165FF"
+                          />
+                          <Text style={{ color: "#000" }}>
+                            {moment(profile.date_of_birth).format("DD/MM/YYYY")}
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
                       <View
                         style={{
                           flexDirection: "row",
-                          alignItems: "center",
-                          gap: 16,
+                          justifyContent: "space-between",
                         }}
                       >
-                        <FontAwesome5
-                          name="map-marker-alt"
-                          size={20}
-                          color="#0165FF"
-                        />
-                        <Text style={{ color: "#000" }}>
-                          {profile.province}
-                        </Text>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 16,
+                          }}
+                        >
+                          <FontAwesome5
+                            name="map-marker-alt"
+                            size={20}
+                            color="#0165FF"
+                          />
+                          <Text style={{ color: "#000" }}>
+                            {profile.province || "Chưa cập nhật"}
+                          </Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </Card.Content>
-              </Card>
-            ))}
+                  </Card.Content>
+                </Card>
+              ))
+            ) : (
+              <View style={{ alignItems: "center", paddingVertical: 20 }}>
+                <Text style={{ color: "#797979", fontSize: 16 }}>
+                  Hiện chưa có hồ sơ
+                </Text>
+              </View>
+            )}
           </ScrollView>
         </View>
         {/* {isSheetVisible && <View style={styles.overlay} />} */}

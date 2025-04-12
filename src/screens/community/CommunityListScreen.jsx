@@ -33,7 +33,7 @@ export default function CommunityListScreen() {
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
 
-  console.log("user", user.role);
+  // console.log("user", user.role);
   // const [routes] = useState([
   //   { key: "all", title: "Tất cả" },
   //   { key: "mine", title: "Câu hỏi của tôi" },
@@ -483,7 +483,13 @@ export default function CommunityListScreen() {
       setLoading(false);
     }
   };
-
+  const createQuestion = () => {
+    if (user) {
+      navigation.navigate("CreateQuestion");
+    } else {
+      navigation.replace("Login");
+    }
+  };
   // console.log("answer", selectedQuestion);
   console.log("myQuestions", myQuestions);
   // console.log("questions", questions);
@@ -574,7 +580,7 @@ export default function CommunityListScreen() {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => navigation.navigate("CreateQuestion")}
+          onPress={createQuestion}
         >
           <FontAwesome name="question-circle-o" size={24} color="#fff" />
           <Text style={{ color: "#fff", fontWeight: "400" }}>Đặt câu hỏi</Text>

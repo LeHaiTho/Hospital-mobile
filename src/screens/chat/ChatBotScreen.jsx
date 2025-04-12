@@ -1,5 +1,5 @@
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -19,6 +19,16 @@ const ChatBotScreen = () => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const initialBotMessage = {
+      sender_id: 2,
+      content:
+        "Xin chào! Tôi là chatbot hỗ trợ bạn. Bạn khỏe không? Có điều gì thú vị đang xảy ra không?",
+      createdAt: new Date(),
+    };
+    setMessages([initialBotMessage]);
+  }, []);
 
   const sendMessage = async () => {
     if (newMessage.trim() === "") return;

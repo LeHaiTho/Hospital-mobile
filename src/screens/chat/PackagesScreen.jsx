@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axiosConfig from "../../apis/axiosConfig";
+import { APP_NAME } from "../../utils/constants";
 const PackagesScreen = () => {
   const navigation = useNavigation();
   const [selectedPackage, setSelectedPackage] = useState(24);
@@ -97,7 +98,7 @@ const PackagesScreen = () => {
           </View>
           <View style={{ gap: 10, paddingVertical: 10 }}>
             <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-              Đặc quyền tại LHT MED
+              Đặc quyền tại {APP_NAME}
             </Text>
             <Text style={{ color: "#0165FC", fontWeight: "bold" }}>
               Chat riêng với bác sĩ 24H
@@ -119,9 +120,10 @@ const PackagesScreen = () => {
             <Text style={{}}>
               <FontAwesome name="check-square-o" size={24} color="#0165FC" />
               <Text style={{ textAlign: "justify" }}>
-                LHT MED cam kết bảo mật tuyệt đối thông tin người dùng bao gồm:
-                Họ và tên, hình ảnh đại diện, chỉ hiển thị tuổi, giới tính người
-                hỏi. Chỉ bác sĩ mới có thể đọc được nội dung trong phiên chat.
+                {APP_NAME} cam kết bảo mật tuyệt đối thông tin người dùng bao
+                gồm: Họ và tên, hình ảnh đại diện, chỉ hiển thị tuổi, giới tính
+                người hỏi. Chỉ bác sĩ mới có thể đọc được nội dung trong hỏi.
+                Chỉ bác sĩ mới có thể đọc được nội dung trong phiên chat.
               </Text>
             </Text>
           </View>

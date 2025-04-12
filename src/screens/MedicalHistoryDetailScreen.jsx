@@ -12,7 +12,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
   const handleExplain = () => {
     setExplain(!explain);
   };
-
+  console.log("appointment", appointment?.doctor?.user?.fullname);
   const getMedicalHistoryDetail = async () => {
     try {
       const res = await axiosConfig.get(
@@ -84,31 +84,40 @@ const MedicalHistoryDetailScreen = ({ route }) => {
             />
           </View>
         </View>
-        <View style={{ paddingHorizontal: 5 }}>
-          <Text style={{ fontSize: 16, fontWeight: "bold", color: "#0165FF" }}>
-            {appointment?.hospital?.name}
-          </Text>
-          <Text style={{ fontSize: 12, color: "#666" }}>
-            {`Ngày khám: ${moment(appointment?.date).format(
-              "DD/MM/YYYY"
-            )} - ${moment(
-              appointment?.appointmentSlot?.start_time,
-              "HH:mm:ss"
-            ).format("HH:mm")} - ${moment(
-              appointment?.appointmentSlot?.end_time,
-              "HH:mm:ss"
-            ).format("HH:mm")}`}
-          </Text>
-          <Text
-            style={{
-              fontSize: 12,
-              color: "#666",
-              flex: 1,
-            }}
-            numberOfLines={2}
-          >
-            {`Địa chỉ: ${appointment?.hospital?.address}`}
-          </Text>
+        <View style={{ paddingHorizontal: 5, gap: 5 }}>
+          <View>
+            <Text
+              style={{ fontSize: 18, fontWeight: "bold", color: "#0165FF" }}
+            >
+              {appointment?.hospital?.name}
+            </Text>
+            <Text style={{ color: "#000", fontWeight: "bold" }}>
+              {`Bác sĩ khám: ${appointment?.doctor?.user?.fullname}`}
+            </Text>
+          </View>
+          <View>
+            <Text style={{ fontSize: 12, color: "#666" }}>
+              {`Ngày khám: ${moment(appointment?.date).format(
+                "DD/MM/YYYY"
+              )} - ${moment(
+                appointment?.appointmentSlot?.start_time,
+                "HH:mm:ss"
+              ).format("HH:mm")} - ${moment(
+                appointment?.appointmentSlot?.end_time,
+                "HH:mm:ss"
+              ).format("HH:mm")}`}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                color: "#666",
+                flex: 1,
+              }}
+              numberOfLines={2}
+            >
+              {`Địa chỉ: ${appointment?.hospital?.address}`}
+            </Text>
+          </View>
         </View>
         <View style={{ gap: 15, padding: 5 }}>
           <View

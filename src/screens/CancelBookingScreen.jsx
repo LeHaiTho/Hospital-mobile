@@ -215,7 +215,10 @@ const CancelBookingScreen = ({ route }) => {
           text1: "Yêu cầu hủy lịch hẹn đã gửi thành công",
           type: "success",
         });
-        navigation.replace("TabNavigator", { screen: "AppointmentScreen" });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "TabNavigator", screen: "AppointmentScreen" }],
+        });
       }
     } catch (error) {
       console.log(error);

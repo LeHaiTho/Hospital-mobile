@@ -1,22 +1,44 @@
 import { useNavigation } from "@react-navigation/native";
 import * as Linking from "expo-linking";
 import { useEffect } from "react";
-
+import axios from "axios";
+const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 const DeepLinkHandler = () => {
   const navigation = useNavigation(); // Sử dụng useNavigation trong component con
 
-  const handleDeepLink = (event) => {
+  const handleDeepLink = async (event) => {
     const { queryParams } = Linking.parse(event.url); // Không cần lấy path nữa
     console.log("Query Params:", queryParams);
 
-    if (queryParams.resultCode === "0") {
+    if (queryParams.status === "1") {
       console.log("Payment Success!");
+
       // Điều hướng tới màn hình thành công
-      const extraData = JSON.parse(queryParams.extraData);
-      const appointmentId = extraData.appointment;
-      navigation.navigate("AppointmentDetail", {
-        appointmentId: appointmentId.id,
-      });
+      const appointmentId = queryParams.apptransid.split("_")[1];
+      try {
+        const response = await axios.patch(
+          `${baseUrl}/appointments/update-appointment-status-after-payment/${appointmentId}`,
+          { payment_status: "paid" }
+        );
+        console.log("response", response);
+        if (response.status === 200) {
+          navigation.reset({
+            index: 1,
+            routes: [
+              {
+                name: "TabNavigator",
+                params: { screen: "Home" },
+              },
+              {
+                name: "AppointmentDetail",
+                params: { appointmentId, fromBookingFlow: true },
+              },
+            ],
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       console.log("Payment Failed!");
       // Điều hướng tới màn hình thất bại

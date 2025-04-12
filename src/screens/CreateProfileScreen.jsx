@@ -131,6 +131,59 @@ const CreateProfileScreen = ({ route }) => {
   );
   const handleSubmit = async () => {
     try {
+      // Kiểm tra các trường bắt buộc
+      const requiredFields = {
+        name: "Họ và tên",
+        phone: "Số điện thoại",
+        dateOfBirth: "Ngày sinh",
+        gender: "Giới tính",
+        email: "Email",
+        province: "Tỉnh/Thành phố",
+        district: "Quận/Huyện",
+        ward: "Phường/Xã",
+        address: "Địa chỉ",
+        relationship: "Hồ sơ khám bệnh",
+      };
+
+      // Tìm các trường bị thiếu
+      const missingFields = Object.entries(requiredFields)
+        .filter(([key]) => !formData[key] && formData[key] !== false) // false là hợp lệ cho gender
+        .map(([, label]) => label);
+
+      // Kiểm tra định dạng email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isValidEmail = formData.email && emailRegex.test(formData.email);
+
+      // Kiểm tra định dạng số điện thoại (10 số, bắt đầu bằng 0)
+      const phoneRegex = /^0\d{9}$/;
+      const isValidPhone = formData.phone && phoneRegex.test(formData.phone);
+
+      if (missingFields.length > 0) {
+        Toast.show({
+          text1: "Thiếu thông tin",
+          text2: `Vui lòng điền: ${missingFields.join(", ")}`,
+          type: "error",
+        });
+        return;
+      }
+
+      if (!isValidEmail) {
+        Toast.show({
+          text1: "Email không hợp lệ",
+          text2: "Vui lòng nhập email đúng định dạng",
+          type: "error",
+        });
+        return;
+      }
+
+      if (!isValidPhone) {
+        Toast.show({
+          text1: "Số điện thoại không hợp lệ",
+          text2: "Vui lòng nhập số điện thoại 10 số bắt đầu bằng 0",
+          type: "error",
+        });
+        return;
+      }
       const res = await axiosConfig.put(
         `/users/create-profile/${user.id}`,
         formData
@@ -162,8 +215,11 @@ const CreateProfileScreen = ({ route }) => {
             type: "success",
           });
         } else {
-          navigation.navigate("CustomerProfile", {
-            fromBooking: false,
+          navigation.replace("TabNavigator", {
+            screen: "CustomerProfile",
+            params: {
+              fromBooking: false,
+            },
           });
           Toast.show({
             text1: "Tạo hồ sơ thành công",

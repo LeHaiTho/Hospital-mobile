@@ -12,6 +12,7 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { Dimensions } from "react-native";
 import axiosConfig from "../apis/axiosConfig";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const Upcoming = ({ appointments, getAppointments, refreshing, isLoading }) => {
   const upcomingAppointments = appointments?.filter(
@@ -179,6 +180,7 @@ const AppointmentScreen = () => {
   const [appointments, setAppointments] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useSelector((state) => state.auth);
 
   // const [routes] = useState([
   //   { key: "upcoming", title: "Sắp tới" },
@@ -235,8 +237,13 @@ const AppointmentScreen = () => {
     }
   };
 
+  console.log(user);
   useEffect(() => {
-    getAppointments();
+    if (user) {
+      getAppointments();
+    } else {
+      navigation.replace("Login");
+    }
   }, [navigation]);
 
   return (
@@ -276,45 +283,51 @@ const AppointmentScreen = () => {
     // />
 
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          flexDirection: "row",
-
-          backgroundColor: "#fff",
-
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingTop: 10,
-          paddingHorizontal: 16,
-
-          borderBottomWidth: 0.6,
-          borderBottomColor: "#D9D9D9",
-        }}
-      >
-        {routes.map((route, i) => (
-          <TouchableOpacity
-            key={i}
+      {!user ? (
+        <ActivityIndicator size="large" color="#0165FF" />
+      ) : (
+        <>
+          <View
             style={{
-              borderBottomWidth: 2,
-              borderColor: index === i ? "#0165FF" : "transparent",
-              paddingHorizontal: 20,
-              paddingBottom: 7,
+              flexDirection: "row",
+
+              backgroundColor: "#fff",
+
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingTop: 10,
+              paddingHorizontal: 16,
+
+              borderBottomWidth: 0.6,
+              borderBottomColor: "#D9D9D9",
             }}
-            onPress={() => setIndex(i)}
           >
-            <Text
-              style={{
-                fontWeight: index === i ? "700" : "400",
-                color: "#000",
-                fontSize: 16,
-              }}
-            >
-              {route.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <View style={{ flex: 1 }}>{routes[index].component}</View>
+            {routes.map((route, i) => (
+              <TouchableOpacity
+                key={i}
+                style={{
+                  borderBottomWidth: 2,
+                  borderColor: index === i ? "#0165FF" : "transparent",
+                  paddingHorizontal: 20,
+                  paddingBottom: 7,
+                }}
+                onPress={() => setIndex(i)}
+              >
+                <Text
+                  style={{
+                    fontWeight: index === i ? "700" : "400",
+                    color: "#000",
+                    fontSize: 16,
+                  }}
+                >
+                  {route.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={{ flex: 1 }}>{routes[index].component}</View>
+        </>
+      )}
     </View>
   );
 };

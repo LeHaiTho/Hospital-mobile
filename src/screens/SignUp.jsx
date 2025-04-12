@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import axiosConfig from "../apis/axiosConfig";
 import { login } from "../redux/authSlice";
+import { APP_NAME } from "../utils/constants";
 
 const SignUp = () => {
   const [initializing, setInitializing] = useState(true);
@@ -74,6 +75,30 @@ const SignUp = () => {
     }
   };
 
+  // handle sign up
+  const handleSignUp = async () => {
+    try {
+      if (!form.fullName || !form.username || !form.password) {
+        Alert.alert("Vui lòng nhập đầy đủ thông tin");
+        return;
+      }
+      setLoading(true);
+      const response = await axiosConfig.post(`/auth/register-new-patient`, {
+        fullName: form.fullName,
+        username: form.username,
+        password: form.password,
+      });
+      console.log("response", response);
+      const { user, token } = response?.data;
+
+      dispatch(login({ user, token }));
+      navigation.replace("CustomerNavigator");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   // return (
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -84,7 +109,7 @@ const SignUp = () => {
           alignItems: "center",
           justifyContent: "center",
           paddingHorizontal: 20,
-          paddingTop: "40%",
+          paddingTop: "20%",
           gap: 20,
         }}
       >
@@ -102,7 +127,7 @@ const SignUp = () => {
               color: "#0165FC",
             }}
           >
-            LHT MED
+            {APP_NAME}
           </Text>
           <Text style={{ fontSize: 12, color: "gray", textAlign: "center" }}>
             Hãy đăng ký tài khoản để trải nghiệm những dịch vụ chăm sóc sức khỏe
@@ -228,6 +253,7 @@ const SignUp = () => {
             borderRadius: 100,
             width: "100%",
           }}
+          onPress={handleSignUp}
         >
           <Text
             style={{
@@ -297,7 +323,7 @@ const SignUp = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      {loading ? (
+      {loading && (
         <View
           style={{
             justifyContent: "center",
@@ -313,132 +339,9 @@ const SignUp = () => {
         >
           <ActivityIndicator size="large" color="#0165FC" />
         </View>
-      ) : null}
+      )}
     </View>
   );
 };
 
 export default SignUp;
-
-// import React, { useState, useEffect } from "react";
-
-// import auth from "@react-native-firebase/auth";
-// import { Button, View, Text, Image, ActivityIndicator } from "react-native";
-// import {
-//   GoogleSignin,
-//   GoogleSigninButton,
-// } from "@react-native-google-signin/google-signin";
-// import axiosConfig from "../apis/axiosConfig";
-// import axios from "axios";
-// import { login } from "../redux/authSlice";
-// import { useDispatch, useSelector } from "react-redux";
-// import { useNavigation } from "@react-navigation/native";
-
-// GoogleSignin.configure({
-//   webClientId:
-//     "909616392538-ofbrf2mbi0cr9ops1sls8gnv9cdif35h.apps.googleusercontent.com",
-// });
-// const Base_URL = process.env.EXPO_PUBLIC_API_URL;
-// const SignUp = () => {
-//   // Set an initializing state whilst Firebase connects
-//   const [initializing, setInitializing] = useState(true);
-//   const [user, setUser] = useState();
-//   const navigation = useNavigation();
-//   const [loading, setLoading] = useState(false);
-//   const dispatch = useDispatch();
-//   // Handle user state changes
-//   function onAuthStateChanged(user) {
-//     setUser(user);
-//     if (initializing) setInitializing(false);
-//     console.log(user);
-//   }
-
-//   useEffect(() => {
-//     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-//     console.log(subscriber);
-//     return subscriber; // unsubscribe on unmount
-//   }, []);
-
-//   if (initializing) return null;
-//   // const onGoogleButtonPres = async () => {
-//   //   // Đăng nhập lại
-//   //   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-//   //   await GoogleSignin.signOut();
-//   //   const signInResult = await GoogleSignin.signIn();
-//   //   console.log("signInResult", signInResult.data.user);
-//   //   let idToken = signInResult.idToken || signInResult?.data?.idToken;
-//   //   if (!idToken) throw new Error("No ID token found");
-//   //   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-//   //   // Đăng nhập với Firebase
-//   //   const user_sign_in = await auth().signInWithCredential(googleCredential);
-
-//   //   try {
-//   //     setLoading(true);
-//   //     const response = await axiosConfig.post(`/auth/google-sign-in`, {
-//   //       ...signInResult.data.user,
-//   //     });
-//   //     const { user, token } = response.data;
-//   //     dispatch(login({ user, token }));
-//   //     navigation.replace("CustomerNavigator");
-//   //   } catch (error) {
-//   //     console.log(error);
-//   //   } finally {
-//   //     setLoading(false);
-//   //   }
-//   // };
-
-//   // if (!user) {
-//   //   return (
-//   //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-//   //       <Text>Login</Text>
-//   //       <GoogleSigninButton
-//   //         style={{ width: 200, height: 50 }}
-//   //         onPress={() => onGoogleButtonPres()}
-//   //       />
-//   //     </View>
-//   //   );
-//   // }
-//   const onGoogleButtonPress = async () => {
-//     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-//     await GoogleSignin.signOut();
-//     const signInResult = await GoogleSignin.signIn();
-//     try {
-//       setLoading(true);
-//       const response = await axiosConfig.post(`/auth/google-sign-in`, {
-//         ...signInResult.data.user,
-//       });
-//       const { user, token } = response.data;
-//       dispatch(login({ user, token }));
-//       navigation.replace("CustomerNavigator");
-//     } catch (error) {
-//       console.log(error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-//   console.log(user);
-//   return (
-//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-//       {/* <Text>Welcome {user.email}</Text>
-//       <Image
-//         source={{ uri: user.photoURL }}
-//         style={{ width: 100, height: 100 }}
-//       />
-//       <Button title="Đăng xuất" onPress={() => auth().signOut()} /> */}
-//       <Button onPress={onGoogleButtonPress} title="Login"></Button>
-//       {/* <Button onPress={() => auth().signOut()} title="Logout"></Button> */}
-//     </View>
-//   );
-// };
-
-// export default SignUp;
-// // import React from "react";
-// // import { View, Text } from "react-native";
-
-// // export const SignUp = () => {
-// //   return (
-// //     <View>
-// //       <Text>SignUp</Text>
-// //     </View>
-// //   );
-// // };

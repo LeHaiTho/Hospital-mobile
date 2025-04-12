@@ -79,6 +79,7 @@ const ConfirmChangeAppointmentDetailScreen = ({ route }) => {
     setVisible(false);
     navigation.replace("AppointmentDetail", {
       appointmentId,
+      fromBookingFlow: true,
     });
   };
   const handlePaymentMethod = (method) => {
@@ -183,10 +184,13 @@ const ConfirmChangeAppointmentDetailScreen = ({ route }) => {
                         color="#0165FF"
                       />
                       <Text style={{ color: "#000" }}>
-                        {moment(
-                          appointment?.member?.date_of_birth ||
-                            appointment?.patient?.date_of_birth
-                        ).format("DD/MM/YYYY")}
+                        {appointment?.member?.date_of_birth ||
+                        appointment?.patient?.date_of_birth
+                          ? moment(
+                              appointment?.member?.date_of_birth ||
+                                appointment?.patient?.date_of_birth
+                            ).format("DD/MM/YYYY")
+                          : "Chưa cập nhật"}
                       </Text>
                     </View>
                   </View>

@@ -13,6 +13,7 @@ import { Avatar, Badge } from "react-native-paper";
 import Search from "../components/Search";
 import moment from "moment";
 import DoctorCard from "../components/DoctorCard";
+import DoctorInfoVetical from "../components/DoctorInfoVetical";
 import { Dimensions } from "react-native";
 import HospitalCard from "../components/HospitalCard";
 import { useNavigation } from "@react-navigation/native";
@@ -26,6 +27,8 @@ import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { FlatList } from "react-native";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
 import { StyleSheet, StatusBar } from "react-native";
+import NewsCard from "../components/NewsCard";
+import { NEWS_DATA, APP_NAME } from "../utils/constants";
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 const HomeScreen = () => {
@@ -45,6 +48,8 @@ const HomeScreen = () => {
     require("../../assets/banners/banner-5.jpeg"),
     require("../../assets/banners/banner-6.png"),
   ];
+  const [news, setNews] = useState([]);
+
   // lấy những lịch hẹn cần cảnh báo dời lịch
   const getAppointmentNeedChange = async () => {
     try {
@@ -76,7 +81,11 @@ const HomeScreen = () => {
   };
   const getDoctorsList = async () => {
     try {
-      const res = await axiosConfig.get("/doctors/all");
+      const res = await axiosConfig.get("/doctors/all", {
+        params: {
+          limit: 5,
+        },
+      });
       setDoctors(res.data.doctorList);
     } catch (error) {
       console.log(error);
@@ -115,11 +124,13 @@ const HomeScreen = () => {
     getHospitalsList();
     getDoctorsList();
     getSpecialtiesList();
+    setNews(NEWS_DATA);
   }, []);
 
   // console.log("user", user?.role);
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      {/* <StatusBar backgroundColor="#0165FC" /> */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ gap: 5 }}
@@ -127,7 +138,7 @@ const HomeScreen = () => {
         <View
           style={{
             paddingHorizontal: 16,
-            paddingTop: "10%",
+            paddingTop: 20,
             paddingBottom: 10,
             backgroundColor: "#0165FC",
             borderBottomLeftRadius: 80,
@@ -135,7 +146,11 @@ const HomeScreen = () => {
             gap: 10,
           }}
         >
-          <View>
+          <View
+            style={{
+              paddingVertical: 16,
+            }}
+          >
             <Text
               style={{
                 fontSize: 20,
@@ -144,7 +159,7 @@ const HomeScreen = () => {
                 textTransform: "uppercase",
               }}
             >
-              LHT medical
+              {APP_NAME}
             </Text>
             <Text style={{ fontSize: 14, color: "#fff" }}>
               Ứng dụng đặt lịch và chăm sóc sức khỏe 24/7
@@ -389,7 +404,8 @@ const HomeScreen = () => {
               >
                 <Text
                   style={{
-                    color: "#0165FC",
+                    color: "gray",
+                    fontWeight: 600,
                   }}
                 >
                   Xem tất cả
@@ -625,7 +641,8 @@ const HomeScreen = () => {
             >
               <Text
                 style={{
-                  color: "#0165FC",
+                  color: "gray",
+                  fontWeight: 600,
                 }}
               >
                 Xem tất cả
@@ -674,7 +691,8 @@ const HomeScreen = () => {
             {/* <TouchableOpacity onPress={() => navigation.navigate("Chat")}> */}
             <Text
               style={{
-                color: "#0165FC",
+                color: "gray",
+                fontWeight: 600,
               }}
             >
               Xem tất cả
@@ -724,7 +742,8 @@ const HomeScreen = () => {
             <TouchableOpacity onPress={() => navigation.navigate("DoctorList")}>
               <Text
                 style={{
-                  color: "#0165FC",
+                  color: "gray",
+                  fontWeight: 600,
                 }}
               >
                 Xem tất cả
@@ -733,10 +752,10 @@ const HomeScreen = () => {
           </View>
 
           <FlatList
-            showsVerticalScrollIndicator={false}
-            scrollEnabled={false}
+            showsHorizontalScrollIndicator={false}
+            horizontal
             contentContainerStyle={{
-              gap: 15,
+              gap: 10,
               paddingHorizontal: 16,
               paddingVertical: 10,
             }}
@@ -744,7 +763,54 @@ const HomeScreen = () => {
             windowSize={1}
             data={doctors}
             renderItem={({ item, index }) => (
-              <DoctorCard key={index} doctor={item} />
+              // <DoctorCard key={index} doctor={item} />
+              <DoctorInfoVetical key={index} doctor={item} />
+            )}
+          />
+        </View>
+
+        {/* news */}
+        <View
+          style={{
+            marginVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              paddingHorizontal: 16,
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+              Tin tức mỗi ngày
+            </Text>
+
+            <TouchableOpacity onPress={() => {}}>
+              <Text
+                style={{
+                  color: "gray",
+                  fontWeight: 600,
+                }}
+              >
+                Xem tất cả
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            nestedScrollEnabled={false}
+            horizontal
+            contentContainerStyle={{
+              gap: 16,
+              paddingHorizontal: 16,
+              paddingVertical: 10,
+            }}
+            data={news}
+            renderItem={({ item, index }) => (
+              <NewsCard key={index} news={item} />
             )}
           />
         </View>

@@ -13,14 +13,23 @@ import PatientInfo from "../components/PatientInfo";
 import { AntDesign, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axiosConfig from "../apis/axiosConfig";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import moment from "moment";
 import { Barcode } from "expo-barcode-generator";
+import { APP_NAME } from "../utils/constants";
 const AppointmentDetail = ({ route }) => {
   const navigation = useNavigation();
-  const { appointmentId } = route.params;
+  const { appointmentId, fromBookingFlow } = route.params || {
+    fromBookingFlow: false,
+  };
   const [appointmentDetail, setAppointmentDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerLeft: () => (fromBookingFlow ? null : <Ionicons name="arrow-back-outline" size={24} color="#fff" />),
+  //   });
+  // }, [navigation, fromBookingFlow]);
 
   const getAppointmentDetail = async () => {
     try {
@@ -433,7 +442,7 @@ const AppointmentDetail = ({ route }) => {
                   }}
                 >
                   <Text style={{ color: "#0165FC" }}>
-                    Bản quyền thuộc LHT MED
+                    Bản quyền thuộc {APP_NAME}
                   </Text>
                   <Text style={{ fontSize: 12, color: "#797979" }}>
                     Đặt lịch khám tại bệnh viện hàng đầu Việt Nam

@@ -26,6 +26,7 @@ export default function ConfirmInfoScreen({ route }) {
   console.log("selectedHospital", selectedHospital);
   console.log("isDoctorSpecial", isDoctorSpecial);
   console.log("specialtyDetail", specialtyDetail);
+  console.log("slot", slot);
   return (
     <>
       <View style={styles.container}>
@@ -89,7 +90,9 @@ export default function ConfirmInfoScreen({ route }) {
                 textAlign: "left",
               }}
             >
-              {moment(profile?.date_of_birth).format("DD/MM/YYYY")}
+              {profile?.date_of_birth
+                ? moment(profile?.date_of_birth).format("DD/MM/YYYY")
+                : "Chưa cập nhật"}
             </Text>
           </View>
           <Divider style={styles.divider} />
@@ -246,47 +249,50 @@ export default function ConfirmInfoScreen({ route }) {
           borderTopRightRadius: 20,
         }}
       >
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#0165FC",
-            padding: 15,
-            borderRadius: 100,
-            width: "100%",
-            alignItems: "center",
-          }}
-          onPress={() =>
-            navigation.navigate("ConfirmBookingAppointmentInfo", {
-              profile,
-              doctor,
-              selectedDate,
-              slot,
-              selectedHospital,
-              selectedSpecialty,
-              isDoctorSpecial,
-              specialtyDetail,
-            })
-          }
-        >
-          <Text
+        {slot ? (
+          <TouchableOpacity
             style={{
-              color: "#FFF",
+              backgroundColor: "#0165FC",
+              padding: 15,
+              borderRadius: 100,
+              width: "100%",
+              alignItems: "center",
             }}
+            onPress={() =>
+              navigation.navigate("ConfirmBookingAppointmentInfo", {
+                profile,
+                doctor,
+                selectedDate,
+                slot,
+                selectedHospital,
+                selectedSpecialty,
+                isDoctorSpecial,
+                specialtyDetail,
+              })
+            }
           >
-            Đặt lịch hẹn
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFF",
-            padding: 15,
-            borderRadius: 100,
-            width: "100%",
-            alignItems: "center",
-          }}
-          onPress={() => navigation.navigate("TabNavigator")}
-        >
-          <Text style={{ color: "#0165FC" }}>Trở về trang chủ</Text>
-        </TouchableOpacity>
+            <Text
+              style={{
+                color: "#FFF",
+              }}
+            >
+              Đặt lịch hẹn
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#FFF",
+              padding: 15,
+              borderRadius: 100,
+              width: "100%",
+              alignItems: "center",
+            }}
+            onPress={() => navigation.navigate("TabNavigator")}
+          >
+            <Text style={{ color: "#0165FC" }}>Trở về trang chủ</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </>
   );

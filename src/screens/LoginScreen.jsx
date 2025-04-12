@@ -1,6 +1,6 @@
 import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -9,22 +9,75 @@ import {
   View,
   Image,
   ActivityIndicator,
+  Alert,
 } from "react-native";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useDispatch, useSelector } from "react-redux";
 import axiosConfig from "../apis/axiosConfig";
 import { login } from "../redux/authSlice";
+import auth from "@react-native-firebase/auth";
+import { APP_NAME } from "../utils/constants";
 const LoginScreen = ({ route }) => {
   const navigation = useNavigation();
+  const [user, setUser] = useState();
   const dispatch = useDispatch();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const { user } = useSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
   const { redirectTo, doctor, selectedDate, slot, selectedHospital } =
     route.params || {};
+  GoogleSignin.configure({
+    webClientId:
+      "909616392538-ofbrf2mbi0cr9ops1sls8gnv9cdif35h.apps.googleusercontent.com",
+  });
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+  if (initializing) return null;
+  const onGoogleButtonPres = async () => {
+    // Đăng nhập lại
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    await GoogleSignin.signOut();
+    const signInResult = await GoogleSignin.signIn();
+    console.log("signInResult", signInResult.data.user);
+    let idToken = signInResult.idToken || signInResult?.data?.idToken;
+    // if (!idToken) throw new Error("No ID token found");
+    if (!idToken) return null;
+    await GoogleSignin.configure({});
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    // Đăng nhập với Firebase
+    const user_sign_in = await auth().signInWithCredential(googleCredential);
+
+    try {
+      setIsLoading(true);
+      const response = await axiosConfig.post(`/auth/google-sign-in`, {
+        ...signInResult?.data?.user,
+      });
+      const { user, token } = response?.data;
+      dispatch(login({ user, token }));
+      navigation.replace("CustomerNavigator");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleLogin = async () => {
     try {
+      if (!username || !password) {
+        Alert.alert("Vui lòng nhập tên đăng nhập và mật khẩu");
+        return;
+      }
       setIsLoading(true);
       const res = await axiosConfig.post("/auth/login", {
         username,
@@ -55,12 +108,7 @@ const LoginScreen = ({ route }) => {
     }
   };
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#fff",
-      }}
-    >
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -68,7 +116,7 @@ const LoginScreen = ({ route }) => {
           alignItems: "center",
           justifyContent: "center",
           paddingHorizontal: 20,
-          paddingTop: "50%",
+          paddingTop: "30%",
           gap: 20,
         }}
       >
@@ -81,7 +129,7 @@ const LoginScreen = ({ route }) => {
               color: "#0165FC",
             }}
           >
-            LHT MED
+            {APP_NAME} MED
           </Text>
           <View
             style={{
@@ -208,6 +256,7 @@ const LoginScreen = ({ route }) => {
                 borderRadius: 100,
                 padding: 10,
               }}
+              onPress={onGoogleButtonPres}
             >
               <Image
                 source={require("../../assets/ggle.png")}
@@ -239,7 +288,7 @@ const LoginScreen = ({ route }) => {
           </View>
         </>
       </ScrollView>
-      {isLoading ? (
+      {isLoading && (
         <View
           style={{
             justifyContent: "center",
@@ -255,7 +304,7 @@ const LoginScreen = ({ route }) => {
         >
           <ActivityIndicator size="large" color="#0165FC" />
         </View>
-      ) : null}
+      )}
     </View>
   );
 };

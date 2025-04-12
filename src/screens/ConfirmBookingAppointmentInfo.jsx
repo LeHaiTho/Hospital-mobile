@@ -56,16 +56,16 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
     isDoctorSpecial,
     specialtyDetail,
   } = route.params || {};
-  // console.log("doctor", doctor);
-  // console.log("selectedHospital", selectedHospital);
-  // console.log("slot", slot);
-  // console.log("selectedDate", selectedDate);
-  // console.log("doctor", doctor);
-  // console.log("isDoctorSpecial", isDoctorSpecial);
-  // console.log("selectedSpecialty", selectedSpecialty);
-  // console.log("specialtyDetail", specialtyDetail);
+  console.log("doctor", doctor);
 
-  console.log("profile", profile);
+  console.log("slot", slot);
+  console.log("selectedDate", selectedDate);
+  console.log("doctor", doctor);
+  console.log("isDoctorSpecial", isDoctorSpecial);
+  console.log("selectedSpecialty", selectedSpecialty);
+  console.log("specialtyDetail", specialtyDetail);
+
+  // console.log("profile", profile);
   const getDoctorName = async () => {
     try {
       const res = await axiosConfig.get(
@@ -82,9 +82,16 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
       getDoctorName();
     }
   }, [doctor?.doctor_id]);
-
-  console.log(doctor?.consultation_fee?.[0]?.toLocaleString("vi-VN"));
   console.log(
+    "selectedHospital.hospitalSpecialty",
+    selectedHospital.hospitalSpecialty
+  );
+  console.log(
+    "doctor?.consultation_fee?.[0]?.toLocaleString('vi-VN')",
+    doctor?.consultation_fee?.[0]?.toLocaleString("vi-VN")
+  );
+  console.log(
+    "selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee?.toLocaleString('vi-VN')",
     selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee?.toLocaleString(
       "vi-VN"
     )
@@ -390,6 +397,12 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
                         color="#0165FF"
                       />
                       <Text style={{ color: "#000" }}>
+                        {/* {doctor?.specialties?.find(
+                          (specialty) => specialty.id === selectedSpecialty
+                        )?.name ||
+                          specialtyDetail ||
+                          selectedHospital?.hospitalSpecialty[0]?.specialty
+                            ?.name} */}
                         {doctor?.specialties?.find(
                           (specialty) => specialty.id === selectedSpecialty
                         )?.name ||

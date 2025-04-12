@@ -35,6 +35,7 @@ import { Modal, Portal } from "react-native-paper";
 import LottieView from "lottie-react-native";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
+import { APP_NAME } from "../utils/constants";
 
 const InfoPaymentScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -137,9 +138,9 @@ const InfoPaymentScreen = ({ route }) => {
               },
             }
           );
-
+          console.log("paymentRes", paymentRes.data.data.order_url);
           navigation.navigate("WebviewPayment", {
-            paymentUrl: paymentRes.data.payUrl,
+            paymentUrl: paymentRes.data.data.order_url,
           });
           console.log(res.data.newAppointment);
           setVisible(false);
@@ -166,8 +167,22 @@ const InfoPaymentScreen = ({ route }) => {
 
   const handleOke = () => {
     setVisible(false);
-    navigation.navigate("AppointmentDetail", {
-      appointmentId,
+    // navigation.replace("AppointmentDetail", {
+    //   appointmentId,
+    //   fromBookingFlow: true,
+    // });
+    navigation.reset({
+      index: 1,
+      routes: [
+        {
+          name: "TabNavigator",
+          params: { screen: "Home" },
+        },
+        {
+          name: "AppointmentDetail",
+          params: { appointmentId, fromBookingFlow: true },
+        },
+      ],
     });
   };
   const handlePaymentMethod = (method) => {
@@ -540,7 +555,7 @@ const InfoPaymentScreen = ({ route }) => {
                   {paymentMethod === "cash"
                     ? "Thanh toán tại cơ sở y tế"
                     : paymentMethod === "e-wallet"
-                      ? "Thanh toán ví điện tử MOMO"
+                      ? "Thanh toán ví điện tử ZaloPay"
                       : "Chọn phương thức"}
                 </Text>
               </View>
@@ -598,8 +613,8 @@ const InfoPaymentScreen = ({ route }) => {
             <Text style={{ fontSize: 12, color: "#797979", width: "90%" }}>
               Tôi đồng ý phí tiện ích để sử dụng dịch vụ đặt khám, thanh toán
               viện phí, tra cứu kết quả khám và các tính năng tiện lợi khác trên
-              nền tảng hệ thống LHT, đây không phải là dịch vụ bắt buộc bởi cơ
-              sở y tế.
+              nền tảng hệ thống {APP_NAME}, đây không phải là dịch vụ bắt buộc
+              bởi cơ sở y tế.
             </Text>
           </View>
         </ScrollView>
@@ -747,9 +762,11 @@ const InfoPaymentScreen = ({ route }) => {
                   height: 50,
                   borderRadius: 10,
                 }}
-                source={require("../../assets/momo.png")}
+                source={{
+                  uri: "https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-ZaloPay-Square.png",
+                }}
               />
-              <Text>Thanh toán ví điện tử MOMO</Text>
+              <Text>Thanh toán ví điện tử ZaloPay</Text>
             </TouchableOpacity>
           </BottomSheetScrollView>
         </BottomSheet>

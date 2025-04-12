@@ -6,7 +6,7 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
-const DoctorCard = ({ doctor, hospitalId }) => {
+const DoctorCard = ({ doctor = null, hospitalId = null }) => {
   const navigation = useNavigation();
   const handlePress = () => {
     navigation.navigate("DoctorDetail", { id: doctor.id, hospitalId });
@@ -14,25 +14,22 @@ const DoctorCard = ({ doctor, hospitalId }) => {
   console.log("hospitalId", hospitalId);
   const renderStars = (averageRating) => {
     const stars = [];
-    const fullStars = Math.floor(averageRating); // Số ngôi sao đầy
-    const halfStar = averageRating % 1 !== 0; // Xác định có ngôi sao nửa không
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0); // Số ngôi sao rỗng
+    const fullStars = Math.floor(averageRating);
+    const halfStar = averageRating % 1 !== 0;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
-    // Thêm ngôi sao đầy
     for (let i = 0; i < fullStars; i++) {
       stars.push(
         <Ionicons key={`full-${i}`} name="star" size={18} color="#FCAF23" />
       );
     }
 
-    // Thêm ngôi sao nửa (nếu có)
     if (halfStar) {
       stars.push(
         <Ionicons key="half" name="star-half" size={18} color="#FCAF23" />
       );
     }
 
-    // Thêm ngôi sao rỗng
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
         <Ionicons
@@ -169,6 +166,7 @@ const DoctorCard = ({ doctor, hospitalId }) => {
           backgroundColor: "#DBEAFE",
           padding: 10,
         }}
+        onPress={handlePress}
       >
         <Text
           style={{ fontWeight: 680, color: "#0165FC", textAlign: "center" }}

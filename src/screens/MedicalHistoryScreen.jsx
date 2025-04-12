@@ -64,8 +64,14 @@ const MedicalHistoryScreen = () => {
   useEffect(() => {
     if (user) {
       getAllProfileOfUser();
+    } else {
+      navigation.replace("Login");
     }
   }, [navigation]);
+  console.log(
+    "appointmentCompleted",
+    appointmentCompleted?.[0]?.doctor?.user?.fullname
+  );
   console.log(allProfilesOfUser);
   console.log(selectedProfile);
   const navigation = useNavigation();
@@ -148,7 +154,7 @@ const MedicalHistoryScreen = () => {
               numberOfLines={2}
               style={{ fontSize: 12, textAlign: "center" }}
             >
-              {allProfilesOfUser?.profile?.fullname}
+              {allProfilesOfUser?.profile?.fullname || "Chính tôi"}
             </Text>
           </View>
           {allProfilesOfUser?.getMembersOfUser?.map((member) => (
@@ -255,12 +261,14 @@ const MedicalHistoryScreen = () => {
               {selectedProfile?.fullname}
             </Text>
             <Text style={{ fontSize: 12 }}>
-              {`${moment(selectedProfile?.date_of_birth).format(
-                "DD/MM/YYYY"
-              )} - ${
-                new Date().getFullYear() -
-                moment(selectedProfile?.date_of_birth).year()
-              } tuổi`}
+              {selectedProfile?.date_of_birth
+                ? `${moment(selectedProfile?.date_of_birth).format(
+                    "DD/MM/YYYY"
+                  )} - ${
+                    new Date().getFullYear() -
+                    moment(selectedProfile?.date_of_birth).year()
+                  } tuổi`
+                : "Không có thông tin"}
             </Text>
           </View>
           <View

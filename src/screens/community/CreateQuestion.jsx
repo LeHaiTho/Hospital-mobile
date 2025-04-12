@@ -102,7 +102,13 @@ const CreateQuestion = () => {
             text1: "Câu hỏi của bạn đã được tạo thành công",
           });
           setTimeout(() => {
-            navigation.replace("CommunityList");
+            navigation.reset({
+              index: 1,
+              routes: [
+                { name: "TabNavigator", params: { screen: "Home" } },
+                { name: "CommunityList" },
+              ],
+            });
           }, 500);
         }
       } catch (error) {

@@ -93,217 +93,210 @@ const ChangeAppointmentDetail = ({ route, navigation }) => {
   }, []);
   return (
     <GestureHandlerRootView>
-      <ScrollView style={{ padding: 20 }}>
-        <View
-          style={{
-            backgroundColor: "#fff",
-            padding: 15,
-            borderRadius: 10,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.2,
-            shadowRadius: 2,
-            gap: 10,
-          }}
-        >
-          <View style={{ gap: 2, flexDirection: "column" }}>
+      {appointmentNeedChangeDetail && (
+        <ScrollView style={{ padding: 20 }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              padding: 15,
+              borderRadius: 10,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.2,
+              shadowRadius: 2,
+              gap: 10,
+            }}
+          >
+            <View style={{ gap: 2, flexDirection: "column" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={{ flexDirection: "row", gap: 5 }}>
+                  <Text style={{ fontSize: 12 }}>Mã phiếu:</Text>
+                  <Text style={{ fontWeight: "bold", fontSize: 14 }}>
+                    {appointmentNeedChange.appointment_code}
+                  </Text>
+                </View>
+                <View
+                  style={{ flexDirection: "row", gap: 5, alignItems: "center" }}
+                >
+                  <Text
+                    style={{ color: "#0165FF", fontSize: 12 }}
+                    onPress={() => {
+                      navigation.navigate("AppointmentDetail", {
+                        appointmentId: appointmentNeedChange.id,
+                      });
+                    }}
+                  >
+                    Xem chi tiết
+                  </Text>
+                  <MaterialIcons
+                    name="arrow-forward-ios"
+                    size={16}
+                    color="#0165FF"
+                  />
+                </View>
+              </View>
+
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  textTransform: "uppercase",
+                }}
+              >
+                {appointmentNeedChangeDetail?.member?.fullname ||
+                  appointmentNeedChangeDetail?.patient?.fullname}
+              </Text>
+            </View>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+              style={{
+                borderWidth: 0.5,
+                borderColor: "#000",
+                borderStyle: "dashed",
+              }}
+            ></View>
+            <Text
+              style={{
+                color: "#0165FF",
+                textTransform: "uppercase",
+                fontSize: 16,
+              }}
             >
-              <View style={{ flexDirection: "row", gap: 5 }}>
-                <Text style={{ fontSize: 12 }}>Mã phiếu:</Text>
-                <Text style={{ fontWeight: "bold", fontSize: 14 }}>
-                  {appointmentNeedChange.appointment_code}
+              {appointmentNeedChangeDetail?.hospital?.name}
+            </Text>
+            <View style={{ gap: 10 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 10,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text>Chuyên khoa:</Text>
+                <Text>{appointmentNeedChangeDetail?.specialty?.name}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 10,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text>Ngày khám:</Text>
+                <Text>
+                  {moment(
+                    appointmentNeedChangeDetail?.doctorSchedule?.date
+                  ).format("DD/MM/YYYY")}
                 </Text>
               </View>
               <View
-                style={{ flexDirection: "row", gap: 5, alignItems: "center" }}
+                style={{
+                  flexDirection: "row",
+                  gap: 10,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
               >
-                <Text
-                  style={{ color: "#0165FF", fontSize: 12 }}
-                  onPress={() => {
-                    navigation.navigate("AppointmentDetail", {
-                      appointmentId: appointmentNeedChange.id,
-                    });
-                  }}
-                >
-                  Xem chi tiết
+                <Text>Giờ khám:</Text>
+                <Text>
+                  {`${moment(
+                    appointmentNeedChangeDetail?.appointmentSlot?.start_time,
+                    "HH:mm:ss"
+                  ).format("HH:mm")} - ${moment(
+                    appointmentNeedChangeDetail?.appointmentSlot?.end_time,
+                    "HH:mm:ss"
+                  ).format("HH:mm")}`}
                 </Text>
-                <MaterialIcons
-                  name="arrow-forward-ios"
-                  size={16}
-                  color="#0165FF"
-                />
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 10,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text>Trạng thái:</Text>
+                <Text style={{ color: "#FCAF23" }}>
+                  {appointmentNeedChangeDetail?.status === "waiting"
+                    ? "Chờ thay đổi"
+                    : appointmentNeedChangeDetail?.status}
+                </Text>
               </View>
             </View>
-
-            <Text
+            <View
               style={{
-                fontWeight: "bold",
-                fontSize: 16,
-                textTransform: "uppercase",
+                borderWidth: 0.5,
+                borderColor: "#000",
+                borderStyle: "dashed",
               }}
-            >
-              {appointmentNeedChangeDetail?.member?.fullname ||
-                appointmentNeedChangeDetail?.patient?.fullname}
-            </Text>
+            ></View>
           </View>
           <View
             style={{
-              borderWidth: 0.5,
-              borderColor: "#000",
-              borderStyle: "dashed",
-            }}
-          ></View>
-          <Text
-            style={{
-              color: "#0165FF",
-              textTransform: "uppercase",
-              fontSize: 16,
+              gap: 10,
+              backgroundColor: "#fff",
+              padding: 10,
+              borderRadius: 10,
             }}
           >
-            {appointmentNeedChangeDetail?.hospital?.name}
-          </Text>
-          <View style={{ gap: 10 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Chuyên khoa:</Text>
-              <Text>{appointmentNeedChangeDetail?.specialty?.name}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Ngày khám:</Text>
-              <Text>
-                {moment(
-                  appointmentNeedChangeDetail?.doctorSchedule?.date
-                ).format("DD/MM/YYYY")}
+            <View>
+              <Text style={{ fontSize: 12, textAlign: "justify" }}>
+                * Lịch hẹn của bạn cần thay đổi vì một số lý do khác. Xin lỗi vì
+                sự bất tiện này. Nhầm hỗ trợ trải nghiệm tốt hơn cho bạn, hệ
+                thống đưa các lựa chọn:
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Giờ khám:</Text>
-              <Text>
-                {`${moment(
-                  appointmentNeedChangeDetail?.appointmentSlot?.start_time,
-                  "HH:mm:ss"
-                ).format("HH:mm")} - ${moment(
-                  appointmentNeedChangeDetail?.appointmentSlot?.end_time,
-                  "HH:mm:ss"
-                ).format("HH:mm")}`}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Trạng thái:</Text>
-              <Text style={{ color: "#FCAF23" }}>
-                {appointmentNeedChangeDetail?.status === "waiting"
-                  ? "Chờ thay đổi"
-                  : appointmentNeedChangeDetail?.status}
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              borderWidth: 0.5,
-              borderColor: "#000",
-              borderStyle: "dashed",
-            }}
-          ></View>
-        </View>
-        <View
-          style={{
-            gap: 10,
-            backgroundColor: "#fff",
-            padding: 10,
-            borderRadius: 10,
-          }}
-        >
-          <View>
-            <Text style={{ fontSize: 12, textAlign: "justify" }}>
-              * Lịch hẹn của bạn cần thay đổi vì một số lý do khác. Xin lỗi vì
-              sự bất tiện này. Nhầm hỗ trợ trải nghiệm tốt hơn cho bạn, hệ thống
-              đưa các lựa chọn:
-            </Text>
-            <Text style={{ fontSize: 12, textAlign: "justify" }}>
-              🥇 Để đảm bảo lịch hẹn diễn ra đúng thời gian. Hệ thống đề xuất
-              các bác sĩ có kinh nghiệm chuyên khoa tương tự.
-            </Text>
-            <Text style={{ fontSize: 12, textAlign: "justify" }}>
-              🥇 Để đảm bảo lịch hẹn diễn ra đúng thời gian. Hệ thống đề xuất
-              các bác sĩ có kinh nghiệm chuyên khoa tương tự.
-            </Text>
-            <Text style={{ fontSize: 12, textAlign: "justify" }}>
-              🥇 Để đảm bảo lịch hẹn diễn ra đúng thời gian. Hệ thống đề xuất
-              các bác sĩ có kinh nghiệm chuyên khoa tương tự.
-            </Text>
-          </View>
-          {suggestedDoctors.length > 0 && (
+            {suggestedDoctors.length > 0 && (
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  backgroundColor: "#FCAF23",
+                  borderRadius: 5,
+                }}
+                onPress={() => {
+                  handleSnapPress();
+                }}
+              >
+                <Text style={{ color: "#fff", textAlign: "center" }}>
+                  Hệ thống đề xuất
+                </Text>
+              </TouchableOpacity>
+            )}
+            {/* <TouchableOpacity
+           style={{ padding: 10, backgroundColor: "#0165FF", borderRadius: 5 }}
+         >
+           <Text style={{ color: "#fff", textAlign: "center" }}>
+             Đổi lại thông tin khám
+           </Text>
+         </TouchableOpacity> */}
             <TouchableOpacity
               style={{
                 padding: 10,
-                backgroundColor: "#FCAF23",
+                backgroundColor: "#fff",
                 borderRadius: 5,
               }}
-              onPress={() => {
-                handleSnapPress();
-              }}
+              onPress={handleCancel}
             >
-              <Text style={{ color: "#fff", textAlign: "center" }}>
-                Hệ thống đề xuất
+              <Text
+                style={{
+                  color: "#FF4D4D",
+                  textAlign: "center",
+                  textDecorationLine: "underline",
+                }}
+              >
+                Hủy phiếu khám
               </Text>
             </TouchableOpacity>
-          )}
-          {/* <TouchableOpacity
-            style={{ padding: 10, backgroundColor: "#0165FF", borderRadius: 5 }}
-          >
-            <Text style={{ color: "#fff", textAlign: "center" }}>
-              Đổi lại thông tin khám
-            </Text>
-          </TouchableOpacity> */}
-          <TouchableOpacity
-            style={{
-              padding: 10,
-              backgroundColor: "#fff",
-              borderRadius: 5,
-            }}
-            onPress={handleCancel}
-          >
-            <Text
-              style={{
-                color: "#FF4D4D",
-                textAlign: "center",
-                textDecorationLine: "underline",
-              }}
-            >
-              Hủy phiếu khám
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          </View>
+        </ScrollView>
+      )}
       <BottomSheet
         ref={sheetRef}
         snapPoints={snapPoint}
@@ -375,6 +368,7 @@ const ChangeAppointmentDetail = ({ route, navigation }) => {
                 shadowRadius: 2,
                 elevation: 2,
               }}
+              key={index}
             >
               <TouchableOpacity style={{ gap: 15 }} key={doctor.id}>
                 <View style={{ flexDirection: "row", gap: 15 }}>

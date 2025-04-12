@@ -25,7 +25,7 @@ import { useNavigation } from "@react-navigation/native";
 const initialLayout = { width: Dimensions.get("window").width };
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 const HospitalDetailScreen = ({ route }) => {
-  const { id } = route.params;
+  const { id = null } = route.params || {};
   const [index, setIndex] = useState(0);
   const { width } = useWindowDimensions();
   const [hospital, setHospital] = useState(null);
@@ -134,7 +134,7 @@ const HospitalDetailScreen = ({ route }) => {
         "Bệnh viện này rất tốt, bác sĩ rất tận tâm và chuyên nghiệp. Tôi rất hài lòng với dịch vụ của bệnh viện.",
     },
   ];
-  const source = { html: hospital?.description || "<p></p>" };
+  const source = { html: hospital?.description || "" };
   const Introduction = () => (
     <View style={{ paddingHorizontal: 15, paddingVertical: 12 }}>
       <Text style={{ fontWeight: "bold", color: "#0165FF" }}>

@@ -362,7 +362,7 @@ const CustomerNavigator = () => {
       <Stack.Screen
         name="AppointmentDetail"
         component={AppointmentDetail}
-        options={{
+        options={({ route }) => ({
           headerShown: true,
           headerTitle: "Phiếu khám bệnh",
           headerTitleStyle: {
@@ -374,17 +374,31 @@ const CustomerNavigator = () => {
           headerTintColor: "#fff",
           headerTitleAlign: "center",
           headerShadowVisible: false,
-          headerRight: () => (
-            <TouchableOpacity
-              style={{ marginRight: 30 }}
-              onPress={() =>
-                navigation.replace("TabNavigator", { screen: "Home" })
-              }
-            >
-              <Ionicons name="home-outline" size={24} color="#fff" />
-            </TouchableOpacity>
-          ),
-        }}
+          headerLeft: () => {
+            const isFromInfoPayment = route.params?.fromBookingFlow;
+            return isFromInfoPayment ? null : (
+              <TouchableOpacity
+                style={{ marginLeft: 30 }}
+                onPress={() => navigation.goBack()}
+              >
+                <Ionicons name="arrow-back-outline" size={24} color="#fff" />
+              </TouchableOpacity>
+            );
+          },
+          headerRight: () => {
+            const isFromInfoPayment = route.params?.fromBookingFlow;
+            return !isFromInfoPayment ? null : (
+              <TouchableOpacity
+                style={{ marginRight: 30 }}
+                onPress={() =>
+                  navigation.replace("TabNavigator", { screen: "Home" })
+                }
+              >
+                <Ionicons name="home-outline" size={24} color="#fff" />
+              </TouchableOpacity>
+            );
+          },
+        })}
       />
       <Stack.Screen
         name="DoctorDetail"
@@ -510,7 +524,18 @@ const CustomerNavigator = () => {
         name="Login"
         component={LoginScreen}
         options={{
-          headerShown: false,
+          headerShadowVisible: false,
+          title: "Đăng nhập",
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ marginLeft: 20 }}
+              onPress={() =>
+                navigation.navigate("TabNavigator", { screen: "Home" })
+              }
+            >
+              <Ionicons name="arrow-back-outline" size={24} color="#000" />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Stack.Screen

@@ -10,8 +10,11 @@ import ChatScreen from "../../screens/chat/ChatScreen";
 import ChatListScreen from "../../screens/chat/ChatListScreen";
 import DoctorScheduleScreen from "../../screens/DoctorScheduleScreen";
 import TimeOffListScreen from "../../screens/doctor/TimeOffListScreen";
+import { TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const DoctorNavigator = () => {
+  const navigation = useNavigation();
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -78,6 +81,14 @@ const DoctorNavigator = () => {
         component={TimeOffListScreen}
         options={{
           headerShown: true,
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ marginLeft: 16 }}
+              onPress={() => navigation.replace("DoctorTabNavigator")}
+            >
+              <Icon name="arrow-back-outline" size={24} color="#fff" />
+            </TouchableOpacity>
+          ),
           headerTitle: "Đơn xin nghỉ phép",
           headerTitleStyle: {
             fontSize: 17,

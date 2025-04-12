@@ -57,6 +57,7 @@ const AppointmentCard = ({ appointment }) => {
         onPress={() => {
           navigation.navigate("AppointmentDetail", {
             appointmentId: appointment.id,
+            fromBookingFlow: false,
           });
         }}
       >
