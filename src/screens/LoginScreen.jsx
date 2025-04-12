@@ -17,17 +17,20 @@ import axiosConfig from "../apis/axiosConfig";
 import { login } from "../redux/authSlice";
 import auth from "@react-native-firebase/auth";
 import { APP_NAME } from "../utils/constants";
+
 const LoginScreen = ({ route }) => {
   const navigation = useNavigation();
   const [user, setUser] = useState();
   const dispatch = useDispatch();
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
+  const [error, setError] = useState(false);
   const { redirectTo, doctor, selectedDate, slot, selectedHospital } =
     route.params || {};
+
   GoogleSignin.configure({
     webClientId:
       "909616392538-ofbrf2mbi0cr9ops1sls8gnv9cdif35h.apps.googleusercontent.com",
@@ -41,37 +44,50 @@ const LoginScreen = ({ route }) => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
+    return subscriber;
   }, []);
-  if (initializing) return null;
-  const onGoogleButtonPres = async () => {
-    // Đăng nhập lại
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    await GoogleSignin.signOut();
-    const signInResult = await GoogleSignin.signIn();
-    console.log("signInResult", signInResult.data.user);
-    let idToken = signInResult.idToken || signInResult?.data?.idToken;
-    // if (!idToken) throw new Error("No ID token found");
-    if (!idToken) return null;
-    await GoogleSignin.configure({});
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    // Đăng nhập với Firebase
-    const user_sign_in = await auth().signInWithCredential(googleCredential);
 
+  useEffect(() => {
+    if (error) {
+      setUsername("");
+      setPassword("");
+
+      const timer = setTimeout(() => setError(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  if (initializing) return null;
+
+  const onGoogleButtonPres = async () => {
     try {
       setIsLoading(true);
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+      await GoogleSignin.signOut();
+      const signInResult = await GoogleSignin.signIn();
+      const idToken = signInResult.idToken;
+      if (!idToken) {
+        throw new Error("No ID token found");
+      }
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      await auth().signInWithCredential(googleCredential);
+
       const response = await axiosConfig.post(`/auth/google-sign-in`, {
-        ...signInResult?.data?.user,
+        ...signInResult.user,
       });
       const { user, token } = response?.data;
       dispatch(login({ user, token }));
       navigation.replace("CustomerNavigator");
     } catch (error) {
-      console.log(error);
+      console.error("Google Sign-In Error:", error);
+      Alert.alert("Lỗi", "Đăng nhập bằng Google thất bại. Vui lòng thử lại.");
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleLogin = async () => {
     try {
       if (!username || !password) {
@@ -83,12 +99,10 @@ const LoginScreen = ({ route }) => {
         username,
         password,
       });
-
-      const { user, token } = res.data;
+      const { user, token } = res?.data;
       dispatch(login({ user, token }));
 
       if (redirectTo) {
-        // Nếu có redirectTo, chuyển hướng đến màn hình chỉ định kèm các tham số
         navigation.replace(redirectTo, {
           doctor,
           selectedDate,
@@ -98,15 +112,20 @@ const LoginScreen = ({ route }) => {
       } else if (user?.role?.name === "doctor" || user?.role === "doctor") {
         navigation.replace("DoctorNavigator");
       } else {
-        // Nếu không có redirectTo, chuyển đến màn hình chính hoặc mặc định
         navigation.replace("CustomerNavigator");
       }
     } catch (error) {
-      console.log("error", error);
+      // console.error("Login Error:", error);
+      if (error?.response?.status === 404) {
+        setError(true);
+      } else {
+        Alert.alert("Lỗi", "Đăng nhập thất bại. Vui lòng thử lại.");
+      }
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
@@ -129,7 +148,7 @@ const LoginScreen = ({ route }) => {
               color: "#0165FC",
             }}
           >
-            {APP_NAME} MED
+            {APP_NAME}
           </Text>
           <View
             style={{
@@ -200,7 +219,6 @@ const LoginScreen = ({ route }) => {
                   onChangeText={(text) => setPassword(text)}
                   secureTextEntry={!isShowPassword}
                 />
-
                 <TouchableOpacity
                   onPress={() => setIsShowPassword(!isShowPassword)}
                   style={{ paddingRight: 10 }}
@@ -212,21 +230,50 @@ const LoginScreen = ({ route }) => {
                   />
                 </TouchableOpacity>
               </View>
+              {error && (
+                <Text style={{ color: "red", fontSize: 12 }}>
+                  Tài khoản hoặc mật khẩu không đúng!
+                </Text>
+              )}
             </View>
           </View>
-          <TouchableOpacity
+          <View
             style={{
-              paddingVertical: 10,
-              backgroundColor: "#0165FC",
-              borderRadius: 100,
+              flexDirection: "column",
+              gap: 10,
               width: "100%",
-              alignItems: "center",
-              justifyContent: "center",
+              justifyContent: "space-between",
             }}
-            onPress={handleLogin}
           >
-            <Text style={{ color: "#fff" }}>Đăng nhập</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                paddingVertical: 10,
+                backgroundColor: "#0165FC",
+                borderRadius: 100,
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={handleLogin}
+            >
+              <Text style={{ color: "#fff" }}>Đăng nhập</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("Quên mật khẩu");
+              }}
+            >
+              <Text
+                style={{
+                  color: "#0165FC",
+                  textAlign: "right",
+                  textDecorationLine: "underline",
+                }}
+              >
+                Quên mật khẩu?
+              </Text>
+            </TouchableOpacity>
+          </View>
           <View
             style={{
               flexDirection: "row",

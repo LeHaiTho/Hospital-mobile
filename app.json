@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "MED CARE",
+    "name": "Medcare",
     "slug": "hospital-lht",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/icon-app.png",
+    "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/icons/splash.png",
+      "image": "./assets/icons/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -42,11 +42,11 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/icon-app.png",
-        "monochromeImage": "./assets/icons/icon-app.png",
+        "foregroundImage": "./assets/icons/icon.png",
+        "monochromeImage": "./assets/icons/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "icon": "./assets/icons/icon-app.png",
+      "icon": "./assets/icons/icon.png",
       "package": "com.lehaitho2002.hospitallht"
     },
     "web": {
