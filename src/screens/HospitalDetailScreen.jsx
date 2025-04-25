@@ -32,8 +32,10 @@ const HospitalDetailScreen = ({ route }) => {
   const [doctors, setDoctors] = useState([]);
   const [specialties, setSpecialties] = useState([]);
   const navigation = useNavigation();
+  const [description, setDescription] = useState("");
   console.log("id", id);
   // get specialties
+
   const getSpecialties = async () => {
     try {
       const res = await axiosConfig.get(`/specialties/list-by-hospital`, {
@@ -49,6 +51,7 @@ const HospitalDetailScreen = ({ route }) => {
     try {
       const res = await axiosConfig.get(`/hospitals/detail/${id}`);
       setHospital(res.data.hospital);
+      setDescription(res.data.hospital.description);
     } catch (error) {
       console.log(error);
     }
@@ -134,23 +137,21 @@ const HospitalDetailScreen = ({ route }) => {
         "Bệnh viện này rất tốt, bác sĩ rất tận tâm và chuyên nghiệp. Tôi rất hài lòng với dịch vụ của bệnh viện.",
     },
   ];
-  const source = { html: hospital?.description || "" };
-  const Introduction = () => (
-    <View style={{ paddingHorizontal: 15, paddingVertical: 12 }}>
-      <Text style={{ fontWeight: "bold", color: "#0165FF" }}>
-        Giới thiệu bệnh viện
-      </Text>
-      <RenderHtml
-        source={source}
-        contentWidth={width}
-        tagsStyles={{
-          // Áp dụng padding cho tất cả các phần tử
-          body: {},
-        }}
-      />
-      {/* <Text>{hospital?.description}</Text> */}
-    </View>
-  );
+
+  const Introduction = ({ description = "hello" }) => {
+    const source = {
+      html: description,
+    };
+    return (
+      <View style={{ paddingHorizontal: 15, paddingVertical: 12 }}>
+        <Text style={{ fontWeight: "bold", color: "#0165FF" }}>
+          Giới thiệu bệnh viện
+        </Text>
+
+        <RenderHtml source={source} contentWidth={width} />
+      </View>
+    );
+  };
 
   const Specialties = () => (
     <View
@@ -334,7 +335,7 @@ const HospitalDetailScreen = ({ route }) => {
   const routes = [
     {
       title: "Giới thiệu",
-      component: <Introduction />,
+      component: <Introduction description={hospital?.description} />,
     },
     {
       title: "Dịch vụ",

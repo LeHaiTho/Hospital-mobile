@@ -182,6 +182,12 @@ const AppointmentCard = ({ appointment }) => {
                 borderRadius: 100,
                 flex: 1,
               }}
+              onPress={() => {
+                navigation.navigate("AppointmentDetail", {
+                  appointmentId: appointment.id,
+                  fromBookingFlow: false,
+                });
+              }}
             >
               <Text style={{ color: "#fff", textAlign: "center" }}>
                 Chi tiết lịch hẹn

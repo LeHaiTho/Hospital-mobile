@@ -73,7 +73,7 @@ const MedicalHistoryScreen = () => {
     appointmentCompleted?.[0]?.doctor?.user?.fullname
   );
   console.log(allProfilesOfUser);
-  console.log(selectedProfile);
+  console.log(appointmentCompleted);
   const navigation = useNavigation();
   return (
     <View style={{ flex: 1 }}>

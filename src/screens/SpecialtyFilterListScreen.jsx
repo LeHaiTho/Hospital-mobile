@@ -212,9 +212,11 @@ const SpecialtyFilterListScreen = ({ route }) => {
         <FlatList
           contentContainerStyle={{ gap: 16, padding: 16 }}
           showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
           data={[...(data?.hospitals || []), ...(data?.doctors || [])]}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <TouchableOpacity
+              key={index}
               style={{
                 paddingHorizontal: 14,
                 paddingVertical: 14,
@@ -363,7 +365,7 @@ const SpecialtyFilterListScreen = ({ route }) => {
                         >
                           {(item?.averageRating &&
                             item?.averageRating > 0 &&
-                            renderStars(item?.averageRating)) ||
+                            renderStars(item?.averageRating, item?.id)) ||
                             renderStars(5)}
                         </View>
                         <Text style={{ fontSize: 12, color: "#000" }}>

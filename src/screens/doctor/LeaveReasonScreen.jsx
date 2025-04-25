@@ -13,14 +13,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import axiosConfig from "../../apis/axiosConfig";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
+
 const LeaveReasonScreen = () => {
   const navigation = useNavigation();
   const [checkedWorkplace, setCheckedWorkplace] = useState(null);
 
   const [showPicker, setShowPicker] = useState({
-    fromTime: false,
     fromDate: false,
-    toTime: false,
     toDate: false,
   });
   const [mode, setMode] = useState("date");
@@ -29,9 +28,9 @@ const LeaveReasonScreen = () => {
     title: "",
     reason: "",
     workplace: null,
-    fromTime: moment(new Date()).format("HH:mm"),
+    fromTime: "07:00",
     fromDate: moment(new Date()).format("DD/MM/YYYY"),
-    toTime: moment(new Date()).format("HH:mm"),
+    toTime: "17:30",
     toDate: moment(new Date()).format("DD/MM/YYYY"),
   });
 
@@ -40,32 +39,26 @@ const LeaveReasonScreen = () => {
     setMode("date");
   };
 
-  const showTimePicker = (field) => {
-    setShowPicker((prev) => ({ ...prev, [field]: true }));
-    setMode("time");
-  };
-
   const handleInputChange = (field, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
+    setFormData((prevData) => {
+      const newData = { ...prevData, [field]: value };
+      // Sync toDate with fromDate when fromDate changes
+      if (field === "fromDate") {
+        newData.toDate = value;
+      }
+      return newData;
+    });
     if (field === "workplace") {
       setCheckedWorkplace(value);
     }
   };
+
   const handleDateChange = (event, selectedDate, field) => {
     setShowPicker((prev) => ({ ...prev, [field]: false }));
 
     if (selectedDate) {
-      const formattedValue = field.includes("Time")
-        ? moment(selectedDate).format("HH:mm")
-        : moment(selectedDate).format("DD/MM/YYYY");
-
-      setFormData((prevData) => ({
-        ...prevData,
-        [field]: formattedValue,
-      }));
+      const formattedValue = moment(selectedDate).format("DD/MM/YYYY");
+      handleInputChange(field, formattedValue);
     }
   };
 
@@ -75,6 +68,7 @@ const LeaveReasonScreen = () => {
 
   const [hospitalList, setHospitalList] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const getHospitalList = async () => {
     try {
       setLoading(true);
@@ -87,6 +81,7 @@ const LeaveReasonScreen = () => {
           ...prevData,
           workplace: response.data[0].id,
         }));
+        setCheckedWorkplace(response.data[0].id);
       }
     } catch (error) {
       console.log("Error getting hospital list:", error);
@@ -94,10 +89,11 @@ const LeaveReasonScreen = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     getHospitalList();
   }, []);
-  console.log(formData.workplace);
+
   const handleSubmit = async () => {
     try {
       const response = await axiosConfig.post(
@@ -109,6 +105,7 @@ const LeaveReasonScreen = () => {
       console.log("Error creating doctor unavailable time:", error);
     }
   };
+
   return (
     <>
       {loading ? (
@@ -155,6 +152,7 @@ const LeaveReasonScreen = () => {
                   value={formData.title}
                 />
               </View>
+              {/* Nơi làm việc */}
               <View style={{ gap: 8 }}>
                 <View
                   style={{
@@ -176,33 +174,29 @@ const LeaveReasonScreen = () => {
                   }}
                 >
                   {hospitalList.length > 1 &&
-                    hospitalList?.map((item) => {
-                      return (
-                        <TouchableOpacity
-                          key={item.id}
-                          style={{
-                            flexDirection: "row",
-                            gap: 10,
-                            alignItems: "center",
-                          }}
-                          onPress={() =>
-                            handleInputChange("workplace", item.id)
+                    hospitalList?.map((item) => (
+                      <TouchableOpacity
+                        key={item.id}
+                        style={{
+                          flexDirection: "row",
+                          gap: 10,
+                          alignItems: "center",
+                        }}
+                        onPress={() => handleInputChange("workplace", item.id)}
+                      >
+                        <RadioButton
+                          value={item.id}
+                          status={
+                            checkedWorkplace === item.id
+                              ? "checked"
+                              : "unchecked"
                           }
-                        >
-                          <RadioButton
-                            value={item.id}
-                            status={
-                              checkedWorkplace === item.id
-                                ? "checked"
-                                : "unchecked"
-                            }
-                            uncheckedColor="#888"
-                            color="#0165FC"
-                          />
-                          <Text>{item.name}</Text>
-                        </TouchableOpacity>
-                      );
-                    })}
+                          uncheckedColor="#888"
+                          color="#0165FC"
+                        />
+                        <Text>{item.name}</Text>
+                      </TouchableOpacity>
+                    ))}
                   {hospitalList.length === 1 && (
                     <Text style={{ paddingHorizontal: 10 }}>
                       {hospitalList[0].name}
@@ -210,7 +204,7 @@ const LeaveReasonScreen = () => {
                   )}
                 </View>
               </View>
-              {/* Date picker */}
+              {/* Thời gian nghỉ */}
               <View style={{ gap: 8 }}>
                 <View
                   style={{
@@ -246,11 +240,7 @@ const LeaveReasonScreen = () => {
                       }}
                     >
                       <Text>Từ lúc</Text>
-                      <TouchableOpacity
-                        onPress={() => showPickerHandler("fromTime")}
-                      >
-                        <Text>{formData.fromTime}</Text>
-                      </TouchableOpacity>
+                      <Text>{formData.fromTime}</Text>
                     </View>
                     <View
                       style={{
@@ -291,11 +281,7 @@ const LeaveReasonScreen = () => {
                       }}
                     >
                       <Text>Đến lúc</Text>
-                      <TouchableOpacity
-                        onPress={() => showPickerHandler("toTime")}
-                      >
-                        <Text>{formData.toTime}</Text>
-                      </TouchableOpacity>
+                      <Text>{formData.toTime}</Text>
                     </View>
                     <View
                       style={{
@@ -317,17 +303,6 @@ const LeaveReasonScreen = () => {
                     </View>
                   </View>
                 </View>
-                {showPicker.fromTime && (
-                  <DateTimePicker
-                    value={new Date()}
-                    mode="time"
-                    display="spinner"
-                    onChange={(event, date) =>
-                      handleDateChange(event, date, "fromTime")
-                    }
-                  />
-                )}
-
                 {showPicker.fromDate && (
                   <DateTimePicker
                     value={new Date()}
@@ -338,18 +313,6 @@ const LeaveReasonScreen = () => {
                     }
                   />
                 )}
-
-                {showPicker.toTime && (
-                  <DateTimePicker
-                    value={new Date()}
-                    mode="time"
-                    display="spinner"
-                    onChange={(event, date) =>
-                      handleDateChange(event, date, "toTime")
-                    }
-                  />
-                )}
-
                 {showPicker.toDate && (
                   <DateTimePicker
                     value={new Date()}
@@ -361,7 +324,6 @@ const LeaveReasonScreen = () => {
                   />
                 )}
               </View>
-
               {/* Lý do */}
               <View style={{ gap: 8 }}>
                 <View
@@ -408,11 +370,11 @@ const LeaveReasonScreen = () => {
               shadowColor: "#000",
               shadowOffset: {
                 width: 0,
-                height: 10, // Increase the shadow height for more elevation
+                height: 10,
               },
-              shadowOpacity: 0.9, // Increase opacity to make it darker
-              shadowRadius: 15, // Increase radius for a larger blur effect
-              elevation: 10, // Higher elevation for Android
+              shadowOpacity: 0.9,
+              shadowRadius: 15,
+              elevation: 10,
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
             }}

@@ -12,7 +12,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
   const handleExplain = () => {
     setExplain(!explain);
   };
-  console.log("appointment", appointment?.doctor?.user?.fullname);
+  // console.log("appointment", appointment?.doctor?.user?.fullname);
   const getMedicalHistoryDetail = async () => {
     try {
       const res = await axiosConfig.get(

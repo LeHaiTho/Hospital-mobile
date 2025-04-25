@@ -41,7 +41,7 @@ const HospitalList = () => {
   const getHospitalsList = async () => {
     try {
       setIsLoading(true);
-      const res = await axiosConfig.get("/hospitals/get-list");
+      const res = await axiosConfig.get("/hospitals/list-for-mobile");
       setHospitals(res.data.hospitals);
     } catch (error) {
       console.log(error);

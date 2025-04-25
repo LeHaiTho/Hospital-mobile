@@ -20,9 +20,19 @@ const renderItem = ({ item }) => {
         style={{ flexDirection: "column", justifyContent: "space-between" }}
       >
         <Text numberOfLines={1}>{item.title}</Text>
-        <Text numberOfLines={1} style={{ fontSize: 12, color: "#828282" }}>
+        <Text numberOfLines={1} style={{ color: "#000" }}>
           {item.reason}
         </Text>
+        {item?.reason_reject && (
+          <View>
+            <Text style={{ color: "#828282", fontStyle: "italic" }}>
+              Lý do từ chối:{" "}
+              <Text numberOfLines={1} style={{ color: "#000" }}>
+                {item?.reason_reject}
+              </Text>{" "}
+            </Text>
+          </View>
+        )}
       </View>
       <View style={{ flexDirection: "column" }}>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -94,30 +104,12 @@ const TimeOffListScreen = () => {
         "/doctor-unavailable-times/get-list"
       );
       const realData = response.data.doctorUnavailableTime;
-
-      // Tạo dữ liệu giả
-      // const fakeData = Array.from({ length: 10 }, (_, i) => ({
-      //   id: 100 + i,
-      //   doctor_id: 48,
-      //   hospital_id: 15,
-      //   title: `Lịch nghỉ giả ${i + 1}`,
-      //   unavailable_start_date: "2024-11-11T08:00:00.000Z",
-      //   unavailable_end_date: "2024-11-11T16:00:00.000Z",
-      //   reason: `Lý do nghỉ giả ${i + 1}`,
-      //   is_active: null,
-      //   status:
-      //     i % 3 === 0 ? "approved" : i % 3 === 1 ? "pending" : "cancelled",
-      //   createdAt: "2024-11-08T07:42:02.171Z",
-      //   updatedAt: "2024-11-08T07:42:02.171Z",
-      // }));
-
-      // Kết hợp dữ liệu thật và dữ liệu giả
       setDoctorUnavailableTimeList([...realData]);
     } catch (error) {
       console.log(error);
     }
   };
-
+  console.log(doctorUnavailableTimeList);
   return (
     <View
       style={{

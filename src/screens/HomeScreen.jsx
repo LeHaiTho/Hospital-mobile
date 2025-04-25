@@ -73,7 +73,7 @@ const HomeScreen = () => {
 
   const getHospitalsList = async () => {
     try {
-      const res = await axiosConfig.get("/hospitals/get-list");
+      const res = await axiosConfig.get("/hospitals/list-for-mobile");
       setHospitals(res.data.hospitals);
     } catch (error) {
       console.log(error);
