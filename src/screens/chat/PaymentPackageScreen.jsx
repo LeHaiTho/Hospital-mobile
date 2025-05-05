@@ -163,11 +163,11 @@ const PaymentPackageScreen = ({ route }) => {
           shadowColor: "#000",
           shadowOffset: {
             width: 0,
-            height: 10, // Increase the shadow height for more elevation
+            height: 10,
           },
-          shadowOpacity: 0.9, // Increase opacity to make it darker
-          shadowRadius: 15, // Increase radius for a larger blur effect
-          elevation: 10, // Higher elevation for Android
+          shadowOpacity: 0.9,
+          shadowRadius: 15,
+          elevation: 10,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
         }}

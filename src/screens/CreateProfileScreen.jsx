@@ -189,9 +189,6 @@ const CreateProfileScreen = ({ route }) => {
         formData
       );
       if (res.status === 200) {
-        // navigation.replace("CustomerProfile", {
-        //   fromBooking: true,
-        // });
         if (fromBooking) {
           navigation.replace("CustomerProfileBooking", {
             fromBooking: true,
@@ -200,15 +197,6 @@ const CreateProfileScreen = ({ route }) => {
             slot,
             selectedHospital,
             selectedSpecialty,
-            // doctor,
-            // selectedDate,
-            // slot,
-            // selectedHospital,
-            // selectedSpecialty,
-            // hospital,
-            // isDoctorSpecial,
-            // specialtyDetail,
-            // fromBooking,
           });
           Toast.show({
             text1: "Tạo hồ sơ thành công",

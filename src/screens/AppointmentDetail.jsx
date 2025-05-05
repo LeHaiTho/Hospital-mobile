@@ -25,12 +25,6 @@ const AppointmentDetail = ({ route }) => {
   const [appointmentDetail, setAppointmentDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerLeft: () => (fromBookingFlow ? null : <Ionicons name="arrow-back-outline" size={24} color="#fff" />),
-  //   });
-  // }, [navigation, fromBookingFlow]);
-
   const getAppointmentDetail = async () => {
     try {
       const response = await axiosConfig.get(

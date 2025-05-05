@@ -49,29 +49,26 @@ const SpecialtyFilterListScreen = ({ route }) => {
     }
   }, [specialtyId, selectedType]);
   console.log(specialtyId);
-
+  console.log("data", data);
   // rating
   const renderStars = (averageRating) => {
     const stars = [];
-    const fullStars = Math.floor(averageRating); // Số ngôi sao đầy
-    const halfStar = averageRating % 1 !== 0; // Xác định có ngôi sao nửa không
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0); // Số ngôi sao rỗng
+    const fullStars = Math.floor(averageRating);
+    const halfStar = averageRating % 1 !== 0;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
-    // Thêm ngôi sao đầy
     for (let i = 0; i < fullStars; i++) {
       stars.push(
         <Ionicons key={`full-${i}`} name="star" size={18} color="#FCAF23" />
       );
     }
 
-    // Thêm ngôi sao nửa (nếu có)
     if (halfStar) {
       stars.push(
         <Ionicons key="half" name="star-half" size={18} color="#FCAF23" />
       );
     }
 
-    // Thêm ngôi sao rỗng
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
         <Ionicons
@@ -208,7 +205,7 @@ const SpecialtyFilterListScreen = ({ route }) => {
             Đang tải dữ liệu...
           </Text>
         </View>
-      ) : data ? (
+      ) : data?.doctors?.length > 0 || data?.hospitals?.length > 0 ? (
         <FlatList
           contentContainerStyle={{ gap: 16, padding: 16 }}
           showsVerticalScrollIndicator={false}
@@ -222,11 +219,6 @@ const SpecialtyFilterListScreen = ({ route }) => {
                 paddingVertical: 14,
                 backgroundColor: "#fff",
                 borderRadius: 14,
-                // shadowColor: "#000",
-                // shadowOffset: { width: 0, height: 2 },
-                // shadowOpacity: 0.25,
-                // shadowRadius: 3.84,
-                // elevation: 3,
                 borderWidth: 1,
                 borderColor: "#E5E5E5",
                 width: "100%",
@@ -314,14 +306,12 @@ const SpecialtyFilterListScreen = ({ route }) => {
                             (specialty) =>
                               specialty?.hospitalSpecialty?.specialty?.name
                           )
-                          .filter((name) => name) // Lọc ra những tên hợp lệ (không null/undefined)
-                          .join(" - ") || // Nối các tên bằng dấu gạch ngang
-                          item?.name}
+                          .filter((name) => name)
+                          .join(" - ") || item?.name}
                       </Text>
                     </View>
                   </View>
                   <View>
-                    {/* Giá khám */}
                     <View
                       style={{
                         flexDirection: "row",
@@ -383,24 +373,6 @@ const SpecialtyFilterListScreen = ({ route }) => {
                   </View>
                 </View>
               </View>
-              {/* <TouchableOpacity
-              style={{
-                marginTop: 10,
-                borderRadius: 8,
-                backgroundColor: "#DBEAFE",
-                padding: 10,
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: 680,
-                  color: "#0165FC",
-                  textAlign: "center",
-                }}
-              >
-                Đặt lịch khám
-              </Text>
-            </TouchableOpacity> */}
             </TouchableOpacity>
           )}
         />

@@ -11,9 +11,7 @@ const WebviewPaymentScreen = ({ route }) => {
     console.log("Nav state change:", event.url);
 
     if (event.url.startsWith("hospital-lht://paymentsuccess")) {
-      // TODO: cập nhật trạng thái lịch hẹn
-
-      navigation.replace("PaymentSuccessScreen"); // Thay bằng màn hình của bạn
+      navigation.replace("PaymentSuccessScreen");
     }
   };
 

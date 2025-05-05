@@ -29,24 +29,4 @@ axiosConfig.interceptors.request.use(
   }
 );
 
-// axiosConfig.interceptors.response.use(
-//   (response) => {
-//     return response.data;
-//   },
-//   (error) => {
-//     // Xử lý lỗi response (lỗi xảy ra khi gửi request)
-//     if (error.response) {
-//       // Lỗi từ server trả về (có phản hồi từ server)
-//       if (error.response.status === 401) {
-//         // Xử lý khi bị Unauthorized (401)
-//         console.error("Unauthorized. Redirecting to login.");
-//         window.location.href = "/login";
-//       } else if (error.response.message === "Network Error") {
-//         console.error("Network Error");
-//       }
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
 export default axiosConfig;

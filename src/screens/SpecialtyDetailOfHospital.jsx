@@ -14,14 +14,6 @@ const SpecialtyDetailOfHospital = ({ route }) => {
   const [doctorSchedule, setDoctorSchedule] = useState([]);
   const [specialtyDetail, setSpecialtyDetail] = useState(null);
   const { user } = useSelector((state) => state.auth);
-  // console.log(
-  //   "hospitalIddffffffffffffffffffffffffffffffffff",
-  //   route.params?.hospitalId.id
-  // );
-  // console.log("specialtyId", specialtyId);
-  // lấy chi tiết chuyên khoa theo hospitalId và specialtyId
-  // console.log("hospitalId", hospitalId);
-  // console.log("specialtyId", specialtyId);
   const getSpecialtyDetailOfHospital = async () => {
     try {
       const response = await axiosConfig.get("/specialties/detail", {
@@ -32,12 +24,6 @@ const SpecialtyDetailOfHospital = ({ route }) => {
       console.log("error", error);
     }
   };
-  // console.log(
-  //   "hospitalId",
-  //   hospitalId?.hospitalSpecialty?.filter(
-  //     (item) => item.specialty_id === specialtyId
-  //   )
-  // );
 
   console.log("hospitalId", hospitalId);
   console.log("specialtyId", specialtyId);
@@ -71,9 +57,6 @@ const SpecialtyDetailOfHospital = ({ route }) => {
       getDoctorSchedule();
     }
   }, [specialtyId, hospitalId?.id, hospitalId]);
-  // console.log("specialtyId", specialtyId);
-
-  // console.log("doctorSchedule", doctorSchedule);
   const handleBookAppointment = (slot) => {
     if (user) {
       navigation.navigate("CustomerProfileBooking", {

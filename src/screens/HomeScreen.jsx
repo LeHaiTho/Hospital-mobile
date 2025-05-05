@@ -5,9 +5,16 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import Speciality from "../components/Speciality";
-import { ScrollView, View, Text, TouchableOpacity, Image } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+} from "react-native";
 import { AntDesign, Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Avatar, Badge } from "react-native-paper";
 import Search from "../components/Search";
@@ -99,18 +106,6 @@ const HomeScreen = () => {
       console.log(error);
     }
   };
-  // console.log(
-  //   "specialtiesdddddddddddddddddddddddddddddddddddddddddddddddd",
-  //   specialties
-  // );
-  // console.log(
-  //   "appointmentdddddddddddddddddddddddddddddddddddddddddddddddd",
-  //   appointments
-  // );
-  // console.log(
-  //   "doctorsdddddddddddddddddddddddddddddddddddddddddddddddddddd",
-  //   doctors
-  // );
   useEffect(() => {
     if (
       user &&
@@ -130,7 +125,7 @@ const HomeScreen = () => {
   // console.log("user", user?.role);
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      {/* <StatusBar backgroundColor="#0165FC" /> */}
+      <StatusBar backgroundColor="#0165FC" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ gap: 5 }}
@@ -187,68 +182,6 @@ const HomeScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingHorizontal: 16,
-          }}
-        >
-          {/* <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 5,
-            }}
-          >
-            <Ionicons name="location" size={24} color="#0165FC" />
-            <Text
-              style={{ fontSize: 16, fontWeight: "bold" }}
-              onPress={() => navigation.navigate("WebviewPayment")}
-            >
-              Vị trí hiện tại
-            </Text>
-            <Ionicons name="chevron-down" size={24} color="#000" />
-          </View> */}
-
-          {/* notification */}
-          {/* <TouchableOpacity style={{ position: "relative" }}>
-            <Ionicons
-              name="notifications"
-              color="black"
-              size={25}
-              style={{
-                padding: 5,
-                borderRadius: 100,
-              }}
-              onPress={() => navigation.navigate("LocationExampleScreen")}
-            />
-            {notification > 0 && (
-              <Badge
-                size={15}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  backgroundColor: "red",
-                }}
-              >
-                {notification}
-              </Badge>
-            )}
-          </TouchableOpacity> */}
-        </View>
-
-        {/* search */}
-        {/* <View style={{ paddingHorizontal: 16 }}>
-          <Search />
-        </View> */}
-        {/* test hỏi cộng đồng */}
-        {/* <TouchableOpacity onPress={() => navigation.navigate("CommunityList")}>
-          <Text>test hỏi cộng đồng</Text>
-        </TouchableOpacity> */}
-        {/* swiper */}
 
         <View>
           <SwiperFlatList
@@ -518,11 +451,6 @@ const HomeScreen = () => {
             paddingVertical: 14,
             paddingHorizontal: 14,
             backgroundColor: "#fff",
-            // shadowColor: "#000",
-            // shadowOffset: { width: 0, height: 1 },
-            // shadowOpacity: 0.2,
-            // shadowRadius: 2,
-            // elevation: 3,
             borderRadius: 10,
             borderWidth: 1,
             borderColor: "#E5E5E5",

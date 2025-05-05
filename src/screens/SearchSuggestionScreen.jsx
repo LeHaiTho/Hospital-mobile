@@ -81,21 +81,7 @@ const SearchSuggestionScreen = () => {
     }
   };
   console.log("kết quả", searchText && searchResults);
-  // Xóa lịch sử tìm kiếm theo id
-  // const deleteSearchHistory = async (item) => {
-  //   const updatedHistory = searchHistory.filter((i) => i.id !== item.id);
-  //   setSearchHistory(updatedHistory);
-  //   try {
-  //     // Lưu danh sách cập nhật vào AsyncStorage
-  //     await AsyncStorage.setItem(
-  //       "searchHistory",
-  //       JSON.stringify(updatedHistory)
-  //     );
-  //     console.log("History updated successfully");
-  //   } catch (error) {
-  //     console.log("Error updating search history:", error);
-  //   }
-  // };
+
   useEffect(() => {
     getSpecialtiesList();
     getSearchHistory();

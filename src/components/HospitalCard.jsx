@@ -6,20 +6,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 const base_url = process.env.EXPO_PUBLIC_API_URL;
-// console.log("base_url", base_url);
 const HospitalCard = ({ compact, onPress, hospital }) => {
-  // console.log("hospital", `${base_url}${hospital.banner}`);
   return (
     <TouchableOpacity
       style={{
         width: compact ? width * 0.6 : "100%",
         backgroundColor: "#fff",
-        // shadowColor: "#000",
-        // shadowOffset: { width: 0, height: 2 },
-        // shadowOpacity: 0.1,
-        // shadowRadius: 1,
-        // borderRadius: 15,
-        // elevation: 1,
         borderWidth: 1,
         borderColor: "#E5E5E5",
         borderRadius: 15,

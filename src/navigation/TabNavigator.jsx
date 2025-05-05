@@ -113,14 +113,6 @@ const TabNavigator = () => {
         }}
         component={NotificationScreen}
       />
-      {/* <Tab.Screen
-        name="MedicalHistory"
-        component={MedicalHistoryScreen}
-        options={{
-          unmountOnBlur: true,
-          tabBarLabel: "Lịch sử",
-        }}
-      /> */}
       <Tab.Screen
         name="Profile"
         options={{

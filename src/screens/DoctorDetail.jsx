@@ -65,9 +65,6 @@ const DoctorDetail = ({ route }) => {
   };
 
   useEffect(() => {
-    // if (selectedSpecialty && doctor) {
-    //   fetchHospitalBySpecialtyAndDoctor();
-    // }
     if (hospitalId) {
       setSelectedHospital(hospitalId);
     } else if (selectedSpecialty && doctor) {
@@ -219,27 +216,6 @@ const DoctorDetail = ({ route }) => {
               selectedSpecialty={selectedSpecialty}
               selectedHospital={selectedHospital}
             />
-
-            {/* address work */}
-            {/* <View style={{ marginTop: 20 }}>
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Địa chỉ khám</Text>
-        {doctor?.hospitals.map((hospital) => (
-          <View
-            key={hospital?.id}
-            style={{
-              backgroundColor: "#D3E6FF",
-              padding: 10,
-              borderRadius: 5,
-              marginTop: 10,
-            }}
-          >
-            <Text style={{ fontWeight: "bold" }}>{hospital?.name}</Text>
-            <Text style={{ color: "#6B7280", fontSize: 12 }}>
-              {hospital?.address}
-            </Text>
-          </View>
-        ))}
-      </View> */}
             {/* About */}
             <View style={{ width: "100%", marginTop: 20 }}>
               <Text

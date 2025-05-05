@@ -26,13 +26,6 @@ const DoctorTabNavigator = () => {
           ),
         }}
       />
-      {/* <Tab.Screen
-        name="DoctorSchedule"
-        component={DoctorScheduleScreen}
-        options={{ headerShown: false }}
-      /> */}
-      {/* <Tab.Screen name="DetailScheduleDate" component={DetailScheduleDate} /> */}
-      {/* <Tab.Screen name="TimeOffList" component={TimeOffListScreen} /> */}
       <Tab.Screen
         name="LeaveReason"
         component={LeaveReasonScreen}

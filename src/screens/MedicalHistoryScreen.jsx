@@ -86,36 +86,6 @@ const MedicalHistoryScreen = () => {
             padding: 20,
           }}
         >
-          {/* <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              width: 80,
-              backgroundColor: "#fff",
-              gap: 10,
-            }}
-          >
-            <View
-              style={{
-                borderWidth: 3,
-                borderColor: "#ECECEC",
-                padding: 1,
-                backgroundColor: "#fff",
-                borderRadius: 100,
-              }}
-            >
-              <Image
-                source={{ uri: "https://via.placeholder.com/150" }}
-                style={{ width: 65, height: 65, borderRadius: 100 }}
-              />
-            </View>
-            <Text
-              numberOfLines={2}
-              style={{ fontSize: 12, textAlign: "center" }}
-            >
-              Chia sẻ với tôi
-            </Text>
-          </View> */}
           <View
             style={{
               flexDirection: "column",
@@ -367,11 +337,6 @@ const MedicalHistoryScreen = () => {
                   padding: 15,
                   backgroundColor: "#fff",
                   borderRadius: 10,
-                  // shadowColor: "#000",
-                  // shadowOffset: { width: 0, height: 1 },
-                  // shadowOpacity: 0.2,
-                  // shadowRadius: 2,
-                  // elevation: 3,
                   borderWidth: 1,
                   borderColor: "#ECECEC",
                 }}

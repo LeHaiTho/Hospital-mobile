@@ -90,10 +90,6 @@ const CreateQuestion = () => {
       }
 
       try {
-        // const response = await fetch("http://192.168.1.9:3000/questions/add", {
-        //   method: "POST",
-        //   body: formData,
-        // });
         const response = await axiosConfig.post("/questions/add", formData);
         console.log(response);
         if (response.status === 200) {
@@ -377,77 +373,3 @@ const CreateQuestion = () => {
 };
 
 export default CreateQuestion;
-
-// import React, { useState } from "react";
-// import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
-// import * as ImagePicker from "expo-image-picker";
-
-// const CreateQuestion = () => {
-//   const [images, setImages] = useState([]);
-
-//   const handlePickImage = async () => {
-//     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-//     if (status !== "granted") {
-//       alert("Bạn cần cấp quyền truy cập thư viện ảnh.");
-//       return;
-//     }
-
-//     const result = await ImagePicker.launchImageLibraryAsync({
-//       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-//       allowsMultipleSelection: true, // chỉ cho phép nhiều hình với EAS
-//       selectionLimit: 5,
-//       aspect: [4, 3],
-//       quality: 1,
-//     });
-//     console.log(result);
-//     if (!result.canceled) {
-//       setImages((prev) => [...prev, result.assets[0]]);
-//     }
-//   };
-
-//   const handleTakePhoto = async () => {
-//     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-//     if (status !== "granted") {
-//       alert("Bạn cần cấp quyền sử dụng camera.");
-//       return;
-//     }
-
-//     const result = await ImagePicker.launchCameraAsync({
-//       quality: 1,
-//     });
-
-//     if (!result.canceled) {
-//       setImages((prev) => [...prev, result.assets[0]]);
-//     }
-//   };
-
-//   return (
-//     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-//       {/* Hiển thị danh sách ảnh */}
-//       <ScrollView
-//         horizontal
-//         contentContainerStyle={{ padding: 10, gap: 10 }}
-//         showsHorizontalScrollIndicator={false}
-//       >
-//         {images.map((image, index) => (
-//           <Image
-//             key={index}
-//             source={{ uri: image.uri }}
-//             style={{ width: 100, height: 100, borderRadius: 8 }}
-//           />
-//         ))}
-//       </ScrollView>
-
-//       {/* Nút thêm ảnh */}
-//       <TouchableOpacity onPress={handlePickImage} style={{ margin: 10 }}>
-//         <Text>Chọn ảnh từ thư viện</Text>
-//       </TouchableOpacity>
-
-//       <TouchableOpacity onPress={handleTakePhoto} style={{ margin: 10 }}>
-//         <Text>Chụp ảnh</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// };
-
-// export default CreateQuestion;

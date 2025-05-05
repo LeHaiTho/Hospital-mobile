@@ -220,7 +220,7 @@ const LoginScreen = ({ route }) => {
               >
                 <FontAwesome6 name="lock" size={18} color="#808080" />
                 <TextInput
-                  placeholder="**************"
+                  placeholder="Nhập mật khẩu"
                   placeholderTextColor="#808080"
                   style={{ flex: 1 }}
                   value={password}

@@ -30,19 +30,18 @@ const SpecialtyListScreen = () => {
   }, []);
 
   useEffect(() => {
-    // Hàm tìm kiếm khi giá trị tìm kiếm thay đổi
     if (search) {
       const filtered = specialties.filter((item) =>
         item.name.toLowerCase().includes(search.toLowerCase())
       );
       setFilteredData(filtered);
     } else {
-      setFilteredData(specialties); // Nếu không có gì để tìm, hiển thị tất cả dữ liệu
+      setFilteredData(specialties);
     }
   }, [search, specialties]);
 
   const handleClear = () => {
-    setSearch(""); // Xóa giá trị tìm kiếm
+    setSearch("");
   };
   return (
     <View
@@ -83,12 +82,6 @@ const SpecialtyListScreen = () => {
                 gap: 20,
                 flexDirection: "row",
                 backgroundColor: "#fff",
-                // borderRadius: 10,
-                // shadowColor: "#000",
-                // shadowOffset: { width: 0, height: 2 },
-                // shadowOpacity: 0.1,
-                // shadowRadius: 10,
-                // elevation: 2,
                 borderRadius: 10,
                 borderWidth: 1,
                 borderColor: "#DBEAFE",
@@ -142,7 +135,7 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   specialtyContainer: {
-    width: "40%", // Đảm bảo mỗi item chiếm khoảng 30% chiều rộng
+    width: "40%",
     alignItems: "center",
     gap: 5,
     padding: 10,

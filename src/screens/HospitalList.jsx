@@ -153,9 +153,6 @@ const HospitalList = () => {
       setIsLoading(false);
     }
   };
-  // const handleRatingChange = (rating) => {
-  //   console.log(rating);
-  // };
 
   return (
     <GestureHandlerRootView>

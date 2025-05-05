@@ -1,23 +1,20 @@
-import { Alert, StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { PaperProvider } from "react-native-paper";
-import StackNavigator from "./src/navigation/StackNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationContainer } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { StyleSheet } from "react-native";
+import { PaperProvider } from "react-native-paper";
+import Toast from "react-native-toast-message";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import axiosConfig from "./src/apis/axiosConfig";
+import DeepLinkHandler from "./src/components/DeepLinkHandler";
+import StackNavigator from "./src/navigation/StackNavigator";
 import { setUserInfo } from "./src/redux/authSlice";
 import { store } from "./src/redux/store";
-import Toast from "react-native-toast-message";
 import { initializeSocket, socket } from "./src/utils/socket";
 import ToastConfig from "./src/utils/toastConfig";
-import { useNavigation } from "@react-navigation/native";
-import DeepLinkHandler from "./src/components/DeepLinkHandler";
 
 // test deep linking
-import * as Linking from "expo-linking";
-import TabNavigator from "./src/navigation/TabNavigator";
 
 const Base_URL = process.env.EXPO_PUBLIC_API_URL;
 const UserInfoFetcher = () => {

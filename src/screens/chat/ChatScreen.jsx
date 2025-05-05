@@ -94,16 +94,6 @@ const ChatScreen = ({ route }) => {
       socket.off("receive-message");
     };
   }, []);
-  // const handleCheck = async () => {
-  //   try {
-  //     const response = await axiosConfig.post(`/subscriptions/check`);
-  //     if (response.data.subscription.length === 0) {
-  //       navigation.navigate("Packages");
-  //     } else {
-  //       return;
-  //     }
-  //   } catch (error) {}
-  // };
   const shouldShowTime = (currentMessage, previousMessage) => {
     if (!previousMessage) return true; // Hiển thị thời gian cho tin nhắn đầu tiên
     const currentTime = moment(currentMessage.createdAt);
@@ -199,9 +189,6 @@ const ChatScreen = ({ route }) => {
           gap: 5,
           paddingBottom: 10,
         }}
-        // onContentSizeChange={() => {
-        //   flatListRef.current?.scrollToEnd({ animated: true });
-        // }}
         style={{ flex: 1, marginBottom: 0 }}
       />
       <View

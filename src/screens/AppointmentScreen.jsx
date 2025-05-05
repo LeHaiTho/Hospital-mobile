@@ -181,13 +181,6 @@ const AppointmentScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useSelector((state) => state.auth);
-
-  // const [routes] = useState([
-  //   { key: "upcoming", title: "Sắp tới" },
-  //   { key: "completed", title: "Hoàn thành" },
-  //   { key: "cancelled", title: "Đã hủy" },
-  // ]);
-
   const routes = [
     {
       title: "Sắp tới",
@@ -247,41 +240,6 @@ const AppointmentScreen = () => {
   }, [navigation]);
 
   return (
-    // <TabView
-    //   navigationState={{ index, routes }}
-    //   renderScene={({ route }) =>
-    //     renderScene({
-    //       route,
-    //       appointments,
-    //       getAppointments,
-    //       refreshing,
-    //     })
-    //   }
-    //   onIndexChange={setIndex}
-    //   initialLayout={{ width: Dimensions.get("window").width }}
-    //   renderTabBar={(props) => (
-    //     <TabBar
-    //       {...props}
-    //       indicatorStyle={{ backgroundColor: "#0165FF" }}
-    //       labelStyle={{
-    //         color: "#000",
-    //         textTransform: "none",
-    //         textAlign: "center",
-    //       }}
-    //       style={{ backgroundColor: "#fff" }}
-    //       tabStyle={{
-    //         paddingVertical: 0,
-    //         paddingHorizontal: 0,
-    //       }}
-    //       renderLabel={({ route, focused }) => (
-    //         <Text style={{ color: focused ? "#0165FF" : "#000" }}>
-    //           {route.title}
-    //         </Text>
-    //       )}
-    //     />
-    //   )}
-    // />
-
     <View style={{ flex: 1 }}>
       {!user ? (
         <ActivityIndicator size="large" color="#0165FF" />

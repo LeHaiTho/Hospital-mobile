@@ -97,12 +97,6 @@ const InfoPaymentScreen = ({ route }) => {
       console.log("error", error);
     }
   };
-  // console.log("doctorName", doctorName);
-  // useEffect(() => {
-  //   if (doctor) {
-  //     getDoctorName();
-  //   }
-  // }, [doctor]);
   const handleSubmit = async () => {
     if (paymentMethod) {
       try {
@@ -113,11 +107,6 @@ const InfoPaymentScreen = ({ route }) => {
         if (res.data.newAppointment.payment_method === "e-wallet") {
           console.log({
             appointment: {
-              // ...res.data.newAppointment.id,
-              // amount: Number(
-              //   selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
-              //     doctor?.consultation_fee[0]
-              // ),
               ...res.data.newAppointment,
               amount: Number(res.data.newAppointment.price),
             },
@@ -128,11 +117,6 @@ const InfoPaymentScreen = ({ route }) => {
             "/payments/create-payment",
             {
               appointment: {
-                // id: res.data.newAppointment.id,
-                // amount: Number(
-                //   selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
-                //     doctor?.consultation_fee[0]
-                // ),
                 ...res.data.newAppointment,
                 amount: Number(res.data.newAppointment.price),
               },
@@ -167,10 +151,6 @@ const InfoPaymentScreen = ({ route }) => {
 
   const handleOke = () => {
     setVisible(false);
-    // navigation.replace("AppointmentDetail", {
-    //   appointmentId,
-    //   fromBookingFlow: true,
-    // });
     navigation.reset({
       index: 1,
       routes: [
@@ -632,11 +612,11 @@ const InfoPaymentScreen = ({ route }) => {
             shadowColor: "#000",
             shadowOffset: {
               width: 0,
-              height: 10, // Increase the shadow height for more elevation
+              height: 10,
             },
-            shadowOpacity: 0.9, // Increase opacity to make it darker
-            shadowRadius: 15, // Increase radius for a larger blur effect
-            elevation: 10, // Higher elevation for Android
+            shadowOpacity: 0.9,
+            shadowRadius: 15,
+            elevation: 10,
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
           }}

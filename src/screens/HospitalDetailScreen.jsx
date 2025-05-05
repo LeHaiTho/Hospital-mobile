@@ -81,11 +81,6 @@ const HospitalDetailScreen = ({ route }) => {
       getSpecialties();
     }
   }, [index]);
-  // useEffect(() => {
-  //   if (index === 3) {
-  //     getReviews();
-  //   }
-  // }, [index]);
 
   const fakeReviews = [
     {
@@ -174,11 +169,6 @@ const HospitalDetailScreen = ({ route }) => {
             paddingVertical: 10,
             backgroundColor: "#fff",
             borderRadius: 14,
-            // shadowColor: "#000",
-            // shadowOffset: { width: 0, height: 2 },
-            // shadowOpacity: 0.25,
-            // shadowRadius: 3.84,
-            // elevation: 1,
             borderWidth: 1,
             borderColor: "#DBEAFE",
             width: "100%",

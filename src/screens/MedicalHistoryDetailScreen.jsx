@@ -12,7 +12,6 @@ const MedicalHistoryDetailScreen = ({ route }) => {
   const handleExplain = () => {
     setExplain(!explain);
   };
-  // console.log("appointment", appointment?.doctor?.user?.fullname);
   const getMedicalHistoryDetail = async () => {
     try {
       const res = await axiosConfig.get(
@@ -126,11 +125,6 @@ const MedicalHistoryDetailScreen = ({ route }) => {
               paddingVertical: 15,
               backgroundColor: "#fff",
               borderRadius: 10,
-              // shadowColor: "#000",
-              // shadowOffset: { width: 0, height: 1 },
-              // shadowOpacity: 0.2,
-              // shadowRadius: 2,
-              // elevation: 2,
               borderWidth: 1,
               borderColor: "#D3E6FF",
               gap: 10,
@@ -162,11 +156,6 @@ const MedicalHistoryDetailScreen = ({ route }) => {
           </View>
           <View
             style={{
-              // shadowColor: "#000",
-              // shadowOffset: { width: 0, height: 1 },
-              // shadowOpacity: 0.2,
-              // shadowRadius: 2,
-              // elevation: 2,
               borderWidth: 1,
               borderColor: "#D3E6FF",
               paddingHorizontal: 20,
@@ -219,11 +208,6 @@ const MedicalHistoryDetailScreen = ({ route }) => {
                 flex: 1,
                 backgroundColor: explain ? "#0165FF" : "#fff",
                 borderRadius: 10,
-                // shadowColor: "#000",
-                // shadowOffset: { width: 0, height: 1 },
-                // shadowOpacity: 0.2,
-                // shadowRadius: 2,
-                // elevation: 2,
                 borderBottomLeftRadius: explain ? 0 : 10,
                 borderBottomRightRadius: explain ? 0 : 10,
                 borderWidth: explain ? 0 : 1,

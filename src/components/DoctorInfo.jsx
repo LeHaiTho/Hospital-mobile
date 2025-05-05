@@ -1,11 +1,6 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { Avatar, Card, Divider, Icon } from "react-native-paper";
-import { FontAwesome } from "@expo/vector-icons";
-import { truncateText } from "../utils/common";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { Text, View } from "react-native";
+import { Avatar } from "react-native-paper";
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 const DoctorInfo = ({ doctor, isAppointmentDetail }) => {
@@ -71,19 +66,6 @@ const DoctorInfo = ({ doctor, isAppointmentDetail }) => {
             )} VNĐ`}
           </Text>
         </Text>
-
-        {/* <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 5,
-          }}
-        >
-          <FontAwesome name="map-marker" size={16} color="#0165FC" />
-          {displayDoctorInfo?.address && (
-            <Text>{displayDoctorInfo?.address}</Text>
-          )}
-        </View> */}
       </View>
     </View>
   );

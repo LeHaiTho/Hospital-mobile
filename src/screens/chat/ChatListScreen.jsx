@@ -86,18 +86,6 @@ const ChatListScreen = () => {
       setIsLoading(false);
     }
   };
-  // Chỉ lấy room_id từ các phòng
-
-  // useEffect(() => {
-  //   const rooms = chatRooms.map((room) => room.room_id); // Chỉ lấy room_id từ các phòng
-  //   console.log(rooms);
-  //   // Tham gia các phòng qua socket
-  //   // rooms.forEach((roomId) => {
-  //   //   socket.emit("join-room", roomId);
-  //   //   console.log("join-room", roomId);
-  //   // });
-  //   // return
-  // }, []);
   useEffect(() => {
     getInfoDoctor();
   }, []);
@@ -213,20 +201,6 @@ const ChatListScreen = () => {
           }}
           placeholder="Tìm kiếm"
         />
-
-        {/* <FlatList
-          style={{}}
-          scrollEnabled={false}
-          data={data}
-          renderItem={renderItem}
-          contentContainerStyle={{
-            gap: 10,
-          }}
-          horizontal
-        /> */}
-        {/* <View>
-          <Text>Tất cả các </Text>
-        </View> */}
         <View style={{ flex: 1 }}>
           {isLoading ? (
             <View

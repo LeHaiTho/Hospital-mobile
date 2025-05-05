@@ -81,23 +81,6 @@ export default function ConfirmInfoScreen({ route }) {
     });
   }, [navigation, profile]);
 
-  // useEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: () => (
-  //       <TouchableOpacity
-  //         style={{ marginRight: 20 }}
-  //         onPress={() => {
-  //           console.log("Profile ID:", profile?.id);
-  //           setModalVisible(true);
-  //         }}
-  //       >
-  //         <AntDesign name="edit" size={24} color="#fff" />
-  //       </TouchableOpacity>
-  //     ),
-  //   });
-  // }, [navigation, profile]);
-
-  // Xử lý thay đổi giá trị trong form
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -222,19 +205,6 @@ export default function ConfirmInfoScreen({ route }) {
             </Text>
           </View>
           <Divider style={styles.divider} />
-          {/* <View
-            style={{
-              gap: 10,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              paddingVertical: 10,
-            }}
-          >
-            <Text>Mã bảo hiểm y tế</Text>
-            <Text style={{ textAlign: "left" }}>Chưa cập nhật</Text>
-          </View>
-          <Divider style={styles.divider} /> */}
           <View
             style={{
               gap: 10,
@@ -282,25 +252,6 @@ export default function ConfirmInfoScreen({ route }) {
             </Text>
           </View>
           <Divider style={styles.divider} />
-          {/* {updatedProfile?.relationship && (
-            <>
-              <View
-                style={{
-                  gap: 10,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  paddingVertical: 10,
-                }}
-              >
-                <Text>Quan hệ</Text>
-                <Text style={{ textAlign: "left" }}>
-                  {updatedProfile?.relationship}
-                </Text>
-              </View>
-              <Divider style={styles.divider} />
-            </>
-          )} */}
         </ScrollView>
       </View>
 
@@ -383,17 +334,6 @@ export default function ConfirmInfoScreen({ route }) {
                 </TouchableOpacity>
               </View>
 
-              {/* <Text style={styles.label}>Căn cước công dân</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.identity_card}
-                onChangeText={(text) =>
-                  handleInputChange("identity_card", text)
-                }
-                placeholder="Nhập số CCCD"
-                keyboardType="numeric"
-              /> */}
-
               <Text style={styles.label}>Điện thoại</Text>
               <TextInput
                 style={styles.input}
@@ -419,20 +359,6 @@ export default function ConfirmInfoScreen({ route }) {
                 onChangeText={(text) => handleInputChange("address", text)}
                 placeholder="Nhập địa chỉ"
               />
-
-              {/* {formData.relationship && (
-                <>
-                  <Text style={styles.label}>Quan hệ</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.relationship}
-                    onChangeText={(text) =>
-                      handleInputChange("relationship", text)
-                    }
-                    placeholder="Nhập quan hệ (VD: Con, Vợ)"
-                  />
-                </>
-              )} */}
             </ScrollView>
 
             <View style={styles.modalButtons}>

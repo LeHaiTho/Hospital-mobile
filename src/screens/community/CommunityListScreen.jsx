@@ -33,11 +33,6 @@ export default function CommunityListScreen() {
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
 
-  // console.log("user", user.role);
-  // const [routes] = useState([
-  //   { key: "all", title: "Tất cả" },
-  //   { key: "mine", title: "Câu hỏi của tôi" },
-  // ]);
   console.log("user", user);
   const [questions, setQuestions] = useState([]);
   const [myQuestions, setMyQuestions] = useState([]);
@@ -307,13 +302,11 @@ export default function CommunityListScreen() {
   }, []);
   const handleSheetChange = useCallback((index) => {
     if (index === -1) {
-      setIsSheetVisible(false); // Đặt trạng thái khi BottomSheet đóng
+      setIsSheetVisible(false);
     } else {
-      setIsSheetVisible(true); // Đặt trạng thái khi BottomSheet mở
+      setIsSheetVisible(true);
     }
   }, []);
-
-  // Xác định các routes cần hiển thị dựa trên vai trò người dùng
   const routes =
     user?.role?.name == "doctor" || user?.role == "doctor"
       ? [
@@ -354,44 +347,6 @@ export default function CommunityListScreen() {
           },
         ];
 
-  // const routes =
-  //   user?.role?.name === "doctor" || user?.role === "doctor"
-  //     ? [
-  //         {
-  //           title: "Các câu hỏi",
-  //           component: (
-  //             <AllQuestions
-  //               data={questions}
-  //               loading={loading}
-  //               handleSnapPress={handleSnapPress}
-  //             />
-  //           ),
-  //         },
-  //       ]
-  //     : [
-  //         {
-  //           title: "Các câu hỏi",
-  //           component: (
-  //             <AllQuestions
-  //               data={questions}
-  //               loading={loading}
-  //               handleSnapPress={handleSnapPress}
-  //             />
-  //           ),
-  //         },
-  //         {
-  //           title: "Câu hỏi của tôi",
-  //           component: (
-  //             <MyQuestions
-  //               data={myQuestions}
-  //               loading={loading}
-  //               handleSnapPress={handleSnapPress}
-  //             />
-  //           ),
-  //         },
-  //       ];
-
-  // Nếu là doctor, chỉ có tab "All Questions"
   const renderScene = SceneMap({
     all: () => (
       <AllQuestions
@@ -490,36 +445,9 @@ export default function CommunityListScreen() {
       navigation.replace("Login");
     }
   };
-  // console.log("answer", selectedQuestion);
-  console.log("myQuestions", myQuestions);
-  // console.log("questions", questions);
-  // console.log("selectedQuestion", selectedQuestion);
+
   return (
     <GestureHandlerRootView>
-      {/* <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{ width: Dimensions.get("window").width }}
-        renderTabBar={(props) => (
-          <TabBar
-            {...props}
-            indicatorStyle={{ backgroundColor: "#fff" }}
-            style={{ backgroundColor: "#fff" }}
-            activeColor="#000"
-            inactiveColor="#A8A2A2"
-            labelStyle={{
-              fontWeight: "500",
-              color: "#0165FC",
-              letterSpacing: 1,
-            }}
-            tabStyle={{
-              backgroundColor: "#fff",
-            }}
-          />
-        )}
-      /> */}
-
       <View style={{ flex: 1 }}>
         <View
           style={{
@@ -558,11 +486,6 @@ export default function CommunityListScreen() {
         </View>
         <View style={{ flex: 1 }}>{routes[index].component}</View>
       </View>
-      {/* <AllQuestions
-        data={questions}
-        loading={loading}
-        handleSnapPress={handleSnapPress}
-      /> */}
 
       {user?.role?.name !== "doctor" && user?.role !== "doctor" ? (
         <TouchableOpacity

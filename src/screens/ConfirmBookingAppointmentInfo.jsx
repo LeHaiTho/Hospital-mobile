@@ -124,17 +124,6 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
       });
       setFocusReasonForVisit(true);
     } else {
-      // console.log({
-      //   // doctor: doctorObject || doctor,
-      //   // selectedDate: moment(selectedDate, "YYYY-MM-DD", true).isValid()
-      //   //   ? selectedDate
-      //   //   : moment(selectedDate, "DD/MM/YYYY", true).format("YYYY-MM-DD"),
-      //   slot: formatDataSlot(slot),
-      //   doctor: doctorObject || doctor,
-      //   // selectedHospital,
-      //   // selectedSpecialty,
-      //   // reasonForVisit,
-      // });
       navigation.navigate("InfoPayment", {
         profile,
         doctor: doctorObject || doctor,
@@ -397,12 +386,6 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
                         color="#0165FF"
                       />
                       <Text style={{ color: "#000" }}>
-                        {/* {doctor?.specialties?.find(
-                          (specialty) => specialty.id === selectedSpecialty
-                        )?.name ||
-                          specialtyDetail ||
-                          selectedHospital?.hospitalSpecialty[0]?.specialty
-                            ?.name} */}
                         {doctor?.specialties?.find(
                           (specialty) => specialty.id === selectedSpecialty
                         )?.name ||

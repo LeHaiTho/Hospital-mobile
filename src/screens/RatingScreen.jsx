@@ -67,7 +67,7 @@ const RatingScreen = ({ route }) => {
             <View
               style={{
                 alignItems: "center",
-                justifyContent: "center", // Đảm bảo căn giữa theo chiều dọc
+                justifyContent: "center",
                 padding: 5,
                 height: 150,
                 width: 150,
@@ -77,9 +77,9 @@ const RatingScreen = ({ route }) => {
             >
               <Image
                 style={{
-                  width: "100%", // Đặt bằng 100% để chiếm hết không gian của View
-                  height: "100%", // Đặt bằng 100% để chiếm hết không gian của View
-                  borderRadius: 100, // Giữ tròn ảnh (nửa của chiều cao hoặc chiều rộng)
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: 100,
                 }}
                 source={{
                   uri: `${BASE_URL}${appointment?.doctor?.avatar}`,
