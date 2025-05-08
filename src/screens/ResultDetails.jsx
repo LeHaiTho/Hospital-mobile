@@ -19,7 +19,10 @@ const ResultDetails = ({ route }) => {
   useEffect(() => {
     getMedicalHistoryDetail();
   }, [appointment]);
-  console.log("medicalHistoryDetail", medicalHistoryDetail);
+  console.log(
+    "medicalHistoryDetail",
+    medicalHistoryDetail?.healthCheckInfos[0]
+  );
   return (
     <>
       {medicalHistoryDetail ? (
@@ -51,7 +54,6 @@ const ResultDetails = ({ route }) => {
                   style={{
                     gap: 5,
                     flexDirection: "row",
-                    flex: 1,
                     justifyContent: "space-between",
                     backgroundColor: "#D3E6FF",
                     paddingVertical: 12,
@@ -74,7 +76,6 @@ const ResultDetails = ({ route }) => {
                     style={{
                       fontWeight: "bold",
                       color: "#0165FF",
-                      flex: 1,
                       textAlign: "right",
                     }}
                   >
@@ -86,7 +87,6 @@ const ResultDetails = ({ route }) => {
                   style={{
                     gap: 5,
                     flexDirection: "row",
-                    flex: 1,
                     justifyContent: "space-between",
                     alignItems: "center",
                     paddingHorizontal: 10,
@@ -117,7 +117,6 @@ const ResultDetails = ({ route }) => {
                   style={{
                     gap: 5,
                     flexDirection: "row",
-                    flex: 1,
                     justifyContent: "space-between",
                     alignItems: "center",
                     paddingHorizontal: 10,
@@ -147,7 +146,6 @@ const ResultDetails = ({ route }) => {
                   style={{
                     gap: 5,
                     flexDirection: "row",
-                    flex: 1,
                     justifyContent: "space-between",
                     alignItems: "center",
                     paddingHorizontal: 10,
@@ -177,7 +175,6 @@ const ResultDetails = ({ route }) => {
                   style={{
                     gap: 5,
                     flexDirection: "row",
-                    flex: 1,
                     justifyContent: "space-between",
                     alignItems: "center",
                     paddingHorizontal: 10,

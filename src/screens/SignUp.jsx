@@ -22,6 +22,7 @@ const SignUp = () => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
   const navigation = useNavigation();
+  const [isShowPassword, setIsShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [form, setForm] = useState({
@@ -219,13 +220,22 @@ const SignUp = () => {
             >
               <FontAwesome6 name="lock" size={18} color="#808080" />
               <TextInput
-                placeholder="************"
+                placeholder="Nhập mật khẩu"
                 placeholderTextColor="#808080"
                 style={{ flex: 1 }}
-                secureTextEntry
+                secureTextEntry={!isShowPassword}
                 value={form.password}
                 onChangeText={(text) => setForm({ ...form, password: text })}
               />
+              <TouchableOpacity
+                onPress={() => setIsShowPassword(!isShowPassword)}
+              >
+                <Ionicons
+                  name={isShowPassword ? "eye-off" : "eye"}
+                  size={20}
+                  color="#808080"
+                />
+              </TouchableOpacity>
               {form.password && (
                 <TouchableOpacity
                   onPress={() => setForm({ ...form, password: "" })}
