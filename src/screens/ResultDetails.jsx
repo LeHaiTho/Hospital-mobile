@@ -226,10 +226,10 @@ const ResultDetails = ({ route }) => {
                 <Text style={{ fontWeight: "bold" }}>Chuyên khoa:</Text>
                 <Text>{appointment?.specialty?.name}</Text>
               </View>
-              <View style={{ gap: 5, flexDirection: "row" }}>
+              {/* <View style={{ gap: 5, flexDirection: "row" }}>
                 <Text style={{ fontWeight: "bold" }}>Chuẩn đoán: </Text>
                 <Text style={{ flex: 1 }}>{item?.findings}</Text>
-              </View>
+              </View> */}
               <View style={{ gap: 5, flexDirection: "row" }}>
                 <Text style={{ fontWeight: "bold" }}>Kết quả: </Text>
                 <Text style={{ flex: 1 }}>{item?.description}</Text>

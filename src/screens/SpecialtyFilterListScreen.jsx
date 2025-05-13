@@ -256,7 +256,10 @@ const SpecialtyFilterListScreen = ({ route }) => {
                   source={{
                     uri:
                       item?.user?.avatar || item?.hospitalSpecialty?.[0]?.image
-                        ? `${baseUrl}${item?.user?.avatar || item?.hospitalSpecialty?.[0]?.image}`
+                        ? `${baseUrl}${
+                            item?.user?.avatar ||
+                            item?.hospitalSpecialty?.[0]?.image
+                          }`
                         : "https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg",
                   }}
                   resizeMode={item?.user?.avatar && "cover"}

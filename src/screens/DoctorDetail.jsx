@@ -12,7 +12,7 @@ import { TouchableOpacity } from "react-native";
 import axiosConfig from "../apis/axiosConfig";
 
 const DoctorDetail = ({ route }) => {
-  const { id, hospitalId, specialtyId } = route.params;
+  const { id, hospitalId, specialtyId } = route.params || {};
   const [doctor, setDoctor] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);

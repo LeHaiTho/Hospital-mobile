@@ -87,13 +87,23 @@ export default function CustomerProfileScreen({ route }) {
     sheetRef.current?.close();
   }, []);
 
-  const handleNavigation = useCallback(
-    (screen, params) => {
-      handleClosePress();
-      navigation.navigate(screen, params);
-    },
-    [navigation, handleClosePress]
-  );
+  const handleNavigation = (screenName, params) => {
+    if (fromBooking) {
+      navigation.navigate(screenName, {
+        ...params,
+        fromBooking,
+        doctor,
+        selectedDate,
+        slot,
+        selectedHospital,
+        selectedSpecialty,
+        isDoctorSpecial,
+        specialtyDetail,
+      });
+    } else {
+      navigation.navigate(screenName, params);
+    }
+  };
 
   // test
   const handleDeleteProfile = useCallback(async (profile) => {
@@ -365,7 +375,7 @@ export default function CustomerProfileScreen({ route }) {
                           color="#0165FF"
                         />
                         <Text style={{ color: "#000" }}>
-                          {profile.province || "Chưa cập nhật"}
+                          {profile.address || "Chưa cập nhật"}
                         </Text>
                       </View>
                     </View>
@@ -468,7 +478,18 @@ export default function CustomerProfileScreen({ route }) {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              onPress={() => handleNavigation("ScannerProfile", {})}
+              onPress={() =>
+                handleNavigation("ScannerProfile", {
+                  fromBooking,
+                  doctor,
+                  selectedDate,
+                  slot,
+                  selectedHospital,
+                  selectedSpecialty,
+                  isDoctorSpecial,
+                  specialtyDetail,
+                })
+              }
             >
               <AntDesign name="qrcode" size={20} color="#fff" />
               <Text style={{ color: "#fff", textAlign: "center" }}>

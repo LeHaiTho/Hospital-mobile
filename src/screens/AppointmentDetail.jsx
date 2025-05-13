@@ -17,6 +17,7 @@ import { useState, useEffect, useLayoutEffect } from "react";
 import moment from "moment";
 import { Barcode } from "expo-barcode-generator";
 import { APP_NAME } from "../utils/constants";
+
 const AppointmentDetail = ({ route }) => {
   const navigation = useNavigation();
   const { appointmentId, fromBookingFlow } = route.params || {
@@ -40,6 +41,26 @@ const AppointmentDetail = ({ route }) => {
   useEffect(() => {
     getAppointmentDetail();
   }, []);
+
+  useLayoutEffect(() => {
+    if (fromBookingFlow) {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            style={{ marginRight: 16 }}
+            onPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabNavigator", params: { screen: "Home" } }],
+              });
+            }}
+          >
+            <Ionicons name="home-outline" size={24} color="#fff" />
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [navigation, fromBookingFlow]);
 
   return (
     <>
@@ -500,11 +521,11 @@ const AppointmentDetail = ({ route }) => {
                 shadowColor: "#000",
                 shadowOffset: {
                   width: 0,
-                  height: 10, // Increase the shadow height for more elevation
+                  height: 10,
                 },
-                shadowOpacity: 0.9, // Increase opacity to make it darker
-                shadowRadius: 15, // Increase radius for a larger blur effect
-                elevation: 10, // Higher elevation for Android
+                shadowOpacity: 0.9,
+                shadowRadius: 15,
+                elevation: 10,
                 borderTopLeftRadius: 20,
                 borderTopRightRadius: 20,
               }}
@@ -526,6 +547,35 @@ const AppointmentDetail = ({ route }) => {
                   Tải xuống
                 </Text>
               </TouchableOpacity>
+
+              {/* {fromBookingFlow && (
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#0165FC",
+                    paddingVertical: 15,
+                    borderRadius: 100,
+                    width: "100%",
+                    alignItems: "center",
+                    flexDirection: "row",
+                    gap: 10,
+                    justifyContent: "center",
+                    marginTop: 8,
+                  }}
+                  onPress={() => {
+                    navigation.reset({
+                      index: 0,
+                      routes: [
+                        { name: "TabNavigator", params: { screen: "Home" } },
+                      ],
+                    });
+                  }}
+                >
+                  <Ionicons name="home-outline" size={18} color="#fff" />
+                  <Text style={{ color: "#fff", fontWeight: "bold" }}>
+                    Về trang chủ
+                  </Text>
+                </TouchableOpacity>
+              )} */}
             </View>
           </View>
         </>

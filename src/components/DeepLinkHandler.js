@@ -18,7 +18,7 @@ const DeepLinkHandler = () => {
       try {
         const response = await axios.patch(
           `${baseUrl}/appointments/update-appointment-status-after-payment/${appointmentId}`,
-          { payment_status: "paid" }
+          { payment_status: "paid", status: "confirmed" }
         );
         console.log("response", response);
         if (response.status === 200) {

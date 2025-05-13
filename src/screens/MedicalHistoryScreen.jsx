@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  BackHandler,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import axiosConfig from "../apis/axiosConfig";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -21,6 +22,8 @@ const MedicalHistoryScreen = () => {
   const [appointmentCompleted, setAppointmentCompleted] = useState(null);
   const { user } = useSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigation = useNavigation();
 
   // lấy thông tin user và tất cả thành viên trong gia đình
   const getAllProfileOfUser = async () => {
@@ -74,7 +77,24 @@ const MedicalHistoryScreen = () => {
   );
   console.log(allProfilesOfUser);
   console.log(appointmentCompleted);
-  const navigation = useNavigation();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        // Khi người dùng nhấn nút back của thiết bị, reset về Home
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "TabNavigator", params: { screen: "Home" } }],
+        });
+        return true; // Ngăn không cho hành vi mặc định của nút back
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [navigation])
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{ backgroundColor: "#fff" }}>
@@ -174,24 +194,24 @@ const MedicalHistoryScreen = () => {
                   {member?.relationship === "father"
                     ? "Ba"
                     : member?.relationship === "mother"
-                      ? "Mẹ"
-                      : member?.relationship === "brother"
-                        ? "Anh trai"
-                        : member?.relationship === "sister"
-                          ? "Chị gái"
-                          : member?.relationship === "husband"
-                            ? "Chồng"
-                            : member?.relationship === "wife"
-                              ? "Vợ"
-                              : member?.relationship === "child"
-                                ? "Con"
-                                : member?.relationship === "grandparent"
-                                  ? "Ông bà"
-                                  : member?.relationship === "grandchild"
-                                    ? "Cháu"
-                                    : member?.relationship === "other"
-                                      ? "Khác"
-                                      : ""}
+                    ? "Mẹ"
+                    : member?.relationship === "brother"
+                    ? "Anh trai"
+                    : member?.relationship === "sister"
+                    ? "Chị gái"
+                    : member?.relationship === "husband"
+                    ? "Chồng"
+                    : member?.relationship === "wife"
+                    ? "Vợ"
+                    : member?.relationship === "child"
+                    ? "Con"
+                    : member?.relationship === "grandparent"
+                    ? "Ông bà"
+                    : member?.relationship === "grandchild"
+                    ? "Cháu"
+                    : member?.relationship === "other"
+                    ? "Khác"
+                    : ""}
                 </Text>
               </View>
             </TouchableOpacity>

@@ -135,7 +135,7 @@ const CustomerNavigator = () => {
       <Stack.Screen
         name="MedicalHistory"
         component={MedicalHistoryScreen}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
           headerTitle: "Lịch sử khám bệnh",
           headerTitleStyle: {
@@ -147,7 +147,22 @@ const CustomerNavigator = () => {
           headerTintColor: "#fff",
           headerTitleAlign: "center",
           headerShadowVisible: false,
-        }}
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ marginLeft: 16 }}
+              onPress={() => {
+                navigation.reset({
+                  index: 0,
+                  routes: [
+                    { name: "TabNavigator", params: { screen: "Home" } },
+                  ],
+                });
+              }}
+            >
+              <Ionicons name="arrow-back" size={24} color="#fff" />
+            </TouchableOpacity>
+          ),
+        })}
       />
       <Stack.Screen
         name="CommunityList"
@@ -359,7 +374,7 @@ const CustomerNavigator = () => {
         component={AppointmentDetail}
         options={({ route }) => ({
           headerShown: true,
-          headerTitle: "Phiếu khám bệnh",
+          headerTitle: "Chi tiết lịch hẹn",
           headerTitleStyle: {
             fontSize: 17,
           },
@@ -369,24 +384,18 @@ const CustomerNavigator = () => {
           headerTintColor: "#fff",
           headerTitleAlign: "center",
           headerShadowVisible: false,
-          headerLeft: () => {
-            const isFromInfoPayment = route.params?.fromBookingFlow;
-            return isFromInfoPayment ? null : (
-              <TouchableOpacity
-                style={{ marginLeft: 30 }}
-                onPress={() => navigation.goBack()}
-              >
-                <Ionicons name="arrow-back-outline" size={24} color="#fff" />
-              </TouchableOpacity>
-            );
-          },
           headerRight: () => {
             const isFromInfoPayment = route.params?.fromBookingFlow;
             return !isFromInfoPayment ? null : (
               <TouchableOpacity
-                style={{ marginRight: 30 }}
+                style={{ marginRight: 16 }}
                 onPress={() =>
-                  navigation.replace("TabNavigator", { screen: "Home" })
+                  navigation.reset({
+                    index: 0,
+                    routes: [
+                      { name: "TabNavigator", params: { screen: "Home" } },
+                    ],
+                  })
                 }
               >
                 <Ionicons name="home-outline" size={24} color="#fff" />

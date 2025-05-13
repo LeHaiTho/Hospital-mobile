@@ -15,6 +15,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { Avatar, Card, IconButton, FAB } from "react-native-paper";
 import React, {
@@ -47,6 +48,7 @@ const InfoPaymentScreen = ({ route }) => {
   const [appointmentId, setAppointmentId] = useState(null);
   const [doctorName, setDoctorName] = useState("");
   const [focusPaymentMethod, setFocusPaymentMethod] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClosePress = useCallback(() => {
     sheetRef.current?.close();
@@ -100,19 +102,21 @@ const InfoPaymentScreen = ({ route }) => {
   const handleSubmit = async () => {
     if (paymentMethod) {
       try {
-        const res = await axiosConfig.post(
-          "/appointments/create-appointment",
-          requestBody
-        );
-        if (res.data.newAppointment.payment_method === "e-wallet") {
-          console.log({
-            appointment: {
-              ...res.data.newAppointment,
-              amount: Number(res.data.newAppointment.price),
-            },
-          });
-          console.log(res.data.newAppointment);
-          console.log("resbody", requestBody);
+        setIsLoading(true);
+
+        if (paymentMethod === "e-wallet") {
+          // Nếu thanh toán bằng ví điện tử, tạo lịch hẹn với trạng thái pending
+          const res = await axiosConfig.post(
+            "/appointments/create-appointment",
+            {
+              ...requestBody,
+              isZaloPay: true, // Thêm flag để đánh dấu đây là thanh toán ZaloPay
+            }
+          );
+
+          const appointmentId = res.data.newAppointment.id;
+
+          // Tạo yêu cầu thanh toán ZaloPay
           const paymentRes = await axiosConfig.post(
             "/payments/create-payment",
             {
@@ -122,19 +126,46 @@ const InfoPaymentScreen = ({ route }) => {
               },
             }
           );
-          console.log("paymentRes", paymentRes.data.data.order_url);
+
+          // Chuyển đến trang thanh toán ZaloPay
           navigation.navigate("WebviewPayment", {
             paymentUrl: paymentRes.data.data.order_url,
+            appointmentId,
+            fromBookingFlow: true,
           });
-          console.log(res.data.newAppointment);
-          setVisible(false);
-        } else if (res.data.newAppointment.payment_method === "cash") {
-          setAppointmentId(res.data.newAppointment.id);
-          setVisible(true);
-          console.log(res.data.newAppointment);
+        } else if (paymentMethod === "cash") {
+          // Nếu thanh toán bằng tiền mặt, tạo lịch hẹn bình thường
+          const res = await axiosConfig.post(
+            "/appointments/create-appointment",
+            requestBody
+          );
+
+          const appointmentId = res.data.newAppointment.id;
+
+          // Chuyển đến trang chi tiết lịch hẹn
+          navigation.reset({
+            index: 1,
+            routes: [
+              {
+                name: "TabNavigator",
+                params: { screen: "Home" },
+              },
+              {
+                name: "AppointmentDetail",
+                params: { appointmentId, fromBookingFlow: true },
+              },
+            ],
+          });
         }
       } catch (error) {
         console.log(error);
+        Toast.show({
+          text1: "Lỗi",
+          text2: "Đã xảy ra lỗi khi tạo lịch hẹn",
+          type: "error",
+        });
+      } finally {
+        setIsLoading(false);
       }
     } else {
       Toast.show({
@@ -535,8 +566,8 @@ const InfoPaymentScreen = ({ route }) => {
                   {paymentMethod === "cash"
                     ? "Thanh toán tại cơ sở y tế"
                     : paymentMethod === "e-wallet"
-                      ? "Thanh toán ví điện tử ZaloPay"
-                      : "Chọn phương thức"}
+                    ? "Thanh toán ví điện tử ZaloPay"
+                    : "Chọn phương thức"}
                 </Text>
               </View>
               <Entypo name="chevron-small-right" size={24} color="#000" />
@@ -624,21 +655,37 @@ const InfoPaymentScreen = ({ route }) => {
           <TouchableOpacity
             style={{
               backgroundColor: "#0165FC",
-              padding: 15,
-              borderRadius: 100,
-              width: "100%",
+              paddingVertical: 15,
+              borderRadius: 10,
               alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+              gap: 10,
+              flex: 1,
             }}
             onPress={handleSubmit}
+            disabled={isLoading}
           >
-            <Text
-              style={{
-                color: "#FFF",
-                fontWeight: "bold",
-              }}
-            >
-              THANH TOÁN
-            </Text>
+            {isLoading ? (
+              <ActivityIndicator
+                color="#fff"
+                size="small"
+                style={{ flex: 1 }}
+              />
+            ) : (
+              <>
+                <Text
+                  style={{
+                    color: "#fff",
+                    fontWeight: "bold",
+                    flex: 1,
+                    textAlign: "center",
+                  }}
+                >
+                  {isLoading ? "Đang xử lý..." : "Thanh toán"}
+                </Text>
+              </>
+            )}
           </TouchableOpacity>
         </View>
         <BottomSheet
