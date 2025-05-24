@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { TouchableOpacity } from "react-native";
 import axiosConfig from "../apis/axiosConfig";
+import moment from "moment";
 
 const DoctorDetail = ({ route }) => {
   const { id, hospitalId, specialtyId } = route.params || {};
@@ -24,6 +25,13 @@ const DoctorDetail = ({ route }) => {
   // lấy bệnh viện theo chuyên khoa và bác sĩ
 
   console.log(id, hospitalId, specialtyId);
+
+  // Function to check if a time slot is in the past
+  const isTimeSlotPassed = (date, time) => {
+    const now = moment();
+    const slotDateTime = moment(`${date} ${time}`, "DD/MM/YYYY HH:mm:ss");
+    return now.isAfter(slotDateTime);
+  };
 
   // fetch doctor
   const getDoctorDetail = async () => {
@@ -210,11 +218,12 @@ const DoctorDetail = ({ route }) => {
               </View>
             )}
 
-            {/* Book Appointment */}
+            {/* Book Appointment - Pass isTimeSlotPassed function to the component */}
             <BookAppointment
               doctor={doctor}
               selectedSpecialty={selectedSpecialty}
               selectedHospital={selectedHospital}
+              isTimeSlotPassed={isTimeSlotPassed}
             />
             {/* About */}
             <View style={{ width: "100%", marginTop: 20 }}>

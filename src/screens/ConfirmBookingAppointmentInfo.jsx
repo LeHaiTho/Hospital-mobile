@@ -55,17 +55,8 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
     selectedSpecialty,
     isDoctorSpecial,
     specialtyDetail,
+    consultationFee,
   } = route.params || {};
-  console.log("doctor", doctor);
-
-  console.log("slot", slot);
-  console.log("selectedDate", selectedDate);
-  console.log("doctor", doctor);
-  console.log("isDoctorSpecial", isDoctorSpecial);
-  console.log("selectedSpecialty", selectedSpecialty);
-  console.log("specialtyDetail", specialtyDetail);
-
-  // console.log("profile", profile);
   const getDoctorName = async () => {
     try {
       const res = await axiosConfig.get(
@@ -136,10 +127,10 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
         reasonForVisit,
         isDoctorSpecial,
         specialtyDetail,
+        consultationFee,
       });
     }
   };
-
   return (
     <>
       <KeyboardAwareScrollView style={{ flex: 1 }} extraScrollHeight={1000}>
@@ -445,8 +436,10 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
                       <Entypo name="wallet" size={20} color="#0165FF" />
                       <Text style={{ color: "#000", fontWeight: "bold" }}>
                         {`${Number(
-                          selectedHospital?.hospitalSpecialty?.[0]
-                            ?.consultation_fee || doctor?.consultation_fee?.[0]
+                          consultationFee ||
+                            selectedHospital?.hospitalSpecialty?.[0]
+                              ?.consultation_fee ||
+                            doctor?.consultation_fee?.[0]
                         ).toLocaleString("vi-VN")} VNĐ`}
                       </Text>
                     </View>
@@ -572,7 +565,8 @@ const ConfirmBookingAppointmentInfo = ({ route }) => {
               style={{ fontWeight: "bold", color: "#0165FC", fontSize: 16 }}
             >
               {`${Number(
-                selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
+                consultationFee ||
+                  selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
                   doctor?.consultation_fee?.[0]
               ).toLocaleString("vi-VN")} VNĐ`}
             </Text>

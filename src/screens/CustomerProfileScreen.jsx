@@ -43,6 +43,7 @@ export default function CustomerProfileScreen({ route }) {
     hospital,
     isDoctorSpecial,
     specialtyDetail,
+    consultationFee,
   } = route.params || {};
 
   const [visible, setVisible] = useState(false);
@@ -86,7 +87,7 @@ export default function CustomerProfileScreen({ route }) {
   const handleClosePress = useCallback(() => {
     sheetRef.current?.close();
   }, []);
-
+  console.log("consultationFee", consultationFee);
   const handleNavigation = (screenName, params) => {
     if (fromBooking) {
       navigation.navigate(screenName, {
@@ -99,9 +100,13 @@ export default function CustomerProfileScreen({ route }) {
         selectedSpecialty,
         isDoctorSpecial,
         specialtyDetail,
+        consultationFee,
       });
     } else {
-      navigation.navigate(screenName, params);
+      navigation.navigate(screenName, {
+        ...params,
+        consultationFee,
+      });
     }
   };
 
@@ -271,6 +276,7 @@ export default function CustomerProfileScreen({ route }) {
                     selectedSpecialty,
                     isDoctorSpecial,
                     specialtyDetail,
+                    consultationFee,
                   })
                 }
               >
@@ -461,6 +467,7 @@ export default function CustomerProfileScreen({ route }) {
                   selectedSpecialty,
                   isDoctorSpecial,
                   specialtyDetail,
+                  consultationFee,
                 })
               }
             >
@@ -488,6 +495,7 @@ export default function CustomerProfileScreen({ route }) {
                   selectedSpecialty,
                   isDoctorSpecial,
                   specialtyDetail,
+                  consultationFee,
                 })
               }
             >

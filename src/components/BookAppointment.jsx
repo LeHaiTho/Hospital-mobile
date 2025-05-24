@@ -13,6 +13,7 @@ const BookAppointment = ({
   selectedSpecialty,
   selectedHospital,
   doctorSche,
+  isTimeSlotPassed,
 }) => {
   const navigation = useNavigation();
   const [doctorSchedule, setDoctorSchedule] = useState(null);
@@ -82,6 +83,11 @@ const BookAppointment = ({
     }
   };
 
+  // Check if a date is in the past
+  const isDateInPast = (date) => {
+    return moment(date).isBefore(moment(), "day");
+  };
+
   console.log("doctor", doctor);
   console.log("doctorSchedule", doctorSchedule);
   console.log("selectedDate", selectedDate);
@@ -98,46 +104,64 @@ const BookAppointment = ({
             showsHorizontalScrollIndicator={false}
             style={{ paddingVertical: 10 }}
           >
-            {dates?.map((date, index) => (
-              <TouchableOpacity
-                key={index}
-                buttonColor="transparent"
-                style={{
-                  backgroundColor:
-                    selectedDate === date ? "#0165FC" : "transparent",
-                  borderColor:
-                    selectedDate === date ? "#0165FC" : "transparent",
-                  borderWidth: 0.5,
-                  borderRadius: 8,
-                  borderColor: selectedDate === date ? "#0165FC" : "#B6B9BE",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  paddingHorizontal: 20,
-                  paddingVertical: 2,
-                  marginRight: 10,
-                }}
-                onPress={() => setSelectedDate(date)}
-              >
-                <Text
+            {dates?.map((date, index) => {
+              const isPastDate = isDateInPast(date);
+
+              return (
+                <TouchableOpacity
+                  key={index}
+                  buttonColor="transparent"
                   style={{
-                    fontSize: 10,
-                    color: selectedDate === date ? "#fff" : "#000",
+                    backgroundColor:
+                      selectedDate === date && !isPastDate
+                        ? "#0165FC"
+                        : "transparent",
+                    borderWidth: 0.5,
+                    borderRadius: 8,
+                    borderColor:
+                      selectedDate === date && !isPastDate
+                        ? "#0165FC"
+                        : "#B6B9BE",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingHorizontal: 20,
+                    paddingVertical: 2,
+                    marginRight: 10,
+                    opacity: isPastDate ? 0.5 : 1,
                   }}
+                  onPress={() => !isPastDate && setSelectedDate(date)}
+                  disabled={isPastDate}
                 >
-                  {moment(date).format("DD/MM/YYYY")}
-                </Text>
-                <Text
-                  style={{
-                    color: selectedDate === date ? "#fff" : "#000",
-                    fontWeight: 700,
-                  }}
-                >
-                  {moment(date).format("dddd").charAt(0).toUpperCase() +
-                    moment(date).format("dddd").slice(1)}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color:
+                        selectedDate === date && !isPastDate ? "#fff" : "#000",
+                      opacity: isPastDate ? 0.5 : 1,
+                    }}
+                  >
+                    {moment(date).format("DD/MM/YYYY")}
+                  </Text>
+                  <Text
+                    style={{
+                      color:
+                        selectedDate === date && !isPastDate ? "#fff" : "#000",
+                      fontWeight: 700,
+                      opacity: isPastDate ? 0.5 : 1,
+                    }}
+                  >
+                    {moment(date).format("dddd").charAt(0).toUpperCase() +
+                      moment(date).format("dddd").slice(1)}
+                  </Text>
+                  {isPastDate && (
+                    <Text style={{ color: "#9CA3AF", fontSize: 8 }}>
+                      Đã qua
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
           </ScrollView>
 
           {/* Thời gian khám */}
@@ -153,30 +177,49 @@ const BookAppointment = ({
                 ) ? (
                   doctorSchedule.map((item) =>
                     item?.shifts?.map((shift) =>
-                      shift?.appointmentSlots?.map((slot) => (
-                        <TouchableOpacity
-                          key={slot?.id}
-                          buttonColor="transparent"
-                          style={{
-                            backgroundColor: "#EEEEEE",
-                            borderColor: "#EEEEEE",
-                            borderWidth: 0.5,
-                            borderRadius: 6,
-                            paddingHorizontal: 10,
-                            paddingVertical: 5,
-                            marginRight: 10,
-                          }}
-                          onPress={() => handleBookAppointment(slot)}
-                        >
-                          <Text style={{ color: "#000" }}>
-                            {`${moment(slot?.start_time, "HH:mm:ss").format(
-                              "HH:mm"
-                            )} - ${moment(slot?.end_time, "HH:mm").format(
-                              "HH:mm"
-                            )}`}
-                          </Text>
-                        </TouchableOpacity>
-                      ))
+                      shift?.appointmentSlots?.map((slot) => {
+                        const formattedDate =
+                          moment(selectedDate).format("DD/MM/YYYY");
+                        const isPassed =
+                          isTimeSlotPassed &&
+                          isTimeSlotPassed(formattedDate, slot?.start_time);
+
+                        return (
+                          <TouchableOpacity
+                            key={slot?.id}
+                            buttonColor="transparent"
+                            style={{
+                              backgroundColor: isPassed ? "#E5E5E5" : "#EEEEEE",
+                              borderColor: "#EEEEEE",
+                              borderWidth: 0.5,
+                              borderRadius: 6,
+                              paddingHorizontal: 10,
+                              paddingVertical: 5,
+                              marginRight: 10,
+                              opacity: isPassed ? 0.5 : 1,
+                            }}
+                            onPress={() =>
+                              !isPassed && handleBookAppointment(slot)
+                            }
+                            disabled={isPassed}
+                          >
+                            <Text
+                              style={{ color: isPassed ? "#9CA3AF" : "#000" }}
+                            >
+                              {`${moment(slot?.start_time, "HH:mm:ss").format(
+                                "HH:mm"
+                              )} - ${moment(slot?.end_time, "HH:mm").format(
+                                "HH:mm"
+                              )}`}
+                            </Text>
+                            {isPassed && (
+                              <Text style={{ color: "#9CA3AF", fontSize: 10 }}>
+                                Đã qua
+                              </Text>
+                            )}
+                          </TouchableOpacity>
+                        );
+                      })
                     )
                   )
                 ) : (

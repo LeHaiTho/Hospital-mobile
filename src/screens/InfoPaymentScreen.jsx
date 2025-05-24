@@ -73,9 +73,8 @@ const InfoPaymentScreen = ({ route }) => {
     reasonForVisit,
     isDoctorSpecial,
     specialtyDetail,
+    consultationFee,
   } = route.params || {};
-  // console.log(doctor?.doctor_id);
-  console.log("isDoctorSpecial", isDoctorSpecial);
   const requestBody = {
     profile,
     // doctor: doctor?.doctor_id,
@@ -87,36 +86,28 @@ const InfoPaymentScreen = ({ route }) => {
     selectedSpecialty,
     paymentMethod,
     isDoctorSpecial,
+    consultationFee:
+      consultationFee ||
+      selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
+      doctor?.consultation_fee?.[0],
   };
-
-  const getDoctorName = async () => {
-    try {
-      const res = await axiosConfig.get(
-        `/doctors/get-doctor-by-id/${doctor?.doctor_id}`
-      );
-      setDoctorName(res?.data?.doctor?.user?.fullname);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  console.log("requestBody", requestBody);
   const handleSubmit = async () => {
     if (paymentMethod) {
       try {
         setIsLoading(true);
 
         if (paymentMethod === "e-wallet") {
-          // Nếu thanh toán bằng ví điện tử, tạo lịch hẹn với trạng thái pending
           const res = await axiosConfig.post(
             "/appointments/create-appointment",
             {
               ...requestBody,
-              isZaloPay: true, // Thêm flag để đánh dấu đây là thanh toán ZaloPay
+              isZaloPay: true,
             }
           );
 
           const appointmentId = res.data.newAppointment.id;
 
-          // Tạo yêu cầu thanh toán ZaloPay
           const paymentRes = await axiosConfig.post(
             "/payments/create-payment",
             {
@@ -127,6 +118,7 @@ const InfoPaymentScreen = ({ route }) => {
             }
           );
 
+          console.log("requestBody", requestBody);
           // Chuyển đến trang thanh toán ZaloPay
           navigation.navigate("WebviewPayment", {
             paymentUrl: paymentRes.data.data.order_url,
@@ -524,8 +516,10 @@ const InfoPaymentScreen = ({ route }) => {
                       <Entypo name="wallet" size={28} color="#0165FF" />
                       <Text style={{ color: "#000", fontWeight: "bold" }}>
                         {`${Number(
-                          selectedHospital?.hospitalSpecialty?.[0]
-                            ?.consultation_fee || doctor?.consultation_fee?.[0]
+                          consultationFee ||
+                            selectedHospital?.hospitalSpecialty?.[0]
+                              ?.consultation_fee ||
+                            doctor?.consultation_fee?.[0]
                         ).toLocaleString("vi-VN")} VNĐ`}
                       </Text>
                     </View>
@@ -587,7 +581,9 @@ const InfoPaymentScreen = ({ route }) => {
               <Text>Tiền khám</Text>
               <Text>
                 {`${Number(
-                  selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
+                  consultationFee ||
+                    selectedHospital?.hospitalSpecialty?.[0]
+                      ?.consultation_fee ||
                     doctor?.consultation_fee?.[0]
                 ).toLocaleString("vi-VN")} VNĐ`}
               </Text>
@@ -604,7 +600,9 @@ const InfoPaymentScreen = ({ route }) => {
               <Text style={{ fontWeight: "bold" }}>Tổng tiền</Text>
               <Text style={{ fontWeight: "bold", color: "#0165FC" }}>
                 {`${Number(
-                  selectedHospital?.hospitalSpecialty?.[0]?.consultation_fee ||
+                  consultationFee ||
+                    selectedHospital?.hospitalSpecialty?.[0]
+                      ?.consultation_fee ||
                     doctor?.consultation_fee?.[0]
                 ).toLocaleString("vi-VN")} VNĐ`}
               </Text>
@@ -794,6 +792,64 @@ const InfoPaymentScreen = ({ route }) => {
                 }}
               />
               <Text>Thanh toán ví điện tử ZaloPay</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#fff",
+                borderWidth: 1,
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+                borderRadius: 10,
+                borderColor: "#E0E0E0",
+                color: "#000",
+                alignItems: "center",
+                flexDirection: "row",
+                gap: 10,
+              }}
+              onPress={() => {
+                handlePaymentMethod("e-wallet");
+              }}
+            >
+              <Image
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 10,
+                }}
+                source={{
+                  uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp1v7T287-ikP1m7dEUbs2n1SbbLEqkMd1ZA&s",
+                }}
+              />
+              <Text>Thanh toán ví điện tử VNPAY</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#fff",
+                borderWidth: 1,
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+                borderRadius: 10,
+                borderColor: "#E0E0E0",
+                color: "#000",
+                alignItems: "center",
+                flexDirection: "row",
+                gap: 10,
+              }}
+              onPress={() => {
+                handlePaymentMethod("e-wallet");
+              }}
+            >
+              <Image
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 10,
+                }}
+                source={{
+                  uri: "https://cdn.tgdd.vn/2020/03/GameApp/Untitled-2-200x200.jpg",
+                }}
+              />
+              <Text>Thanh toán ví điện tử Momo</Text>
             </TouchableOpacity>
           </BottomSheetScrollView>
         </BottomSheet>

@@ -132,13 +132,13 @@ const WebviewPaymentScreen = ({ route }) => {
       <WebView
         ref={webViewRef}
         source={{ uri: paymentUrl }}
-        onLoadStart={() => setIsLoading(true)}
-        onLoadEnd={() => setIsLoading(false)}
+        // onLoadStart={() => setIsLoading(true)}
+        // onLoadEnd={() => setIsLoading(false)}
         onNavigationStateChange={handleNavigationStateChange}
         javaScriptEnabled={true}
         domStorageEnabled={true}
       />
-      {isLoading && (
+      {/* {isLoading && (
         <View
           style={{
             position: "absolute",
@@ -153,7 +153,7 @@ const WebviewPaymentScreen = ({ route }) => {
         >
           <ActivityIndicator size="large" color="#0165FC" />
         </View>
-      )}
+      )} */}
     </View>
   );
 };

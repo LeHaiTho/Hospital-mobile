@@ -50,8 +50,7 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   console.log("user", user);
   const banners = [
-    require("../../assets/banners/banner-2.png"),
-    require("../../assets/banners/banner-3.png"),
+    require("../../assets/banners/banner-7.jpg"),
     require("../../assets/banners/banner-5.jpeg"),
     require("../../assets/banners/banner-6.png"),
   ];

@@ -25,9 +25,6 @@ const SpecialtyDetailOfHospital = ({ route }) => {
     }
   };
 
-  console.log("hospitalId", hospitalId);
-  console.log("specialtyId", specialtyId);
-
   useEffect(() => {
     if (hospitalId?.id || (hospitalId && specialtyId)) {
       getSpecialtyDetailOfHospital();
@@ -68,9 +65,19 @@ const SpecialtyDetailOfHospital = ({ route }) => {
         selectedSpecialty: specialtyId,
         isDoctorSpecial: false,
         specialtyDetail: specialtyDetail?.specialty?.name,
+        consultationFee:
+          specialtyDetail?.consultation_fee ||
+          hospitalId?.hospitalSpecialty?.[0]?.consultation_fee,
       });
     }
   };
+
+  const isTimeSlotPassed = (date, time) => {
+    const now = moment();
+    const slotDateTime = moment(`${date} ${time}`, "DD/MM/YYYY HH:mm:ss");
+    return now.isAfter(slotDateTime);
+  };
+
   return (
     <ScrollView contentContainerStyle={{ gap: 8 }}>
       <Image
@@ -140,48 +147,70 @@ const SpecialtyDetailOfHospital = ({ route }) => {
                   paddingVertical: 10,
                 }}
               >
-                {Object.keys(doctorSchedule).map((item, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    buttonColor="transparent"
-                    style={{
-                      borderWidth: 0.5,
-                      borderRadius: 8,
-                      borderColor:
-                        selectedDate === item ? "#0165FC" : "#B6B9BE",
-                      backgroundColor:
-                        selectedDate === item ? "#0165FC" : "transparent",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      paddingHorizontal: 20,
-                      paddingVertical: 2,
-                      marginRight: 10,
-                    }}
-                    onPress={() => setSelectedDate(item)}
-                  >
-                    <Text
+                {Object.keys(doctorSchedule).map((item, index) => {
+                  const isDateInPast = moment(item, "DD/MM/YYYY").isBefore(
+                    moment(),
+                    "day"
+                  );
+
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      buttonColor="transparent"
                       style={{
-                        fontSize: 10,
-                        color: selectedDate === item ? "#fff" : "#000",
+                        borderWidth: 0.5,
+                        borderRadius: 8,
+                        borderColor:
+                          selectedDate === item ? "#0165FC" : "#B6B9BE",
+                        backgroundColor:
+                          selectedDate === item ? "#0165FC" : "transparent",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        paddingHorizontal: 20,
+                        paddingVertical: 2,
+                        marginRight: 10,
+                        opacity: isDateInPast ? 0.5 : 1,
                       }}
+                      onPress={() => !isDateInPast && setSelectedDate(item)}
+                      disabled={isDateInPast}
                     >
-                      {item}
-                    </Text>
-                    <Text
-                      style={{
-                        fontWeight: 700,
-                        color: selectedDate === item ? "#fff" : "#000",
-                      }}
-                    >
-                      {moment(item, "DD/MM/YYYY")
-                        .format("dddd")
-                        .charAt(0)
-                        .toUpperCase() +
-                        moment(item, "DD/MM/YYYY").format("dddd").slice(1)}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color:
+                            selectedDate === item && !isDateInPast
+                              ? "#fff"
+                              : "#000",
+                          opacity: isDateInPast ? 0.5 : 1,
+                        }}
+                      >
+                        {item}
+                      </Text>
+                      <Text
+                        style={{
+                          fontWeight: 700,
+                          color:
+                            selectedDate === item && !isDateInPast
+                              ? "#fff"
+                              : "#000",
+                          opacity: isDateInPast ? 0.5 : 1,
+                        }}
+                      >
+                        {moment(item, "DD/MM/YYYY")
+                          .format("dddd")
+                          .charAt(0)
+                          .toUpperCase() +
+                          moment(item, "DD/MM/YYYY").format("dddd").slice(1)}
+                      </Text>
+                      {isDateInPast && (
+                        <Text style={{ color: "#9CA3AF", fontSize: 8 }}>
+                          Đã qua
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  );
+                })}
               </ScrollView>
 
               {/* time */}
@@ -189,30 +218,44 @@ const SpecialtyDetailOfHospital = ({ route }) => {
               <View style={{ marginTop: 10, gap: 5 }}>
                 <Text>Thời gian khám</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {doctorSchedule[selectedDate]?.map((item) => (
-                    <TouchableOpacity
-                      key={item?.slot_id}
-                      buttonColor="transparent"
-                      style={{
-                        backgroundColor: "#EEEEEE",
-                        borderColor: "#EEEEEE",
-                        borderWidth: 0.5,
-                        borderRadius: 6,
-                        paddingHorizontal: 10,
-                        paddingVertical: 5,
-                        marginRight: 10,
-                      }}
-                      onPress={() => handleBookAppointment(item)}
-                    >
-                      <Text style={{ color: "#000" }}>
-                        {`${moment(item?.start_time, "HH:mm:ss").format(
-                          "HH:mm"
-                        )} - ${moment(item?.end_time, "HH:mm:ss").format(
-                          "HH:mm"
-                        )}`}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                  {doctorSchedule[selectedDate]?.map((item) => {
+                    const isPassed = isTimeSlotPassed(
+                      selectedDate,
+                      item?.start_time
+                    );
+
+                    return (
+                      <TouchableOpacity
+                        key={item?.slot_id}
+                        buttonColor="transparent"
+                        style={{
+                          backgroundColor: isPassed ? "#E5E5E5" : "#EEEEEE",
+                          borderColor: "#EEEEEE",
+                          borderWidth: 0.5,
+                          borderRadius: 6,
+                          paddingHorizontal: 10,
+                          paddingVertical: 5,
+                          marginRight: 10,
+                          opacity: isPassed ? 0.5 : 1,
+                        }}
+                        onPress={() => !isPassed && handleBookAppointment(item)}
+                        disabled={isPassed}
+                      >
+                        <Text style={{ color: isPassed ? "#9CA3AF" : "#000" }}>
+                          {`${moment(item?.start_time, "HH:mm:ss").format(
+                            "HH:mm"
+                          )} - ${moment(item?.end_time, "HH:mm:ss").format(
+                            "HH:mm"
+                          )}`}
+                        </Text>
+                        {isPassed && (
+                          <Text style={{ color: "#9CA3AF", fontSize: 10 }}>
+                            Đã qua
+                          </Text>
+                        )}
+                      </TouchableOpacity>
+                    );
+                  })}
                 </ScrollView>
               </View>
             </View>

@@ -28,8 +28,9 @@ export default function ConfirmInfoScreen({ route }) {
     selectedSpecialty,
     isDoctorSpecial,
     specialtyDetail,
+    consultationFee,
   } = route.params || {};
-
+  console.log("consultationFee", consultationFee);
   // State cho modal, dữ liệu form, và profile hiển thị
   const [modalVisible, setModalVisible] = useState(false);
   const [formData, setFormData] = useState({
@@ -425,6 +426,7 @@ export default function ConfirmInfoScreen({ route }) {
                 selectedSpecialty,
                 isDoctorSpecial,
                 specialtyDetail,
+                consultationFee,
               })
             }
           >
