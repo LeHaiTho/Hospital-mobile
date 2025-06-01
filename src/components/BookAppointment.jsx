@@ -85,6 +85,7 @@ const BookAppointment = ({
 
   // Check if a date is in the past
   const isDateInPast = (date) => {
+    console.log("date", date);
     return moment(date).isBefore(moment(), "day");
   };
 
@@ -106,7 +107,7 @@ const BookAppointment = ({
           >
             {dates?.map((date, index) => {
               const isPastDate = isDateInPast(date);
-
+              console.log("date", date);
               return (
                 <TouchableOpacity
                   key={index}

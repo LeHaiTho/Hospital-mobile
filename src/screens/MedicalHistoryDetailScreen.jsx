@@ -4,26 +4,89 @@ import { FontAwesome } from "@expo/vector-icons";
 import axiosConfig from "../apis/axiosConfig";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
+
 const MedicalHistoryDetailScreen = ({ route }) => {
   const navigation = useNavigation();
   const { appointment, selectedProfile } = route?.params;
   const [explain, setExplain] = useState(false);
-  const [prescriptionDetail, setPrescriptionDetail] = useState(null);
+  const [detailedExamResult, setDetailedExamResult] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const handleExplain = () => {
     setExplain(!explain);
   };
-  const getMedicalHistoryDetail = async () => {
+
+  const getDetailedExamResult = async () => {
     try {
-      const res = await axiosConfig.get(
-        `medical-histories/get-prescription-detail/${appointment?.id}`
+      setLoading(true);
+      console.log("appointment", appointment?.appointment_code);
+      // Use the new detailed exam result API
+      const response = await axiosConfig.get(
+        `/detailed-exam-results/appointment/${appointment?.appointment_code}`
       );
-      setPrescriptionDetail(res?.data?.prescription?.prescriptionItems);
-    } catch (error) {}
+      console.log("response", response);
+
+      if (response?.data?.success) {
+        const appointmentData = response.data.data.appointment;
+        console.log("appointmentData", appointmentData);
+        const detailedResult = response.data.data.detailedExamResult;
+        // Format the data similar to web version
+        const formattedData = {
+          ...detailedResult,
+          appointmentCode: detailedResult.appointment_code,
+          examDate: appointmentData.appointment_date,
+          hospital: detailedResult.hospital,
+          doctor: detailedResult.doctor,
+          specialty: detailedResult.specialty,
+          patientInfo: {
+            fullName:
+              appointmentData.familyMembers?.fullname ||
+              appointmentData.user?.fullname ||
+              "Bệnh nhân",
+            dateOfBirth:
+              appointmentData.familyMembers?.date_of_birth ||
+              appointmentData.user?.date_of_birth ||
+              "",
+            gender:
+              appointmentData.familyMembers?.gender ||
+              appointmentData.user?.gender ||
+              "",
+            address:
+              appointmentData.familyMembers?.address ||
+              appointmentData.user?.address ||
+              "",
+            phone:
+              appointmentData.familyMembers?.phone ||
+              appointmentData.user?.phone ||
+              "",
+            reasonForExam: appointmentData.reason_for_visit || "",
+          },
+          clinicalExam: {
+            pulse: detailedResult.pulse,
+            temperature: detailedResult.temperature,
+            bloodPressure: detailedResult.blood_pressure,
+            skin: detailedResult.skin_condition,
+            mucousMembrane: detailedResult.mucous_membrane,
+            organExamination: detailedResult.organ_examination,
+          },
+          testResults: detailedResult.testResults || [],
+          prescriptions: detailedResult.detailedPrescriptions || [],
+          appointment: detailedResult,
+        };
+
+        setDetailedExamResult(formattedData);
+      }
+    } catch (error) {
+      console.error("Error loading detailed exam result:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useEffect(() => {
-    getMedicalHistoryDetail();
+    getDetailedExamResult();
   }, [appointment]);
-  console.log(selectedProfile);
+
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
@@ -58,9 +121,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
             </Text>
             <Text style={{ fontSize: 12 }}>Mã BN: {selectedProfile?.id}</Text>
             <Text style={{ fontSize: 12 }}>
-              {`Giới tính: ${
-                selectedProfile?.gender === "male" ? "Nam" : "Nữ"
-              }`}
+              {`Giới tính: ${selectedProfile?.gender ? "Nam" : "Nữ"}`}
             </Text>
             <Text style={{ fontSize: 12 }}>
               {`Điện thoại: ${selectedProfile?.phone || "chưa cập nhật"}`}
@@ -96,15 +157,10 @@ const MedicalHistoryDetailScreen = ({ route }) => {
           </View>
           <View>
             <Text style={{ fontSize: 12, color: "#666" }}>
-              {`Ngày khám: ${moment(appointment?.date).format(
+              {`Ngày khám:${moment(detailedExamResult?.examDate).format(
                 "DD/MM/YYYY"
-              )} - ${moment(
-                appointment?.appointmentSlot?.start_time,
-                "HH:mm:ss"
-              ).format("HH:mm")} - ${moment(
-                appointment?.appointmentSlot?.end_time,
-                "HH:mm:ss"
-              ).format("HH:mm")}`}
+              )} 
+            `}
             </Text>
             <Text
               style={{
@@ -140,6 +196,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
               onPress={() =>
                 navigation.navigate("ResultDetails", {
                   appointment,
+                  detailedExamResult,
                 })
               }
             >
@@ -175,6 +232,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
               onPress={() =>
                 navigation.navigate("ResultImage", {
                   appointment,
+                  detailedExamResult,
                 })
               }
             >
@@ -243,7 +301,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
               />
             </TouchableOpacity>
             {/* click mở view */}
-            {explain && (
+            {explain && detailedExamResult?.prescriptions?.length > 0 && (
               <View
                 style={{
                   gap: 5,
@@ -300,7 +358,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
                     DL
                   </Text>
                 </View>
-                {prescriptionDetail?.map((item) => (
+                {detailedExamResult?.prescriptions?.map((item) => (
                   <View
                     key={item?.id}
                     style={{
@@ -319,10 +377,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
                           fontWeight: "bold",
                         }}
                       >
-                        {item?.medicate_name}
-                      </Text>
-                      <Text style={{ fontSize: 12, color: "#666" }}>
-                        {item?.instructions}
+                        {item?.medication}
                       </Text>
                     </View>
 
@@ -332,7 +387,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
                         textAlign: "right",
                       }}
                     >
-                      {item?.dosage}
+                      {item?.quantity}
                     </Text>
                     <Text
                       style={{
@@ -340,7 +395,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
                         textAlign: "right",
                       }}
                     >
-                      {item?.quantity}
+                      {item?.instructions}
                     </Text>
                   </View>
                 ))}

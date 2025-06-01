@@ -190,29 +190,6 @@ const MedicalHistoryScreen = () => {
                 >
                   {member?.fullname}
                 </Text>
-                <Text style={{ fontSize: 12, textAlign: "center" }}>
-                  {member?.relationship === "father"
-                    ? "Ba"
-                    : member?.relationship === "mother"
-                    ? "Mẹ"
-                    : member?.relationship === "brother"
-                    ? "Anh trai"
-                    : member?.relationship === "sister"
-                    ? "Chị gái"
-                    : member?.relationship === "husband"
-                    ? "Chồng"
-                    : member?.relationship === "wife"
-                    ? "Vợ"
-                    : member?.relationship === "child"
-                    ? "Con"
-                    : member?.relationship === "grandparent"
-                    ? "Ông bà"
-                    : member?.relationship === "grandchild"
-                    ? "Cháu"
-                    : member?.relationship === "other"
-                    ? "Khác"
-                    : ""}
-                </Text>
               </View>
             </TouchableOpacity>
           ))}

@@ -25,7 +25,8 @@ const UserInfoFetcher = () => {
       const token = await AsyncStorage.getItem("token");
       if (token) {
         const response = await axiosConfig.get("/auth/user-info");
-        console.log("user vừa vào app", response.data.user.role.name);
+        // console.log("user vừa vào app", response.data.user.role.name);
+        console.log("token", token);
 
         // Gửi token khi connect serve
         dispatch(setUserInfo(response?.data?.user));

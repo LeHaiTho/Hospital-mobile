@@ -43,7 +43,7 @@ const InfoPaymentScreen = ({ route }) => {
   const { appointment } = route.params || {};
   const [expanded, setExpanded] = useState(false);
   const sheetRef = useRef(null);
-  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [visible, setVisible] = useState(false);
   const [appointmentId, setAppointmentId] = useState(null);
   const [doctorName, setDoctorName] = useState("");
