@@ -20,8 +20,8 @@ const AppointmentCard = ({ appointment }) => {
   const statusOptions = [
     {
       value: "pending",
-      label: "Chưa thanh toán",
-      color: "#eaa615",
+      label: "Đã xác nhận",
+      color: "#0958d9",
       icon: "clock",
     },
     {

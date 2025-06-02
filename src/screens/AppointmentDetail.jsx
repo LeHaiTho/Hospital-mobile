@@ -183,43 +183,45 @@ const AppointmentDetail = ({ route }) => {
                       </Text>
                     </View>
                   </View>
-                  {appointmentDetail?.status === "confirmed" &&
-                    appointmentDetail?.payment_status === "pending" && (
-                      <View
-                        style={{
-                          gap: 10,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          marginTop: 10,
-                          paddingHorizontal: 20,
-                        }}
-                      >
-                        <Text
+                  {(appointmentDetail?.status === "confirmed" &&
+                    appointmentDetail?.payment_status === "pending") ||
+                    (appointmentDetail?.status === "pending" &&
+                      appointmentDetail?.payment_status === "pending" && (
+                        <View
                           style={{
-                            color: "#13DC5F",
-                            fontWeight: "600",
-                            backgroundColor: "#CDF8DD",
-                            paddingHorizontal: 10,
-                            paddingVertical: 8,
-                            borderRadius: 10,
+                            gap: 10,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginTop: 10,
+                            paddingHorizontal: 20,
                           }}
                         >
-                          Đặt khám thành công
-                        </Text>
-                        <Text
-                          style={{
-                            color: "#f20000",
-                            textAlign: "center",
-                          }}
-                        >
-                          Số tiền phải thanh toán:
-                          {Number(
-                            appointmentDetail?.appointmentFee
-                          ).toLocaleString()}
-                          VNĐ đã bao gồm phí khám + phí tiện ích
-                        </Text>
-                      </View>
-                    )}
+                          <Text
+                            style={{
+                              color: "#13DC5F",
+                              fontWeight: "600",
+                              backgroundColor: "#CDF8DD",
+                              paddingHorizontal: 10,
+                              paddingVertical: 8,
+                              borderRadius: 10,
+                            }}
+                          >
+                            Đặt khám thành công
+                          </Text>
+                          <Text
+                            style={{
+                              color: "#f20000",
+                              textAlign: "center",
+                            }}
+                          >
+                            Số tiền phải thanh toán:
+                            {Number(
+                              appointmentDetail?.appointmentFee
+                            ).toLocaleString()}
+                            VNĐ đã bao gồm phí khám + phí tiện ích
+                          </Text>
+                        </View>
+                      ))}
                   {appointmentDetail?.status === "confirmed" &&
                     appointmentDetail?.payment_status === "paid" && (
                       <View
@@ -464,40 +466,42 @@ const AppointmentDetail = ({ route }) => {
                   </Text>
                 </View>
               </View>
-              {appointmentDetail?.status === "confirmed" && (
-                <>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: "#F8D2CD",
-                      padding: 15,
-                      borderRadius: 10,
-                      flexDirection: "row",
-                      gap: 10,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: 15,
-                    }}
-                    onPress={() => {
-                      navigation.navigate("CancelBooking", {
-                        appointmentId,
-                      });
-                    }}
-                  >
-                    <AntDesign name="close" size={20} color="#F20000" />
-                    <Text style={{ color: "#F20000" }}>Hủy phiếu </Text>
-                  </TouchableOpacity>
-                  <View
-                    style={{ marginTop: 15, flexDirection: "row", gap: 10 }}
-                  >
-                    <AntDesign name="infocirlce" size={18} color="#f20000" />
-                    <Text style={{ color: "#f20000", flex: 1 }}>
-                      Trong thời gian quy định nếu quý khách hủy phiếu khám sẽ
-                      được hoàn tiền khám và các dịch vụ đặt thêm (không bao gồm
-                      phí tiện ích)
-                    </Text>
-                  </View>
-                </>
-              )}
+              {(appointmentDetail?.status === "confirmed" ||
+                appointmentDetail?.status === "pending") &&
+                appointmentDetail?.payment_status === "pending" && (
+                  <>
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: "#F8D2CD",
+                        padding: 15,
+                        borderRadius: 10,
+                        flexDirection: "row",
+                        gap: 10,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 15,
+                      }}
+                      onPress={() => {
+                        navigation.navigate("CancelBooking", {
+                          appointmentId,
+                        });
+                      }}
+                    >
+                      <AntDesign name="close" size={20} color="#F20000" />
+                      <Text style={{ color: "#F20000" }}>Hủy phiếu </Text>
+                    </TouchableOpacity>
+                    <View
+                      style={{ marginTop: 15, flexDirection: "row", gap: 10 }}
+                    >
+                      <AntDesign name="infocirlce" size={18} color="#f20000" />
+                      <Text style={{ color: "#f20000", flex: 1 }}>
+                        Trong thời gian quy định nếu quý khách hủy phiếu khám sẽ
+                        được hoàn tiền khám và các dịch vụ đặt thêm (không bao
+                        gồm phí tiện ích)
+                      </Text>
+                    </View>
+                  </>
+                )}
             </View>
           </ScrollView>
           <View

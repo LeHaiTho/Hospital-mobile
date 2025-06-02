@@ -132,7 +132,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
               )}`}
             </Text>
             <Text style={{ fontSize: 12, flex: 1 }} numberOfLines={2}>
-              {`Địa chỉ: ${selectedProfile?.province || "chưa cập nhật"}`}
+              {`Địa chỉ: ${selectedProfile?.address || "chưa cập nhật"}`}
             </Text>
           </View>
           <View style={{ flex: 1, alignItems: "center" }}>
