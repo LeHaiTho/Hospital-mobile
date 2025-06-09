@@ -680,7 +680,7 @@ const InfoPaymentScreen = ({ route }) => {
                     textAlign: "center",
                   }}
                 >
-                  {isLoading ? "Đang xử lý..." : "Thanh toán"}
+                  {isLoading ? "Đang xử lý..." : "Đặt lịch"}
                 </Text>
               </>
             )}
