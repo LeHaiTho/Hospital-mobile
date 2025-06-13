@@ -67,10 +67,19 @@ const CreateProfileScreen = ({ route }) => {
     identificationCard: "",
     relationship: fromBooking ? "myself" : "myself",
   });
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   // Xử lý thay đổi input
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
+      handleInputChange("dateOfBirth", formattedDate);
+    }
   };
 
   // Xử lý khi người dùng nhấn nút quay lại
@@ -123,7 +132,7 @@ const CreateProfileScreen = ({ route }) => {
 
       // Tìm các trường bị thiếu
       const missingFields = Object.entries(requiredFields)
-        .filter(([key]) => !formData[key] && formData[key] !== false) // false là hợp lệ cho gender
+        .filter(([key]) => !formData[key] && formData[key] !== false)
         .map(([, label]) => label);
 
       // Kiểm tra định dạng email
@@ -133,6 +142,11 @@ const CreateProfileScreen = ({ route }) => {
       // Kiểm tra định dạng số điện thoại (10 số, bắt đầu bằng 0)
       const phoneRegex = /^0\d{9}$/;
       const isValidPhone = formData.phone && phoneRegex.test(formData.phone);
+
+      // Kiểm tra định dạng ngày sinh
+      const isValidDate =
+        formData.dateOfBirth &&
+        moment(formData.dateOfBirth, "YYYY-MM-DD", true).isValid();
 
       if (missingFields.length > 0) {
         Toast.show({
@@ -161,7 +175,16 @@ const CreateProfileScreen = ({ route }) => {
         return;
       }
 
-      // Gửi dữ liệu lên server - vẫn giữ nguyên cấu trúc dữ liệu để không ảnh hưởng đến API
+      if (!isValidDate) {
+        Toast.show({
+          text1: "Ngày sinh không hợp lệ",
+          text2: "Vui lòng chọn ngày sinh hợp lệ",
+          type: "error",
+        });
+        return;
+      }
+
+      // Gửi dữ liệu lên server
       const res = await axiosConfig.put(
         `/users/create-profile/${user.id}`,
         formData
@@ -303,17 +326,38 @@ const CreateProfileScreen = ({ route }) => {
               <Text style={styles.label}>Ngày sinh </Text>
               <Text style={styles.required}>*</Text>
             </View>
-            <TextInput
-              style={[
-                styles.input,
-                isQR && styles.disabledInput,
-                formData.dateOfBirth && styles.filledInput,
-              ]}
-              placeholder="DD/MM/YYYY"
-              value={formData.dateOfBirth}
-              onChangeText={(text) => handleInputChange("dateOfBirth", text)}
-              editable={!isQR}
-            />
+            <TouchableOpacity
+              onPress={() => setShowDatePicker(true)}
+              disabled={isQR}
+            >
+              <TextInput
+                style={[
+                  styles.input,
+                  isQR && styles.disabledInput,
+                  formData.dateOfBirth && styles.filledInput,
+                ]}
+                placeholder="DD/MM/YYYY"
+                value={
+                  formData.dateOfBirth
+                    ? moment(formData.dateOfBirth).format("DD/MM/YYYY")
+                    : ""
+                }
+                editable={false}
+              />
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={
+                  formData.dateOfBirth
+                    ? new Date(formData.dateOfBirth)
+                    : new Date()
+                }
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+                maximumDate={new Date()}
+              />
+            )}
           </View>
 
           <View style={styles.formGroup}>

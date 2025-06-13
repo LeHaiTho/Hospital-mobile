@@ -118,7 +118,6 @@ const InfoPaymentScreen = ({ route }) => {
             }
           );
 
-          console.log("requestBody", requestBody);
           // Chuyển đến trang thanh toán ZaloPay
           navigation.navigate("WebviewPayment", {
             paymentUrl: paymentRes.data.data.order_url,

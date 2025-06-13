@@ -51,9 +51,9 @@ const WebviewPaymentScreen = ({ route }) => {
       try {
         // Cập nhật trạng thái thanh toán thành công
         await axiosConfig.patch(
-          `/appointments/update-payment-status/${appointmentId}`,
+          `/appointments/update-appointment-status-after-payment/${appointmentId}`,
           {
-            payment_status: "completed",
+            payment_status: "paid",
           }
         );
 

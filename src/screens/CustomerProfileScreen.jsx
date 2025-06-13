@@ -124,7 +124,7 @@ export default function CustomerProfileScreen({ route }) {
           onPress: async () => {
             try {
               // Gọi API xóa FamilyMember
-              await axiosConfig.delete(`/appointments/${profile.id}`);
+              await axiosConfig.delete(`/users/family-members/${profile.id}`);
               // Cập nhật danh sách profiles
               setAllProfile((prev) => prev.filter((p) => p.id !== profile.id));
               Alert.alert("Thành công", "Hồ sơ đã được xóa!");
