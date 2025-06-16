@@ -184,10 +184,26 @@ const CreateProfileScreen = ({ route }) => {
         return;
       }
 
+      // Chuẩn bị dữ liệu gửi lên server
+      const submitData = { ...formData };
+
+      // Xử lý identificationCard: nếu là chuỗi rỗng thì gán null
+      if (
+        !submitData.identificationCard ||
+        submitData.identificationCard.trim() === ""
+      ) {
+        submitData.identificationCard = null;
+      }
+
+      // Nếu là family member, loại bỏ identificationCard khỏi dữ liệu
+      if (submitData.relationship === "other") {
+        delete submitData.identificationCard;
+      }
+
       // Gửi dữ liệu lên server
       const res = await axiosConfig.put(
         `/users/create-profile/${user.id}`,
-        formData
+        submitData
       );
 
       if (res.status === 200) {
