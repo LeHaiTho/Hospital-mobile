@@ -93,7 +93,7 @@ const DoctorList = () => {
         }}
       >
         <TextInput
-          placeholder="Tìm kiếm bác sĩ hoặc chuyên khoa"
+          placeholder="Tìm kiếm bác sĩ"
           style={{
             flex: 1,
             padding: 9,

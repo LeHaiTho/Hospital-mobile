@@ -255,7 +255,7 @@ const CreateProfileScreen = ({ route }) => {
           dateOfBirth: dataArray[3]
             ? moment(dataArray[3], "DD/MM/YYYY").format("YYYY-MM-DD")
             : "",
-          gender: dataArray[4] === "Nam", // Giới tính
+          gender: dataArray[4] === "Nam" ? true : false, // Giới tính
           address: dataArray[5] || "", // Địa chỉ chi tiết
           identificationCard: dataArray[0] || "", // Số CMND
         };

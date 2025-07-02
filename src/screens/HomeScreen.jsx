@@ -177,7 +177,7 @@ const HomeScreen = () => {
           >
             <Ionicons name="search" size={24} color="#0165FC" />
             <Text style={{ color: "gray" }}>
-              Tìm kiếm bệnh viện, chuyên khoa, bác sĩ ...
+              Tìm kiếm cơ sở y tế, chuyên khoa, bác sĩ...
             </Text>
           </TouchableOpacity>
         </View>
@@ -287,7 +287,7 @@ const HomeScreen = () => {
                       }}
                     >
                       <Text style={{ fontSize: 14 }}>
-                        {`Mã phiếu khám ${appointmentNeedChange[0].appointment_code} tại bệnh viện ${appointmentNeedChange[0].hospital.name}. Bác sĩ ${appointmentNeedChange[0].doctor.user.fullname} vì lí do đột xuất cần`}{" "}
+                        {`Mã phiếu khám ${appointmentNeedChange[0].appointment_code} tại cơ sở ${appointmentNeedChange[0].hospital.name}. Bác sĩ ${appointmentNeedChange[0].doctor.user.fullname} vì lí do đột xuất cần`}{" "}
                         <Text
                           style={{
                             fontSize: 14,
@@ -476,7 +476,7 @@ const HomeScreen = () => {
                 textAlign: "center",
               }}
             >
-              Đặt lịch tại bệnh viện
+              Đặt lịch tại cơ sở y tế
             </Text>
           </TouchableOpacity>
           <TouchableOpacity

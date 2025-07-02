@@ -164,7 +164,7 @@ const SpecialtyFilterListScreen = ({ route }) => {
               color: selectedType === "hospital" ? "#fff" : "#0165FF",
             }}
           >
-            Bệnh viện
+            Cơ sở y tế
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

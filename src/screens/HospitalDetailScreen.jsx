@@ -219,7 +219,7 @@ const HospitalDetailScreen = ({ route }) => {
   const Doctors = () => (
     <View style={{ paddingHorizontal: 15, paddingVertical: 12, gap: 15 }}>
       <Text style={{ fontWeight: "bold", color: "#0165FF" }}>
-        Bác sĩ của bệnh viện
+        Bác sĩ của cơ sở y tế
       </Text>
       <View style={{ gap: 10 }}>
         {doctors.map((doctor) => (

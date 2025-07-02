@@ -248,7 +248,7 @@ const MedicalHistoryDetailScreen = ({ route }) => {
                   style={{ color: "#0165FF", fontWeight: "bold" }}
                   numberOfLines={1}
                 >
-                  Kết quả CĐHA và thăm dò theo dõi
+                  Kết quả chẩn đoán hình ảnh
                 </Text>
               </View>
               <FontAwesome name="angle-right" size={25} color="#0165FF" />

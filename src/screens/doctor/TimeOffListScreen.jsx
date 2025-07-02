@@ -127,52 +127,9 @@ const TimeOffListScreen = () => {
           }}
         >
           <Text style={{ fontWeight: "500", fontSize: 18 }}>
-            Danh sách đề xuất
+            Danh sách đơn xin nghỉ phép
           </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
-            <FontAwesome name="calendar" size={24} color="#000" />
-            <Ionicons name="filter-outline" size={29} color="#000" />
-          </View>
         </View>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 10 }}
-        >
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 20,
-              paddingVertical: 5,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: "#E7E7E7",
-            }}
-          >
-            <Text>Đề xuất của tôi</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 20,
-              paddingVertical: 5,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: "#E7E7E7",
-            }}
-          >
-            <Text>Gửi đến tôi</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 20,
-              paddingVertical: 5,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: "#E7E7E7",
-            }}
-          >
-            <Text>Đang theo dõi</Text>
-          </TouchableOpacity>
-        </ScrollView>
         <View>
           <FlatList
             data={doctorUnavailableTimeList}

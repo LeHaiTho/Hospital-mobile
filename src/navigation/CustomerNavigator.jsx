@@ -5,7 +5,6 @@ import DoctorDetail from "../screens/DoctorDetail";
 import HospitalList from "../screens/HospitalList";
 import DoctorList from "../screens/DoctorList";
 import LoginScreen from "../screens/LoginScreen";
-import PatientDetailScreen from "../screens/PatientDetailScreen";
 import SuccessfullBookScreen from "../screens/SuccessfullBookScreen";
 import CancelBookingScreen from "../screens/CancelBookingScreen";
 import AppointmentDetail from "../screens/AppointmentDetail";
@@ -26,7 +25,6 @@ import InfoPaymentScreen from "../screens/InfoPaymentScreen";
 import ChangeAppointmentDetail from "../screens/ChangeAppointmentDetail";
 const Stack = createStackNavigator();
 import { useNavigation } from "@react-navigation/native";
-import RecommendedSystemScreen from "../screens/RecommendedSystemScreen";
 import ConfirmChangeAppointmentDetailScreen from "../screens/ConfirmChangeAppointmentDetailScreen";
 import WebviewPaymentScreen from "../screens/WebviewPaymentScreen";
 import MedicalHistoryDetailScreen from "../screens/MedicalHistoryDetailScreen";
@@ -226,10 +224,6 @@ const CustomerNavigator = () => {
         }}
       />
       <Stack.Screen
-        name="RecommendedSystem"
-        component={RecommendedSystemScreen}
-      />
-      <Stack.Screen
         name="CreateProfile"
         component={CreateProfileScreen}
         options={{
@@ -292,7 +286,7 @@ const CustomerNavigator = () => {
         component={HospitalDetailScreen}
         options={{
           headerShown: true,
-          headerTitle: "Thông tin bệnh viện",
+          headerTitle: "Thông tin cơ sở y tế",
           headerTitleStyle: {
             fontSize: 17,
           },
@@ -467,7 +461,6 @@ const CustomerNavigator = () => {
         }}
       />
 
-      <Stack.Screen name="PatientDetail" component={PatientDetailScreen} />
       <Stack.Screen
         name="SuccessfullBook"
         component={SuccessfullBookScreen}

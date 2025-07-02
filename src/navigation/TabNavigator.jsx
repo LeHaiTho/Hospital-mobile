@@ -8,7 +8,6 @@ import NotificationScreen from "../screens/NotificationScreen";
 import CustomerProfileScreen from "../screens/CustomerProfileScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TouchableOpacity, Text } from "react-native";
-import MedicalHistoryScreen from "../screens/MedicalHistoryScreen";
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {

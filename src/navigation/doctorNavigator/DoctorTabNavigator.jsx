@@ -1,7 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import DoctorScheduleScreen from "../../screens/DoctorScheduleScreen";
-import DetailScheduleDate from "../../screens/DetailScheduleDate";
 import ProfileScreen from "../../screens/ProfileScreen";
 import DoctorHomeScreen from "../../screens/doctor/DoctorHomeScreen";
 import LeaveReasonScreen from "../../screens/doctor/LeaveReasonScreen";

@@ -7,9 +7,6 @@ import {
   ActivityIndicator,
 } from "react-native";
 import DoctorInfo from "../components/DoctorInfo";
-import { SafeAreaView } from "react-native-safe-area-context";
-import ScheduleAppointment from "../components/ScheduleAppointment";
-import PatientInfo from "../components/PatientInfo";
 import { AntDesign, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axiosConfig from "../apis/axiosConfig";
@@ -299,7 +296,7 @@ const AppointmentDetail = ({ route }) => {
                         paddingHorizontal: 20,
                       }}
                     >
-                      Phiếu khám này không được tiếp nhận tại bệnh viện
+                      Phiếu khám này không được tiếp nhận tại cơ sở y tế
                     </Text>
                   )}
                   <View
@@ -461,9 +458,6 @@ const AppointmentDetail = ({ route }) => {
                   <Text style={{ color: "#0165FC" }}>
                     Bản quyền thuộc {APP_NAME}
                   </Text>
-                  <Text style={{ fontSize: 12, color: "#797979" }}>
-                    Đặt lịch khám tại bệnh viện hàng đầu Việt Nam
-                  </Text>
                 </View>
               </View>
               {(appointmentDetail?.status === "confirmed" ||
@@ -551,35 +545,6 @@ const AppointmentDetail = ({ route }) => {
                   Tải xuống
                 </Text>
               </TouchableOpacity>
-
-              {/* {fromBookingFlow && (
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#0165FC",
-                    paddingVertical: 15,
-                    borderRadius: 100,
-                    width: "100%",
-                    alignItems: "center",
-                    flexDirection: "row",
-                    gap: 10,
-                    justifyContent: "center",
-                    marginTop: 8,
-                  }}
-                  onPress={() => {
-                    navigation.reset({
-                      index: 0,
-                      routes: [
-                        { name: "TabNavigator", params: { screen: "Home" } },
-                      ],
-                    });
-                  }}
-                >
-                  <Ionicons name="home-outline" size={18} color="#fff" />
-                  <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                    Về trang chủ
-                  </Text>
-                </TouchableOpacity>
-              )} */}
             </View>
           </View>
         </>
